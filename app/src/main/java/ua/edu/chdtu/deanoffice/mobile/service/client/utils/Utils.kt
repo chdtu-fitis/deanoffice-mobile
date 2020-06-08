@@ -1,18 +1,15 @@
 package ua.edu.chdtu.deanoffice.mobile.service.client.utils
 
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import ua.edu.chdtu.deanoffice.mobile.service.DTO.ApplicationTypeDTO
-import ua.edu.chdtu.deanoffice.mobile.service.DTO.objectDTO
-import java.util.*
+import ua.edu.chdtu.deanoffice.mobile.service.POJO.ApplicationTypeIdPOJO
+import ua.edu.chdtu.deanoffice.mobile.service.POJO.ApplicationTypePOJO
 import kotlin.collections.ArrayList
-import kotlin.reflect.KClass
 
 class Utils {
 
-    fun  JSONtoArrayObjects(JSON: String) : ArrayList<ApplicationTypeDTO>{
-        var obj = ArrayList<ApplicationTypeDTO>();
-        obj.addAll(Gson().fromJson(JSON, Array<ApplicationTypeDTO>::class.java))
+    fun  JSONtoArrayObjects(JSON: String) : ArrayList<ApplicationTypePOJO>{
+        var obj = ArrayList<ApplicationTypePOJO>();
+        obj.addAll(Gson().fromJson(JSON, Array<ApplicationTypePOJO>::class.java))
         return obj
     }
 
@@ -21,8 +18,7 @@ class Utils {
         return obj
     }*/
 
-    fun objectToJSON(obj: objectDTO) : String{
-        return Gson().toJson(obj)
+    fun ApplicationTypeIdPOJOtoJSON(applicationTypeIdPOJO: ApplicationTypeIdPOJO) : String{
+        return Gson().toJson(applicationTypeIdPOJO)
     }
-
 }

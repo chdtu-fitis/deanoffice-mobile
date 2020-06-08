@@ -1,0 +1,10 @@
+package ua.edu.chdtu.deanoffice.mobile.service.client.requests
+
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.http.GET
+
+interface GetRequest {
+    @GET("application")
+    fun getRequest(): Call<ResponseBody>
+}
