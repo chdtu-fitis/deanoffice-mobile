@@ -18,17 +18,7 @@
         <!--Button with id showInput-->
 
 
-        <TextView
-            android:id="@+id/txtViewApp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Виберіть Ваш освітній ступінь:"
-            android:textSize="20dp" />
-        <Spinner
-            android:id="@+id/spinnerApp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/txtView"/>
+
         <EditText
             android:id="@+id/editText"
             android:layout_width="match_parent"

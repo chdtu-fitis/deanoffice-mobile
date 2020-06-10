@@ -10,10 +10,6 @@ import android.widget.Spinner
 import ua.edu.chdtu.deanoffice.mobile.service.client.Client
 import ua.edu.chdtu.deanoffice.mobile.service.client.utils.Utils
 
-
-
-
-
 class ApplicationTypesActivity : AppCompatActivity() {
 
 
@@ -33,13 +29,6 @@ class ApplicationTypesActivity : AppCompatActivity() {
             val text = editText.text
 
         }
-
-        val exam = arrayOf("бакалаврського", "магістерського")
-        val spinner = findViewById(R.id.spinnerApp) as Spinner
-        val adapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, exam)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner.adapter = adapter
-
 
         val exam1 = arrayOf("іспиту", "заліку")
         val spinner1 = findViewById(R.id.spinnerAppExam) as Spinner

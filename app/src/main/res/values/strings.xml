@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">My Applications</string>
     <string name="selected_item">Selected item:</string>
 
     <string-array name="Languages">
@@ -11,4 +11,5 @@
         <item>Заява6</item>
     </string-array>
     <string name="title_activity_exam_application">ExamApplicationActivity</string>
+
 </resources>

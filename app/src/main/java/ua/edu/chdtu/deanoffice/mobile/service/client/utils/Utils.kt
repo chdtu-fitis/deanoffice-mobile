@@ -7,7 +7,7 @@ import ua.edu.chdtu.deanoffice.mobile.service.POJO.ApplicationTypePOJO
 import ua.edu.chdtu.deanoffice.mobile.service.POJO.RetakeApplicationData
 import kotlin.collections.ArrayList
 
-class Utils {
+object Utils {
 
     fun  JSONtoArrayObjects(JSON: String) : ArrayList<ApplicationTypePOJO>{
         var obj = ArrayList<ApplicationTypePOJO>();
