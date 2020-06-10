@@ -20,17 +20,10 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, ApplicationTypesActivity::class.java)
             startActivity(intent)
         }
-
-
         val spinner = findViewById(R.id.spinner) as Spinner
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, ArrayList<String>().toArray())
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = adapter
-
-
-
-
-
     }
 }
 

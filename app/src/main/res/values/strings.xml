@@ -10,4 +10,5 @@
         <item>Заява5</item>
         <item>Заява6</item>
     </string-array>
+    <string name="title_activity_exam_application">ExamApplicationActivity</string>
 </resources>
