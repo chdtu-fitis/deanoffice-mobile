@@ -1,6 +1,8 @@
 package ua.edu.chdtu.deanoffice.mobile.service.client.requests
 
 import retrofit2.Retrofit
+import ua.edu.chdtu.deanoffice.mobile.service.client.requests.interfaces.GetApplication
+import ua.edu.chdtu.deanoffice.mobile.service.client.requests.interfaces.GetApplicationTypeList
 
 class Get(private var retrofit: Retrofit){
 

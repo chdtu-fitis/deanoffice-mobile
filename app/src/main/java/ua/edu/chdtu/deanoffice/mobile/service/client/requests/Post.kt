@@ -2,6 +2,7 @@ package ua.edu.chdtu.deanoffice.mobile.service.client.requests
 
 import retrofit2.Retrofit
 import ua.edu.chdtu.deanoffice.mobile.service.POJO.ApplicationTypeIdPOJO
+import ua.edu.chdtu.deanoffice.mobile.service.client.requests.interfaces.PostRequest
 
 class Post(private var retrofit: Retrofit) {
 

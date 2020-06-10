@@ -31,6 +31,14 @@ class Client private constructor() {
         return getRequest
     }
 
+    fun getApplicationList() : Get{
+        var getRequest = Get(retrofitBase)
+        threadRequest = Thread{ getRequest.applicationTypeList()}
+        threadRequest!!.start()
+        while(!getRequest.isGet){ /*process status*/ }
+        return getRequest
+    }
+
     fun getApplication(id: Int, json: String) : Get{
         var getRequest = Get(retrofitBase)
         threadRequest = Thread{ getRequest.application(id, json)}

@@ -3,6 +3,7 @@ package ua.edu.chdtu.deanoffice.mobile.service.client.utils
 import com.google.gson.Gson
 import ua.edu.chdtu.deanoffice.mobile.service.POJO.ApplicationTypeIdPOJO
 import ua.edu.chdtu.deanoffice.mobile.service.POJO.ApplicationTypePOJO
+import ua.edu.chdtu.deanoffice.mobile.service.POJO.RetakeApplicationData
 import kotlin.collections.ArrayList
 
 class Utils {
@@ -18,7 +19,13 @@ class Utils {
         return obj
     }*/
 
-    fun ApplicationTypeIdPOJOtoJSON(applicationTypeIdPOJO: ApplicationTypeIdPOJO) : String{
+    fun applicationTypeIdPOJOtoJSON(applicationTypeIdPOJO: ApplicationTypeIdPOJO) : String{
         return Gson().toJson(applicationTypeIdPOJO)
     }
+
+    fun retakeApplicationDataToJSON(retakeApplicationData : RetakeApplicationData) : String{
+        return Gson().toJson(retakeApplicationData)
+    }
+
+
 }
