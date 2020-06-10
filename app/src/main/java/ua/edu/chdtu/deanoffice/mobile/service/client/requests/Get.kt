@@ -23,7 +23,7 @@ class Get(private var retrofit: Retrofit){
         isGet = true;
     }
 
-    public fun application(id: Int,json: String){
+    public fun application(id: Int, json: String){
         var req = retrofit.create(GetApplication::class.java)
         var resp = req.getRequest(id, json).execute()
         response = Response(resp.body()!!.string())

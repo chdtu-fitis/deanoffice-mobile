@@ -9,11 +9,9 @@ import ua.edu.chdtu.deanoffice.mobile.service.client.requests.Post
 class Client private constructor() {
 
     private var retrofitBase = Retrofit.Builder()
-        .baseUrl("http://25.49.24.181:8080/")
+        .baseUrl("http://25.42.248.136:8080/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
-
-    private var threadRequest: Thread ?= null;
 
     private object HOLDER{
         val INSTANCE = Client()
@@ -25,24 +23,21 @@ class Client private constructor() {
 
     fun emptyGet() : Get{
         var getRequest = Get(retrofitBase)
-        threadRequest = Thread{ getRequest.applicationTypeList()}
-        threadRequest!!.start()
+        Thread{ getRequest.applicationTypeList()}.start()
         while(!getRequest.isGet){ /*process status*/ }
         return getRequest
     }
 
     fun getApplicationList() : Get{
         var getRequest = Get(retrofitBase)
-        threadRequest = Thread{ getRequest.applicationTypeList()}
-        threadRequest!!.start()
+        Thread{ getRequest.applicationTypeList()}.start()
         while(!getRequest.isGet){ /*process status*/ }
         return getRequest
     }
 
     fun getApplication(id: Int, json: String) : Get{
         var getRequest = Get(retrofitBase)
-        threadRequest = Thread{ getRequest.application(id, json)}
-        threadRequest!!.start()
+        Thread{ getRequest.application(id, json)}.start()
         while(!getRequest.isGet){ /*process status*/ }
         return getRequest
     }

@@ -6,6 +6,6 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface GetApplication {
-    @GET("application/param")
-    fun getRequest(@Query("ApplicationType") id: Int, @Query("json") json: String): Call<ResponseBody>
+    @GET("param")
+    fun getRequest(@Query("applicationType") id: Int, @Query("json") json: String): Call<ResponseBody>
 }
