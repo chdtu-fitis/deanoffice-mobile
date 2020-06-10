@@ -6,5 +6,59 @@
     android:layout_height="match_parent"
     tools:context="ua.edu.chdtu.deanoffice.mobile.myapplication.ApplicationTypesActivity">
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/linear_layout"
+        android:gravity = "center">
+
+        <!--EditText with id editText-->
+
+        <!--Button with id showInput-->
+
+
+        <TextView
+            android:id="@+id/txtViewApp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Виберіть Ваш освітній ступінь:"
+            android:textSize="20dp" />
+
+        <Spinner
+            android:id="@+id/spinnerApp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/txtView"/>
+
+        <EditText
+            android:id="@+id/editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:hint="Введіть предмет, з яйого бажаєте перескласти іспит(залік)"
+            android:inputType="text"/>
+
+        <TextView
+            android:id="@+id/txtViewAppExam"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Перескладання чого, ви потребуєте?"
+            android:textSize="20dp" />
+
+
+        <Spinner
+            android:id="@+id/spinnerAppExam"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/txtView"/>
+
+        <Button
+            android:id="@+id/buttonApp"
+            android:layout_width="128dp"
+            android:layout_height="wrap_content"
+            android:text="Далі" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
