@@ -31,7 +31,5 @@
             android:layout_width="159dp"
             android:layout_height="63dp"
             android:text="Далі" />
-
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

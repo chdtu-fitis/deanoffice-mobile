@@ -47,9 +47,11 @@ class ApplicationTypesActivity : AppCompatActivity() {
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner1.adapter = adapter1
 
-
-
-
+        val button = findViewById<Button>(R.id.buttonApp)
+        button.setOnClickListener {
+            val intent = Intent(this, ExamApplicationActivity::class.java)
+            startActivity(intent)
+        }
 
     }
 }
