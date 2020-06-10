@@ -21,24 +21,13 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        val languages = resources.getStringArray(R.array.Languages)
-
-        // access the spinner
-        var client = Client()
-        var json = client.emptyGet().response!!.body
-        var applicationtypes = Utils().JSONtoArrayObjects(json)
-        var applicationTypeNames:ArrayList <String> = ArrayList()
-        for (item in applicationtypes) {
-         applicationTypeNames.add(item.name)
-        }
 
         val spinner = findViewById(R.id.spinner) as Spinner
-        // Создаем адаптер ArrayAdapter с помощью массива строк и стандартной разметки элемета spinner
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, applicationTypeNames.toArray())
-        // Определяем разметку для использования при выборе элемента
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, ArrayList<String>().toArray())
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        // Применяем адаптер к элементу spinner
         spinner.adapter = adapter
+
+
 
 
 
