@@ -1,25 +1,44 @@
 package ua.edu.chdtu.deanoffice.mobile.service.client
 
-import okhttp3.OkHttpClient
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import ua.edu.chdtu.deanoffice.mobile.service.POJO.ApplicationTypeIdPOJO
 import ua.edu.chdtu.deanoffice.mobile.service.client.requests.Get
-import ua.edu.chdtu.deanoffice.mobile.service.client.requests.Response
-import ua.edu.chdtu.deanoffice.mobile.service.threading.ThreadData
+import ua.edu.chdtu.deanoffice.mobile.service.client.requests.Post
 
-import java.util.*
+class Client private constructor() {
 
-class Client() {
+    private var retrofitBase = Retrofit.Builder()
+        .baseUrl("http://25.42.248.136:8080/")
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
 
-    var okHttpClient = OkHttpClient()
-    var threadRequest: Thread ?= null;
+    private object HOLDER{
+        val INSTANCE = Client()
+    }
+
+    companion object{
+        val instance: Client by lazy { HOLDER.INSTANCE }
+    }
 
     fun emptyGet() : Get{
-        var getRequest = Get(okHttpClient)
-        threadRequest = Thread{ getRequest.run()}
-        threadRequest!!.start()
-        while(!getRequest.isGet){
-
-        }
+        var getRequest = Get(retrofitBase)
+        Thread{ getRequest.applicationTypeList()}.start()
+        while(!getRequest.isGet){ /*process status*/ }
         return getRequest
     }
 
+    fun getApplicationList() : Get{
+        var getRequest = Get(retrofitBase)
+        Thread{ getRequest.applicationTypeList()}.start()
+        while(!getRequest.isGet){ /*process status*/ }
+        return getRequest
+    }
+
+    fun getApplication(id: Int, json: String) : Get{
+        var getRequest = Get(retrofitBase)
+        Thread{ getRequest.application(id, json)}.start()
+        while(!getRequest.isGet){ /*process status*/ }
+        return getRequest
+    }
 }

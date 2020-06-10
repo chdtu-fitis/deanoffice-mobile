@@ -1,28 +1,35 @@
 package ua.edu.chdtu.deanoffice.mobile.service.client.utils
 
 import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import ua.edu.chdtu.deanoffice.mobile.service.DTO.ApplicationTypeDTO
-import ua.edu.chdtu.deanoffice.mobile.service.DTO.objectDTO
-import java.util.*
+import ua.edu.chdtu.deanoffice.mobile.service.POJO.Application
+import ua.edu.chdtu.deanoffice.mobile.service.POJO.ApplicationTypeIdPOJO
+import ua.edu.chdtu.deanoffice.mobile.service.POJO.ApplicationTypePOJO
+import ua.edu.chdtu.deanoffice.mobile.service.POJO.RetakeApplicationData
 import kotlin.collections.ArrayList
-import kotlin.reflect.KClass
 
 class Utils {
 
-    fun  JSONtoArrayObjects(JSON: String) : ArrayList<ApplicationTypeDTO>{
-        var obj = ArrayList<ApplicationTypeDTO>();
-        obj.addAll(Gson().fromJson(JSON, Array<ApplicationTypeDTO>::class.java))
+    fun  JSONtoArrayObjects(JSON: String) : ArrayList<ApplicationTypePOJO>{
+        var obj = ArrayList<ApplicationTypePOJO>();
+        obj.addAll(Gson().fromJson(JSON, Array<ApplicationTypePOJO>::class.java))
         return obj
+    }
+
+    fun  JSONtoApplication(JSON: String) : Application {
+        var application = Gson().fromJson(JSON, Application::class.java)
+        return application
+    }
+
+    fun applicationTypeIdPOJOtoJSON(applicationTypeIdPOJO: ApplicationTypeIdPOJO) : String{
+        return Gson().toJson(applicationTypeIdPOJO)
+    }
+
+    fun retakeApplicationDataToJSON(retakeApplicationData : RetakeApplicationData) : String{
+        return Gson().toJson(retakeApplicationData)
     }
 
     /*fun  <T>JSONtoObject(JSON: String) : T{
         var obj: T = Gson().fromJson(JSON, object: TypeToken<T>(){}.type);
         return obj
     }*/
-
-    fun objectToJSON(obj: objectDTO) : String{
-        return Gson().toJson(obj)
-    }
-
 }
