@@ -6,7 +6,7 @@ import ua.edu.chdtu.deanoffice.mobile.service.POJO.ApplicationTypeIdPOJO
 import ua.edu.chdtu.deanoffice.mobile.service.client.requests.Get
 import ua.edu.chdtu.deanoffice.mobile.service.client.requests.Post
 
-class Client() {
+class Client private constructor() {
 
     private var retrofitBase = Retrofit.Builder()
         .baseUrl("http://25.49.24.181:8080/")
@@ -15,29 +15,27 @@ class Client() {
 
     private var threadRequest: Thread ?= null;
 
+    private object HOLDER{
+        val INSTANCE = Client()
+    }
+
+    companion object{
+        val instance: Client by lazy { HOLDER.INSTANCE }
+    }
+
     fun emptyGet() : Get{
         var getRequest = Get(retrofitBase)
-        threadRequest = Thread{ getRequest.run()}
+        threadRequest = Thread{ getRequest.applicationTypeList()}
         threadRequest!!.start()
         while(!getRequest.isGet){ /*process status*/ }
         return getRequest
     }
 
-    fun get() : Get{
+    fun getApplication(id: Int, json: String) : Get{
         var getRequest = Get(retrofitBase)
-        threadRequest = Thread{ getRequest.run()}
+        threadRequest = Thread{ getRequest.application(id, json)}
         threadRequest!!.start()
         while(!getRequest.isGet){ /*process status*/ }
         return getRequest
     }
-
-    fun post(ApplicationTypeId: ApplicationTypeIdPOJO) : Post{
-        var postRequest = Post(retrofitBase)
-        threadRequest = Thread{ postRequest.run(ApplicationTypeId)}
-        threadRequest!!.start()
-        while(!postRequest.isGet){ /*process status*/ }
-        return postRequest
-    }
-
-
 }

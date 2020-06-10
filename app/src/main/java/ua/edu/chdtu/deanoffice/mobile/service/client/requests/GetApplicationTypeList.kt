@@ -4,7 +4,7 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.GET
 
-interface GetRequest {
+interface GetApplicationTypeList {
     @GET("application")
-    fun getRequest(): Call<ResponseBody>
+    fun getApplicationTypeList(): Call<ResponseBody>
 }
