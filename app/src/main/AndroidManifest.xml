@@ -17,7 +17,9 @@
             android:name=".ExamApplicationActivity"
             android:label="@string/title_activity_exam_application"
             android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".ApplicationTypesActivity" />
+        <activity android:name=".RetakeApplicationActivity" />
+        <activity android:name=".RenewApplicationActivity" />
+        <activity android:name=".DeducApplicationActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

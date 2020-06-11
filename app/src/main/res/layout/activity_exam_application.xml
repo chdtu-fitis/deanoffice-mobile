@@ -7,7 +7,7 @@
     tools:context="ua.edu.chdtu.deanoffice.mobile.myapplication.ExamApplicationActivity">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/applicationHeader"
         android:layout_width="wrap_content"
         android:layout_height="243dp"
         android:gravity="right"
@@ -33,7 +33,7 @@
         android:layout_height="61dp"
         android:gravity="center"
         android:textColor="@color/textbody"
-        android:text="ЗАЯВА"
+        android:text="Заява"
         android:textSize="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -42,7 +42,7 @@
         app:layout_constraintVertical_bias="0.344" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/applicationBody"
         android:layout_width="365dp"
         android:layout_height="272dp"
         android:gravity="left|top"
@@ -56,7 +56,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/applicationDateTime"
         android:layout_width="96dp"
         android:layout_height="25dp"
         android:gravity="center|top"
@@ -79,7 +79,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.881"
-        app:layout_constraintStart_toEndOf="@+id/textView4"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.797" />
 </androidx.constraintlayout.widget.ConstraintLayout>

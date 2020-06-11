@@ -6,11 +6,7 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-import ua.edu.chdtu.deanoffice.mobile.service.client.utils.Utils
 import ua.edu.chdtu.deanoffice.mobile.service.POJO.ApplicationTypePOJO
-import ua.edu.chdtu.deanoffice.mobile.service.POJO.RetakeApplicationData
-import ua.edu.chdtu.deanoffice.mobile.service.client.Client
-import java.lang.Exception
 
 
 class MainActivity : AppCompatActivity() {
@@ -21,26 +17,30 @@ class MainActivity : AppCompatActivity() {
         val button = findViewById<Button>(R.id.button)
         
         var applicationTypeList = ArrayList<ApplicationTypePOJO>()
-        try{
-            //applicationTypeList = Utils.JSONtoArrayObjects(Client.getApplicationList().response!!.body)
-        }catch (e: Exception){
-            println(e.toString())
-        }
 
+        //applicationTypeList = Utils.JSONtoArrayObjects(Client.getApplicationList().response!!.body)
         //Client.getApplication(0, Utils.retakeApplicationDataToJSON(RetakeApplicationData("Mathematics", 2)) )
         //println(Utils.retakeApplicationDataToJSON(RetakeApplicationData("Mathematics", 2)))
 
         val spinner = findViewById(R.id.spinner) as Spinner
-        var temp = arrayListOf<String>("1","2","3")
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, temp.toArray())
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        var temp = arrayListOf<String>(
+                "Перескладання іспиту для підвищення оцінки з метою отримання диплому з відзнакою",
+                "Поновлення до складу здобувачів вищої освіти після академічної відпустки",
+                "Відрахування за власним бажанням")
+        val adapter = ArrayAdapter(this, R.layout.multiline_spinner_dropdown_item, temp.toArray())
+
         spinner.adapter = adapter
 
         button.setOnClickListener {
-            val intent = Intent(this, ApplicationTypesActivity::class.java)
+            var intent = Intent(this, RetakeApplicationActivity::class.java)
+
+            when(1+spinner.selectedItemId){
+                1L -> { intent = Intent(this, RetakeApplicationActivity::class.java) }
+                2L -> { intent = Intent(this, RenewApplicationActivity::class.java) }
+                3L -> { intent = Intent(this, DeducApplicationActivity::class.java) }
+            }
+
             startActivity(intent)
-            
-            println(spinner.selectedItemId + 1)
         }
 
 
