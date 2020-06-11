@@ -1,13 +1,10 @@
 package ua.edu.chdtu.deanoffice.mobile.service.client.utils
 
 import com.google.gson.Gson
-import ua.edu.chdtu.deanoffice.mobile.service.POJO.Application
-import ua.edu.chdtu.deanoffice.mobile.service.POJO.ApplicationTypeIdPOJO
-import ua.edu.chdtu.deanoffice.mobile.service.POJO.ApplicationTypePOJO
-import ua.edu.chdtu.deanoffice.mobile.service.POJO.RetakeApplicationData
+import ua.edu.chdtu.deanoffice.mobile.service.POJO.*
 import kotlin.collections.ArrayList
 
-class Utils {
+object Utils {
 
     fun  JSONtoArrayObjects(JSON: String) : ArrayList<ApplicationTypePOJO>{
         var obj = ArrayList<ApplicationTypePOJO>();
@@ -26,6 +23,9 @@ class Utils {
 
     fun retakeApplicationDataToJSON(retakeApplicationData : RetakeApplicationData) : String{
         return Gson().toJson(retakeApplicationData)
+    }
+    fun renewApplicationDataToJSON(renewApplicationData : RenewApplicationData) : String{
+        return Gson().toJson(renewApplicationData)
     }
 
     /*fun  <T>JSONtoObject(JSON: String) : T{

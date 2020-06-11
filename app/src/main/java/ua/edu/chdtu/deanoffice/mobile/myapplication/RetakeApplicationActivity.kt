@@ -7,39 +7,21 @@ import android.widget.Button
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.Spinner
+import com.google.gson.Gson
+import ua.edu.chdtu.deanoffice.mobile.service.POJO.RetakeApplicationData
 import ua.edu.chdtu.deanoffice.mobile.service.client.Client
 import ua.edu.chdtu.deanoffice.mobile.service.client.utils.Utils
 
+class RetakeApplicationActivity : AppCompatActivity() {
 
-
-
-
-class ApplicationTypesActivity : AppCompatActivity() {
-
+    var id: Int = 2;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main2)
 
-
-        // finding the button
-        val showButton = findViewById<Button>(R.id.buttonApp)
-
         // finding the edit text
         val editText = findViewById<EditText>(R.id.editText)
-
-        showButton.setOnClickListener {
-
-            val text = editText.text
-
-        }
-
-        val exam = arrayOf("бакалаврського", "магістерського")
-        val spinner = findViewById(R.id.spinnerApp) as Spinner
-        val adapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, exam)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner.adapter = adapter
-
 
         val exam1 = arrayOf("іспиту", "заліку")
         val spinner1 = findViewById(R.id.spinnerAppExam) as Spinner
@@ -50,6 +32,11 @@ class ApplicationTypesActivity : AppCompatActivity() {
         val button = findViewById<Button>(R.id.buttonApp)
         button.setOnClickListener {
             val intent = Intent(this, ExamApplicationActivity::class.java)
+            var temp = Client.getApplication(id, Utils.retakeApplicationDataToJSON(RetakeApplicationData(editText.text.toString(),
+                spinner1.selectedItemId.toByte()))).response!!.body
+            println(temp);
+            ApplicationDataTemp.header = Utils.JSONtoApplication(temp).header
+            ApplicationDataTemp.body = "\t\t" + Utils.JSONtoApplication(temp).body
             startActivity(intent)
         }
 

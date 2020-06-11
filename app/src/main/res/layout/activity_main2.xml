@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ua.edu.chdtu.deanoffice.mobile.myapplication.ApplicationTypesActivity">
+    tools:context="ua.edu.chdtu.deanoffice.mobile.myapplication.RetakeApplicationActivity">
 
     <LinearLayout
         android:orientation="vertical"
@@ -17,18 +17,6 @@
 
         <!--Button with id showInput-->
 
-
-        <TextView
-            android:id="@+id/txtViewApp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Виберіть Ваш освітній ступінь:"
-            android:textSize="20dp" />
-        <Spinner
-            android:id="@+id/spinnerApp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/txtView"/>
         <EditText
             android:id="@+id/editText"
             android:layout_width="match_parent"
@@ -47,7 +35,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@id/txtView"/>
-
         <Button
             android:id="@+id/buttonApp"
             android:layout_width="128dp"

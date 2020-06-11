@@ -7,10 +7,20 @@
     tools:context="ua.edu.chdtu.deanoffice.mobile.myapplication.ExamApplicationActivity">
 
     <TextView
-        android:id="@+id/textView"
-        android:layout_width="385dp"
-        android:layout_height="159dp"
-        android:text="TextView"
+        android:id="@+id/applicationHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="243dp"
+        android:gravity="right"
+        android:textColor="@color/textbody"
+        android:text="Декану ФІТІС \n
+        Півню Олександру Борисовичу \n
+        студентки 2 курсу \n
+        бакалаврського освітнього рівня \n
+        денної форми навчання \n
+        спеціальності 121-Інженерія програмного забезпечення \n
+        освітня програма - Інженерія програмного забезпечення \n групи ПЗ-1904, навчання за рахунок державного бюджету \n
+        Кравець Юлії Сергіївни \n
+        Контактний телефон +380988245023"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,12 +29,56 @@
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="397dp"
-        android:layout_height="525dp"
-        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="61dp"
+        android:gravity="center"
+        android:textColor="@color/textbody"
+        android:text="Заява"
+        android:textSize="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.922" />
+        app:layout_constraintVertical_bias="0.344" />
+
+    <TextView
+        android:id="@+id/applicationBody"
+        android:layout_width="365dp"
+        android:layout_height="272dp"
+        android:gravity="left|top"
+        android:text="      Прошу вашого дозволу на перескладання іспиту з дисципліни основи програмування для підвищення оцінки з метою отримання диплому бакалавра з відзнакою."
+        android:textColor="@color/textbody"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/applicationDateTime"
+        android:layout_width="96dp"
+        android:layout_height="25dp"
+        android:gravity="center|top"
+        android:textColor="@color/textbody"
+        android:text="24.02.2021"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.08"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.797" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="96dp"
+        android:layout_height="25dp"
+        android:gravity="center|top"
+        android:text="(підпис)"
+        android:textColor="@color/textbody"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.881"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.797" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,14 +1,7 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Заяви ЧДТУ</string>
     <string name="selected_item">Selected item:</string>
 
-    <string-array name="Languages">
-        <item>Заява1</item>
-        <item>Заява2</item>
-        <item>Заява3</item>
-        <item>Заява4</item>
-        <item>Заява5</item>
-        <item>Заява6</item>
-    </string-array>
     <string name="title_activity_exam_application">ExamApplicationActivity</string>
+
 </resources>
