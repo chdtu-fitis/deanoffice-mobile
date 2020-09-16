@@ -1,32 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/linear_layout"
-        android:gravity = "center">
-
-        <!--EditText with id editText-->
-
-        <!--Button with id showInput-->
-
-        <EditText
-            android:id="@+id/editDate1"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:hint="Введіть дату з якої ви хочете відрахуватись\n зі складу здобувачів вищої освіти"
-            android:inputType="date"/>
+            android:layout_height="match_parent"
+            android:id="@+id/linear_layout"
+            android:gravity = "center">
 
-        <Button
-            android:id="@+id/buttonNext"
-            android:layout_width="128dp"
-            android:layout_height="wrap_content"
-            android:text="Далі" />
-    </LinearLayout>
+                <EditText
+                    android:id="@+id/editDate1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:hint="Введіть дату з якої ви хочете відрахуватись\n зі складу здобувачів вищої освіти"
+                    android:inputType="date"/>
+
+                <Button
+                    android:id="@+id/buttonNext"
+                    android:layout_width="128dp"
+                    android:layout_height="wrap_content"
+                    android:text="Далі" />
+        </LinearLayout>
 
 </LinearLayout>
