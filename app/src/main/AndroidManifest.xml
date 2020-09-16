@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ua.edu.chdtu.deanoffice.mobile.myapplication">
+    package="ua.edu.deanoffice.mobile.studentchdtu">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -17,9 +17,10 @@
             android:name=".ExamApplicationActivity"
             android:label="@string/title_activity_exam_application"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+
+        <activity android:name=".DeducApplicationActivity" />
         <activity android:name=".RetakeApplicationActivity" />
         <activity android:name=".RenewApplicationActivity" />
-        <activity android:name=".DeducApplicationActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
