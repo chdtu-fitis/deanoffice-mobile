@@ -1,4 +1,4 @@
-package ua.edu.deanoffice.mobile.studentchdtu.service.client;
+package ua.edu.deanoffice.mobile.studentchdtu.service.client.requests;
 
 import java.io.IOException;
 
@@ -11,8 +11,11 @@ import ua.edu.deanoffice.mobile.studentchdtu.service.client.interfaces.GetApplic
 public class Get {
 
     private Retrofit retrofit;
-    public String response;
-    public boolean isGet;
+    private String responseBody;
+
+    public String getResponseBody() {
+        return responseBody;
+    }
 
     public Get(Retrofit retrofit) {
         this.retrofit = retrofit;
@@ -22,23 +25,20 @@ public class Get {
         GetApplicationTypeList req = retrofit.create(GetApplicationTypeList.class);
         try{
             Response resp = req.getApplicationTypeList().execute();
-            response = ((ResponseBody)resp.body()).string();
+            responseBody = ((ResponseBody)resp.body()).string();
 
         }catch (IOException e){
             e.printStackTrace();
         }
-        isGet = true;
     }
 
     public void application(int id, String json) {
         GetApplication req = retrofit.create(GetApplication.class);
         try{
             Response resp = req.getRequest(id, json).execute();
-            response = ((ResponseBody)resp.body()).string();
+            responseBody = ((ResponseBody)resp.body()).string();
         }catch (IOException e){
             e.printStackTrace();
         }
-        isGet = true;
     }
-
 }

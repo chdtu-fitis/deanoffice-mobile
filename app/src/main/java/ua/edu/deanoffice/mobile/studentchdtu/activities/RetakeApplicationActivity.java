@@ -1,10 +1,7 @@
-package ua.edu.deanoffice.mobile.studentchdtu;
+package ua.edu.deanoffice.mobile.studentchdtu.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,9 +10,11 @@ import android.widget.Spinner;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import okhttp3.internal.Util;
+import ua.edu.deanoffice.mobile.studentchdtu.ApplicationDataTemp;
+import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.service.Utils;
 import ua.edu.deanoffice.mobile.studentchdtu.service.client.Client;
+import ua.edu.deanoffice.mobile.studentchdtu.service.client.requests.Get;
 import ua.edu.deanoffice.mobile.studentchdtu.service.pojo.RetakeApplicationData;
 
 public class RetakeApplicationActivity extends AppCompatActivity {
@@ -37,18 +36,17 @@ public class RetakeApplicationActivity extends AppCompatActivity {
         spinner.setAdapter(adapter);
 
         Button button = findViewById(R.id.buttonApp);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(RetakeApplicationActivity.this, ExamApplicationActivity.class);
-                String temp = Client.getInstance().getApplication(id, Utils.retakeApplicationDataToJSON(
-                        new RetakeApplicationData(editText.getText().toString(), (int)spinner.getSelectedItemId()))).response;
-                Log.d("Test", temp);
-
-                ApplicationDataTemp.getInstance().header = Utils.JSONtoApplication(temp).header;
-                ApplicationDataTemp.getInstance().body = "\t\t" + Utils.JSONtoApplication(temp).body;
-                startActivity(intent);
-            }
+        button.setOnClickListener((view)-> {
+            Client.getInstance().getApplication(id, Utils.retakeApplicationDataToJSON(
+                    new RetakeApplicationData(editText.getText().toString(), (int)spinner.getSelectedItemId())), (get)->onResponse(get));
         });
+    }
+
+    public void onResponse(Get get){
+        Intent intent = new Intent(RetakeApplicationActivity.this, ExamApplicationActivity.class);
+        String body = get.getResponseBody();
+        ApplicationDataTemp.getInstance().header = Utils.JSONtoApplication(body).header;
+        ApplicationDataTemp.getInstance().body = "\t\t" + Utils.JSONtoApplication(body).body;
+        startActivity(intent);
     }
 }

@@ -1,4 +1,4 @@
-package ua.edu.deanoffice.mobile.studentchdtu;
+package ua.edu.deanoffice.mobile.studentchdtu.activities;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +10,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+
+import ua.edu.deanoffice.mobile.studentchdtu.ApplicationDataTemp;
+import ua.edu.deanoffice.mobile.studentchdtu.R;
 
 public class ExamApplicationActivity extends AppCompatActivity {
 

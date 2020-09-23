@@ -1,11 +1,10 @@
-package ua.edu.deanoffice.mobile.studentchdtu;
+package ua.edu.deanoffice.mobile.studentchdtu.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import android.util.Log;
 import android.view.View;
@@ -15,10 +14,10 @@ import android.widget.Spinner;
 
 import java.util.ArrayList;
 
+import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.service.pojo.ApplicationTypePOJO;
-import ua.edu.deanoffice.mobile.studentchdtu.service.pojo.RenewApplicationData;
 
-public class MainActivity extends AppCompatActivity {
+public class ChooseApplicationActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,24 +42,24 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, RetakeApplicationActivity.class);
+                Intent intent = new Intent(ChooseApplicationActivity.this, RetakeApplicationActivity.class);
 
                 switch (1+(int)spinner.getSelectedItemId()){
                     case 1:
-                        intent = new Intent(MainActivity.this, RetakeApplicationActivity.class);
+                        intent = new Intent(ChooseApplicationActivity.this, RetakeApplicationActivity.class);
                         break;
                     case 2:
-                        intent = new Intent(MainActivity.this, RenewApplicationActivity.class);
+                        intent = new Intent(ChooseApplicationActivity.this, RenewApplicationActivity.class);
                         break;
                     case 3:
-                        intent = new Intent(MainActivity.this, DeducApplicationActivity.class);
+                        intent = new Intent(ChooseApplicationActivity.this, DeducApplicationActivity.class);
                         break;
 
                         default:
                             break;
                 }
                 Log.d("Test", "enter");
-                MainActivity.this.startActivity(intent);
+                ChooseApplicationActivity.this.startActivity(intent);
                 finish();
             }
         });
