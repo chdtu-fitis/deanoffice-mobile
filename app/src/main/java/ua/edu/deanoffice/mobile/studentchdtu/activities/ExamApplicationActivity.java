@@ -11,8 +11,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import ua.edu.deanoffice.mobile.studentchdtu.ApplicationDataTemp;
+import ua.edu.deanoffice.mobile.studentchdtu.mobile.ApplicationCache;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
+import ua.edu.deanoffice.mobile.studentchdtu.mobile.Mobile;
 
 public class ExamApplicationActivity extends AppCompatActivity {
 
@@ -28,8 +29,8 @@ public class ExamApplicationActivity extends AppCompatActivity {
         TextView applicationBody = findViewById(R.id.applicationBody);
         TextView applicationDateTime = findViewById(R.id.applicationDateTime);
 
-        applicationHeader.setText(ApplicationDataTemp.getInstance().header.replace("\\n", "\n"));
-        applicationBody.setText(ApplicationDataTemp.getInstance().body);
+        applicationHeader.setText(Mobile.getInstance().currentApplication.getHeader());
+        applicationBody.setText(Mobile.getInstance().currentApplication.getBody());
         DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
         String date = df.format(Calendar.getInstance().getTime());
         applicationDateTime.setText(date);

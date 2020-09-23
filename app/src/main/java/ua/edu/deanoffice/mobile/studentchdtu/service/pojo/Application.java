@@ -1,6 +1,19 @@
 package ua.edu.deanoffice.mobile.studentchdtu.service.pojo;
 
 public class Application {
-    public String header;
-    public String body;
+    private String header;
+    private String body;
+
+    public Application(String header, String body) {
+        this.header = header;
+        this.body = body;
+    }
+
+    public String getHeader() {
+        return header;
+    }
+
+    public String getBody() {
+        return body;
+    }
 }

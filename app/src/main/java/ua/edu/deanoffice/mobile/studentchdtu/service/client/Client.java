@@ -11,22 +11,16 @@ import ua.edu.deanoffice.mobile.studentchdtu.service.client.requests.Get;
 import ua.edu.deanoffice.mobile.studentchdtu.service.client.requests.Post;
 
 public class Client {
-    private static Client instance = new Client();
 
     private Retrofit retrofitBase;
     private Executor executor;
 
     public Client() {
         retrofitBase = new Retrofit.Builder()
-                .baseUrl("http://192.168.212.196:8080/")
+                .baseUrl("http://192.168.1.126:8080/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         executor = Executors.newCachedThreadPool();
-    }
-
-
-    public static Client getInstance() {
-        return instance;
     }
 
     public void getApplicationList(OnResponseGetCallback onResponseGetCallback) {
