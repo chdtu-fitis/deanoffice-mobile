@@ -36,4 +36,5 @@ public class User {
         this.group = group;
         this.course = course;
     }
+    
 }
