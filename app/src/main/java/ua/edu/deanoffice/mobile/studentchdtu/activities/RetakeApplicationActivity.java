@@ -37,7 +37,7 @@ public class RetakeApplicationActivity extends AppCompatActivity {
 
         Button button = findViewById(R.id.buttonApp);
         button.setOnClickListener((view)-> {
-            Mobile.getInstance().client.getApplication(id, Utils.retakeApplicationDataToJSON(
+            Mobile.getInstance().getClient().getApplication(id, Utils.retakeApplicationDataToJSON(
                     new RetakeApplicationData(editText.getText().toString(), (int)spinner.getSelectedItemId())), (get)->onResponse(get));
         });
     }
@@ -45,7 +45,14 @@ public class RetakeApplicationActivity extends AppCompatActivity {
     public void onResponse(Get get){
         Intent intent = new Intent(RetakeApplicationActivity.this, ExamApplicationActivity.class);
         String body = get.getResponseBody();
-        Mobile.getInstance().currentApplication.load(Utils.JSONtoApplication(body));
+        Mobile.getInstance().getCurrentApplication().load(Utils.JSONtoApplication(body));
         startActivity(intent);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(RetakeApplicationActivity.this, ChooseApplicationActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

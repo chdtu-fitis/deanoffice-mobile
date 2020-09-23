@@ -17,7 +17,7 @@ import ua.edu.deanoffice.mobile.studentchdtu.service.pojo.RenewApplicationData;
 
 public class RenewApplicationActivity extends AppCompatActivity {
 
-    int id = 7;
+    private int id = 7;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -28,7 +28,7 @@ public class RenewApplicationActivity extends AppCompatActivity {
         Button buttonNext = findViewById(R.id.buttonNext);
 
         buttonNext.setOnClickListener((view)->{
-            Mobile.getInstance().client.getApplication(id,
+            Mobile.getInstance().getClient().getApplication(id,
                     Utils.renewApplicationDataToJSON(new RenewApplicationData(textDate.getText().toString())),
                     (get)->onResponse(get));
         });
@@ -37,7 +37,14 @@ public class RenewApplicationActivity extends AppCompatActivity {
     public void onResponse(Get get){
         Intent intent = new Intent(RenewApplicationActivity.this, ExamApplicationActivity.class);
         String body = get.getResponseBody();
-        Mobile.getInstance().currentApplication.load(Utils.JSONtoApplication(body));
+        Mobile.getInstance().getCurrentApplication().load(Utils.JSONtoApplication(body));
         startActivity(intent);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(RenewApplicationActivity.this, ChooseApplicationActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

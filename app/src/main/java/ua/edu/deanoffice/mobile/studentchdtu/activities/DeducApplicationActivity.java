@@ -16,17 +16,18 @@ import ua.edu.deanoffice.mobile.studentchdtu.service.pojo.RenewApplicationData;
 
 public class DeducApplicationActivity extends AppCompatActivity {
 
-    int id = 8;
+    private int id = 8;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.deduc_application_activity);
 
-        final EditText textDate = findViewById(R.id.editDate1);
+        EditText textDate = findViewById(R.id.editDate1);
         Button buttonNext = findViewById(R.id.buttonNext);
 
         buttonNext.setOnClickListener((view)->{
-            Mobile.getInstance().client.getApplication(id,
+            Mobile.getInstance().getClient().getApplication(id,
                     Utils.renewApplicationDataToJSON(new RenewApplicationData(textDate.getText().toString())),
                     (get) -> onResponse(get));
         });
@@ -35,7 +36,14 @@ public class DeducApplicationActivity extends AppCompatActivity {
     public void onResponse(Get get){
         Intent intent = new Intent(DeducApplicationActivity.this, ExamApplicationActivity.class);
         String body = get.getResponseBody();
-        Mobile.getInstance().currentApplication.load(Utils.JSONtoApplication(body));
+        Mobile.getInstance().getCurrentApplication().load(Utils.JSONtoApplication(body));
         startActivity(intent);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(DeducApplicationActivity.this, ChooseApplicationActivity.class);
+        startActivity(intent);
+        finish();
     }
 }
