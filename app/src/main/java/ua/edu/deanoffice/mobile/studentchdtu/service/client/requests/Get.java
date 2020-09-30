@@ -26,7 +26,6 @@ public class Get {
         try{
             Response resp = req.getApplicationTypeList().execute();
             responseBody = ((ResponseBody)resp.body()).string();
-
         }catch (IOException e){
             e.printStackTrace();
         }

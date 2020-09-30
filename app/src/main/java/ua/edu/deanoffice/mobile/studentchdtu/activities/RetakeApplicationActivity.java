@@ -55,4 +55,6 @@ public class RetakeApplicationActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
+
 }

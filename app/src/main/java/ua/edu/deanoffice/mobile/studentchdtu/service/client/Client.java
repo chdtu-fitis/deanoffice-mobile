@@ -1,19 +1,12 @@
 package ua.edu.deanoffice.mobile.studentchdtu.service.client;
 
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import ua.edu.deanoffice.mobile.studentchdtu.mobile.UserData.Credentials;
 import ua.edu.deanoffice.mobile.studentchdtu.service.client.requests.Get;
 import ua.edu.deanoffice.mobile.studentchdtu.service.client.requests.Post;
 
@@ -24,7 +17,7 @@ public class Client {
 
     public Client() {
         retrofitBase = new Retrofit.Builder()
-                .baseUrl("http://192.168.1.126:8080/")
+                .baseUrl("http://192.168.1.106:8080/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         executor = Executors.newCachedThreadPool();
@@ -48,10 +41,19 @@ public class Client {
         });
     }
 
+    public void getUser(Credentials credentials, OnResponsePostCallback onResponsePostCallback) {
+        Post postRequest = new Post(retrofitBase);
+        executor.execute(()->{
+            postRequest.sendCredentials(credentials);
+            onResponsePostCallback.onResponsePost(postRequest.getResponseBody());
+        });
+    }
+
     public interface OnResponseGetCallback {
         void onResponseGet(Get get);
     }
+
     public interface OnResponsePostCallback {
-        void onResponsePost(Post get);
+        void onResponsePost(String responseBody);
     }
 }
