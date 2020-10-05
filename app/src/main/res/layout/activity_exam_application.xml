@@ -4,14 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ExamApplicationActivity">
+    android:background="@color/white"
+    tools:context=".activities.ExamApplicationActivity">
 
     <TextView
         android:id="@+id/applicationHeader"
         android:layout_width="wrap_content"
         android:layout_height="243dp"
         android:gravity="right"
-        android:textColor="@color/textbody"
+        android:textColor="@color/black"
         android:text="Декану ФІТІС \n
         Півню Олександру Борисовичу \n
         студентки 2 курсу \n
@@ -32,7 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="61dp"
         android:gravity="center"
-        android:textColor="@color/textbody"
+        android:textColor="@color/black"
         android:text="Заява"
         android:textSize="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -47,7 +48,7 @@
         android:layout_height="272dp"
         android:gravity="left|top"
         android:text="      Прошу вашого дозволу на перескладання іспиту з дисципліни основи програмування для підвищення оцінки з метою отримання диплому бакалавра з відзнакою."
-        android:textColor="@color/textbody"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
@@ -60,7 +61,7 @@
         android:layout_width="96dp"
         android:layout_height="25dp"
         android:gravity="center|top"
-        android:textColor="@color/textbody"
+        android:textColor="@color/black"
         android:text="24.02.2021"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -75,10 +76,11 @@
         android:layout_height="25dp"
         android:gravity="center|top"
         android:text="(підпис)"
-        android:textColor="@color/textbody"
+        android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.881"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.797" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

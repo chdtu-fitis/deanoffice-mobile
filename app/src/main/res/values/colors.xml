@@ -3,5 +3,9 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
-    <color name="textbody">#000000</color>
+    <color name="black">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="chdtu_value1">#88BCF2</color>
+    <color name="chdtu_value2">#2D7ED3</color>
+    <color name="act_background">#F1F7FE</color>
 </resources>

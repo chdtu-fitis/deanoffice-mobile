@@ -11,17 +11,16 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
+        android:theme="@style/CHDTU.AcitivityBackground"
         android:usesCleartextTraffic="true">
+        <activity android:name=".activities.ChooseApplicationActivity"></activity>
         <activity
-            android:name=".ExamApplicationActivity"
-            android:label="@string/title_activity_exam_application"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-
-        <activity android:name=".DeducApplicationActivity" />
-        <activity android:name=".RetakeApplicationActivity" />
-        <activity android:name=".RenewApplicationActivity" />
-        <activity android:name=".MainActivity">
+            android:name=".activities.ExamApplicationActivity"
+            android:label="@string/title_activity_exam_application" />
+        <activity android:name=".activities.DeducApplicationActivity" />
+        <activity android:name=".activities.RetakeApplicationActivity" />
+        <activity android:name=".activities.RenewApplicationActivity" />
+        <activity android:name=".activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
