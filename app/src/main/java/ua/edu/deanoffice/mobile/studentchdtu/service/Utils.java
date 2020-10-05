@@ -40,4 +40,5 @@ public class Utils {
     public static String userCredentialsToJSON(Credentials credentials) {
         return new Gson().toJson(credentials);
     }
+
 }
