@@ -17,7 +17,7 @@ public class Client {
 
     public Client() {
         retrofitBase = new Retrofit.Builder()
-                .baseUrl("http://192.168.1.106:8080/")
+                .baseUrl("http://192.168.43.128:8075/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         executor = Executors.newCachedThreadPool();
@@ -45,6 +45,14 @@ public class Client {
         Post postRequest = new Post(retrofitBase);
         executor.execute(()->{
             postRequest.sendCredentials(credentials);
+            onResponsePostCallback.onResponsePost(postRequest.getResponseBody());
+        });
+    }
+
+    public void getUserData(OnResponsePostCallback onResponsePostCallback) {
+        Post postRequest = new Post(retrofitBase);
+        executor.execute(()->{
+            postRequest.getUserData();
             onResponsePostCallback.onResponsePost(postRequest.getResponseBody());
         });
     }

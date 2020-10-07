@@ -20,7 +20,7 @@
     <style name="CHDTU"></style>
 
     <style name="CHDTU.InputText">
-       <item name="android:background">@color/chdtu_value1</item>
+        <item name="android:background">@color/chdtu_value1</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textAlignment">textStart</item>
         <item name="android:paddingLeft">13dp</item>
@@ -31,5 +31,14 @@
     <style name="CHDTU.AcitivityBackground" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@color/act_background</item>
     </style>
+
+    <style name="CHDTU.AcitivityBackground.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="CHDTU.AcitivityBackground.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="CHDTU.AcitivityBackground.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>

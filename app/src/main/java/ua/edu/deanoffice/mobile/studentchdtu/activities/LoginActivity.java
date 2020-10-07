@@ -8,10 +8,14 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.mobile.Mobile;
 import ua.edu.deanoffice.mobile.studentchdtu.mobile.UserData.Credentials;
 import ua.edu.deanoffice.mobile.studentchdtu.service.Utils;
+import ua.edu.deanoffice.mobile.studentchdtu.service.pojo.Token;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -37,8 +41,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void OnResponse(String responseBody) {
-        Log.d("Test", responseBody);
-        Intent intent = new Intent(LoginActivity.this, ChooseApplicationActivity.class);
+        Mobile.getInstance().token = new Gson().fromJson(responseBody, Token.class);
+        Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);
         startActivity(intent);
         finish();
     }
