@@ -81,7 +81,7 @@
             android:id="@+id/StudentName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Золотоверхий Андрій Ярославович"
+            android:text=""
             android:textColor="@color/white"
             android:textSize="18dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -91,10 +91,10 @@
             app:layout_constraintVertical_bias="0.25" />
 
         <TextView
-            android:id="@+id/StudentCafed"
+            android:id="@+id/StudentFacult"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ФІТІС 2 курс"
+            android:text="Завантаження"
             android:textColor="@color/white"
             android:textSize="18dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -104,16 +104,16 @@
             app:layout_constraintVertical_bias="0.3" />
 
         <TextView
-            android:id="@+id/StudentDegree"
+            android:id="@+id/StudentGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ПЗ-1904"
+            android:text=""
             android:textColor="@color/white"
             android:textSize="18dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/StudentCafed"
+            app:layout_constraintTop_toBottomOf="@+id/StudentFacult"
             app:layout_constraintVertical_bias="0" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
