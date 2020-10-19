@@ -1,7 +1,6 @@
-package ua.edu.deanoffice.mobile.studentchdtu.service.model.courses;
+package ua.edu.deanoffice.mobile.studentchdtu.service.model.course;
 
-public class Position extends ModelBase {
-
+public class KnowledgeControl extends ModelBase {
     private String name;
 
     public String getName() {

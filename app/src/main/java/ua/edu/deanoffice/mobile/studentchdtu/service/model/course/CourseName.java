@@ -1,4 +1,4 @@
-package ua.edu.deanoffice.mobile.studentchdtu.service.model.courses;
+package ua.edu.deanoffice.mobile.studentchdtu.service.model.course;
 
 public class CourseName extends ModelBase {
     private String name;
