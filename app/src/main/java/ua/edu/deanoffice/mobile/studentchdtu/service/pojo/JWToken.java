@@ -1,13 +1,13 @@
 package ua.edu.deanoffice.mobile.studentchdtu.service.pojo;
 
-public class Token {
+public class JWToken {
 
     public String token;
 
-    public Token() {
+    public JWToken() {
     }
 
-    public Token(String token) {
+    public JWToken(String token) {
         this.token = token;
     }
 }

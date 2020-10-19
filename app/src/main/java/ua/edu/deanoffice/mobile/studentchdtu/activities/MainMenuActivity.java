@@ -16,6 +16,7 @@ import android.widget.TextView;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.mobile.Mobile;
 import ua.edu.deanoffice.mobile.studentchdtu.mobile.UserData.User;
+import ua.edu.deanoffice.mobile.studentchdtu.service.model.student.Student;
 
 public class MainMenuActivity extends AppCompatActivity {
 
@@ -30,15 +31,12 @@ public class MainMenuActivity extends AppCompatActivity {
         studentInfo[1] = findViewById(R.id.StudentFacult);
         studentInfo[2] = findViewById(R.id.StudentGroup);
 
-        Mobile.getInstance().getClient().getUserData((resp)->{
-            Log.d("Test", resp);
-            updateStudentInfo(new Gson().fromJson(resp, User.class));
-        });
+        updateStudentInfo(Mobile.getInstance().getStudent());
     }
 
-    public void updateStudentInfo(User user){
-        studentInfo[0].setText(user.getName()+ " " + user.getSurname()+ " " + user.getPatronymic());
-        studentInfo[1].setText(user.getCourse());
-        studentInfo[2].setText(user.getGroup());
+    public void updateStudentInfo(Student user){
+        studentInfo[0].setText(user.getName()+ " " + user.getSurname()+ " " + user.getPatronimic());
+        studentInfo[1].setText(user.getDegrees()[0].getSpecialization().getSpeciality().getName());
+        studentInfo[2].setText(user.getDegrees()[0].getStudentGroup().getName());
     }
 }

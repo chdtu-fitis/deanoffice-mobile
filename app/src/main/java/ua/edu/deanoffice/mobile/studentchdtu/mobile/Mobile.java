@@ -2,7 +2,8 @@ package ua.edu.deanoffice.mobile.studentchdtu.mobile;
 
 import ua.edu.deanoffice.mobile.studentchdtu.mobile.UserData.User;
 import ua.edu.deanoffice.mobile.studentchdtu.service.client.Client;
-import ua.edu.deanoffice.mobile.studentchdtu.service.pojo.Token;
+import ua.edu.deanoffice.mobile.studentchdtu.service.model.student.Student;
+import ua.edu.deanoffice.mobile.studentchdtu.service.pojo.JWToken;
 
 public class Mobile {
     private static Mobile instance = new Mobile();
@@ -12,9 +13,9 @@ public class Mobile {
 
     private Client client;
     private ApplicationCache currentApplication;
-    private User user;
+    private Student student;
 
-    public Token token;
+    public JWToken JWToken;
 
     public Client getClient() {
         return client;
@@ -24,12 +25,12 @@ public class Mobile {
         return currentApplication;
     }
 
-    public User getUser() {
-        return user;
+    public Student getStudent() {
+        return student;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setStudent(Student student) {
+        this.student = student;
     }
 
     private Mobile() {

@@ -9,13 +9,13 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.mobile.Mobile;
 import ua.edu.deanoffice.mobile.studentchdtu.mobile.UserData.Credentials;
 import ua.edu.deanoffice.mobile.studentchdtu.service.Utils;
-import ua.edu.deanoffice.mobile.studentchdtu.service.pojo.Token;
+import ua.edu.deanoffice.mobile.studentchdtu.service.model.student.Student;
+import ua.edu.deanoffice.mobile.studentchdtu.service.pojo.JWToken;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -41,7 +41,17 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void OnResponse(String responseBody) {
-        Mobile.getInstance().token = new Gson().fromJson(responseBody, Token.class);
+        Log.d("Test", responseBody);
+        Mobile.getInstance().JWToken = new Gson().fromJson(responseBody, JWToken.class);
+        Log.d("Test", Mobile.getInstance().JWToken.token);
+
+        Mobile.getInstance().getClient().getUserData((resp)->{
+            OnStudentDataGet(resp);
+        });
+    }
+
+    public void OnStudentDataGet(String resp) {
+        Mobile.getInstance().setStudent(new Gson().fromJson(resp, Student.class));
         Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);
         startActivity(intent);
         finish();
