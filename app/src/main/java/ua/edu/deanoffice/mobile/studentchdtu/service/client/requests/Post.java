@@ -39,7 +39,6 @@ public class Post {
     public void getUserData() {
         GetUserData post = retrofit.create(GetUserData.class);
         try{
-            Log.d("Test","Bearer " + Mobile.getInstance().JWToken.token);
             Response resp = post.getApplicationTypeList("Bearer " + Mobile.getInstance().JWToken.token).execute();
             Log.d("Test", "Code: " + resp.code());
             responseBody = ((ResponseBody)resp.body()).string();

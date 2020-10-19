@@ -41,17 +41,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void OnResponse(String responseBody) {
-        Log.d("Test", responseBody);
         Mobile.getInstance().JWToken = new Gson().fromJson(responseBody, JWToken.class);
-        Log.d("Test", Mobile.getInstance().JWToken.token);
-
-        Mobile.getInstance().getClient().getUserData((resp)->{
-            OnStudentDataGet(resp);
-        });
-    }
-
-    public void OnStudentDataGet(String resp) {
-        Mobile.getInstance().setStudent(new Gson().fromJson(resp, Student.class));
         Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);
         startActivity(intent);
         finish();

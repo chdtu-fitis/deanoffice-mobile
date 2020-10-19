@@ -3,7 +3,6 @@ package ua.edu.deanoffice.mobile.studentchdtu.service;
 import com.google.gson.Gson;
 
 import ua.edu.deanoffice.mobile.studentchdtu.mobile.UserData.Credentials;
-import ua.edu.deanoffice.mobile.studentchdtu.mobile.UserData.User;
 import ua.edu.deanoffice.mobile.studentchdtu.service.pojo.Application;
 import ua.edu.deanoffice.mobile.studentchdtu.service.pojo.RenewApplicationData;
 import ua.edu.deanoffice.mobile.studentchdtu.service.pojo.RetakeApplicationData;

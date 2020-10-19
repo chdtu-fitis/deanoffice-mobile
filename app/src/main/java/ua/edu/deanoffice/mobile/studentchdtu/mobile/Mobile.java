@@ -1,6 +1,5 @@
 package ua.edu.deanoffice.mobile.studentchdtu.mobile;
 
-import ua.edu.deanoffice.mobile.studentchdtu.mobile.UserData.User;
 import ua.edu.deanoffice.mobile.studentchdtu.service.client.Client;
 import ua.edu.deanoffice.mobile.studentchdtu.service.model.student.Student;
 import ua.edu.deanoffice.mobile.studentchdtu.service.pojo.JWToken;
