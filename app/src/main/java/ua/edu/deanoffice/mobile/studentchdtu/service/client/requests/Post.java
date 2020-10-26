@@ -4,7 +4,6 @@ import android.util.Log;
 
 import java.io.IOException;
 
-import okhttp3.ResponseBody;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import ua.edu.deanoffice.mobile.studentchdtu.mobile.Mobile;
@@ -15,10 +14,15 @@ import ua.edu.deanoffice.mobile.studentchdtu.service.client.interfaces.PostReque
 public class Post {
 
     private Retrofit retrofit;
-    private String responseBody = "";
+    private Response response;
+    private boolean isSuccesful = false;
 
-    public String getResponseBody() {
-        return responseBody;
+    public boolean isSuccesful() {
+        return isSuccesful;
+    }
+
+    public Response getResponse() {
+        return response;
     }
 
     public Post(Retrofit retrofit) {
@@ -30,18 +34,8 @@ public class Post {
         try{
             Response resp = post.request(cred).execute();
             Log.d("Test", "Code: " + resp.code());
-            responseBody = ((ResponseBody)resp.body()).string();
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-    }
-
-    public void getUserData() {
-        GetUserData post = retrofit.create(GetUserData.class);
-        try{
-            Response resp = post.getApplicationTypeList("Bearer " + Mobile.getInstance().JWToken.token).execute();
-            Log.d("Test", "Code: " + resp.code());
-            responseBody = ((ResponseBody)resp.body()).string();
+            response = resp;
+            isSuccesful = true;
         }catch (IOException e){
             e.printStackTrace();
         }

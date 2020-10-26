@@ -14,7 +14,7 @@ public class Mobile {
     private ApplicationCache currentApplication;
     private Student student;
 
-    public JWToken jwToken;
+    public JWToken jwt;
 
     public Client getClient() {
         return client;

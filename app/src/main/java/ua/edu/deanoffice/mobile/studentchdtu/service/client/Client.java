@@ -1,11 +1,15 @@
 package ua.edu.deanoffice.mobile.studentchdtu.service.client;
 
 
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import ua.edu.deanoffice.mobile.studentchdtu.mobile.Mobile;
 import ua.edu.deanoffice.mobile.studentchdtu.mobile.UserData.Credentials;
 import ua.edu.deanoffice.mobile.studentchdtu.service.client.requests.Get;
 import ua.edu.deanoffice.mobile.studentchdtu.service.client.requests.Post;
@@ -23,45 +27,58 @@ public class Client {
         executor = Executors.newCachedThreadPool();
     }
 
-    public void getApplicationList(OnResponseGetCallback onResponseGetCallback) {
+    public void getApplicationList(OnResponseCallback onResponseGetCallback) {
         Get getRequest = new Get(retrofitBase);
 
-        executor.execute(()->{
+        executor.execute(() -> {
             getRequest.applicationTypeList();
-            onResponseGetCallback.onResponseGet(getRequest);
+            if(getRequest.isSuccesful()) {
+                onResponseGetCallback.OnResponseSuccess(getRequest.getResponse());
+            }else{
+                onResponseGetCallback.OnFailureSuccess(getRequest.getResponse());
+            }
         });
     }
 
-    public void getApplication(final int id, final String json, OnResponseGetCallback onResponseGetCallback) {
+    public void getApplication(final int id, final String json, OnResponseCallback onResponseGetCallback) {
         Get getRequest = new Get(retrofitBase);
 
-        executor.execute(()->{
+        executor.execute(() -> {
             getRequest.application(id, json);
-            onResponseGetCallback.onResponseGet(getRequest);
+            if(getRequest.isSuccesful()) {
+                onResponseGetCallback.OnResponseSuccess(getRequest.getResponse());
+            }else{
+                onResponseGetCallback.OnFailureSuccess(getRequest.getResponse());
+            }
         });
     }
 
-    public void getUser(Credentials credentials, OnResponsePostCallback onResponsePostCallback) {
+    public void getUser(Credentials credentials, OnResponseCallback onResponsePostCallback) {
         Post postRequest = new Post(retrofitBase);
-        executor.execute(()->{
+        executor.execute(() -> {
             postRequest.sendCredentials(credentials);
-            onResponsePostCallback.onResponsePost(postRequest.getResponseBody());
+            if(postRequest.isSuccesful()) {
+                onResponsePostCallback.OnResponseSuccess(postRequest.getResponse());
+            }else{
+                onResponsePostCallback.OnFailureSuccess(postRequest.getResponse());
+            }
         });
     }
 
-    public void getUserData(OnResponsePostCallback onResponsePostCallback) {
-        Post postRequest = new Post(retrofitBase);
-        executor.execute(()->{
-            postRequest.getUserData();
-            onResponsePostCallback.onResponsePost(postRequest.getResponseBody());
+    public void getUserData(OnResponseCallback onResponsePostCallback) {
+        Get getRequest = new Get(retrofitBase);
+        executor.execute(() -> {
+            getRequest.getUserData();
+            if(getRequest.isSuccesful()) {
+                onResponsePostCallback.OnResponseSuccess(getRequest.getResponse());
+            }else{
+                onResponsePostCallback.OnFailureSuccess(getRequest.getResponse());
+            }
         });
     }
 
-    public interface OnResponseGetCallback {
-        void onResponseGet(Get get);
-    }
-
-    public interface OnResponsePostCallback {
-        void onResponsePost(String responseBody);
+    public interface OnResponseCallback {
+        void OnResponseSuccess(Response response);
+        void OnFailureSuccess(Response response);
     }
 }

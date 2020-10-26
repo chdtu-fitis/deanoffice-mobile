@@ -8,12 +8,16 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
+import retrofit2.Response;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.mobile.Mobile;
 import ua.edu.deanoffice.mobile.studentchdtu.mobile.UserData.Credentials;
 import ua.edu.deanoffice.mobile.studentchdtu.service.Utils;
+import ua.edu.deanoffice.mobile.studentchdtu.service.client.Client;
+import ua.edu.deanoffice.mobile.studentchdtu.service.client.requests.Post;
 import ua.edu.deanoffice.mobile.studentchdtu.service.model.student.Student;
 import ua.edu.deanoffice.mobile.studentchdtu.service.pojo.JWToken;
 
@@ -36,14 +40,26 @@ public class LoginActivity extends AppCompatActivity {
                 return;
             }
 
-            Mobile.getInstance().getClient().getUser(new Credentials(login, password), (resp)->OnResponse(resp));
+            Mobile.getInstance().getClient().getUser(new Credentials(login, password), new Client.OnResponseCallback() {
+                @Override
+                public void OnResponseSuccess(Response response) {
+                    OnResponse(response);
+                }
+                @Override
+                public void OnFailureSuccess(Response response) {
+                    Snackbar.make(findViewById(android.R.id.content), "Failed connect to server", Snackbar.LENGTH_LONG)
+                            .setAction("No action", null).show();
+                }
+            });
         });
     }
 
-    public void OnResponse(String responseBody) {
-        Mobile.getInstance().JWToken = new Gson().fromJson(responseBody, JWToken.class);
-        Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);
-        startActivity(intent);
-        finish();
+    public void OnResponse(Response response) {
+        Mobile.getInstance().jwt = new Gson().fromJson((String) response.body(), JWToken.class);
+        if (Mobile.getInstance().jwt.isValid()) {
+            Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 }

@@ -2,19 +2,25 @@ package ua.edu.deanoffice.mobile.studentchdtu.service.client.requests;
 
 import java.io.IOException;
 
-import okhttp3.ResponseBody;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import ua.edu.deanoffice.mobile.studentchdtu.mobile.Mobile;
 import ua.edu.deanoffice.mobile.studentchdtu.service.client.interfaces.GetApplication;
 import ua.edu.deanoffice.mobile.studentchdtu.service.client.interfaces.GetApplicationTypeList;
+import ua.edu.deanoffice.mobile.studentchdtu.service.client.interfaces.GetUserData;
 
 public class Get {
 
     private Retrofit retrofit;
-    private String responseBody;
+    private Response response;
+    private boolean isSuccesful = false;
 
-    public String getResponseBody() {
-        return responseBody;
+    public boolean isSuccesful() {
+        return isSuccesful;
+    }
+
+    public Response getResponse() {
+        return response;
     }
 
     public Get(Retrofit retrofit) {
@@ -25,7 +31,8 @@ public class Get {
         GetApplicationTypeList req = retrofit.create(GetApplicationTypeList.class);
         try{
             Response resp = req.getApplicationTypeList().execute();
-            responseBody = ((ResponseBody)resp.body()).string();
+            response = resp;
+            isSuccesful = true;
         }catch (IOException e){
             e.printStackTrace();
         }
@@ -35,7 +42,19 @@ public class Get {
         GetApplication req = retrofit.create(GetApplication.class);
         try{
             Response resp = req.getRequest(id, json).execute();
-            responseBody = ((ResponseBody)resp.body()).string();
+            response = resp;
+            isSuccesful = true;
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void getUserData() {
+        GetUserData post = retrofit.create(GetUserData.class);
+        try{
+            Response resp = post.getApplicationTypeList("Bearer " + Mobile.getInstance().jwt.token).execute();
+            response = resp;
+            isSuccesful = true;
         }catch (IOException e){
             e.printStackTrace();
         }

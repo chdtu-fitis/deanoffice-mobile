@@ -1,6 +1,6 @@
 package ua.edu.deanoffice.mobile.studentchdtu.service.model.student;
 
-public class Specialization {
+public class Specialization extends ValidModel {
 
     private String name;
     private Speciality speciality;

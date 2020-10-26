@@ -10,10 +10,13 @@ import android.widget.Spinner;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import ua.edu.deanoffice.mobile.studentchdtu.mobile.ApplicationCache;
+import com.google.android.material.snackbar.Snackbar;
+
+import retrofit2.Response;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.mobile.Mobile;
 import ua.edu.deanoffice.mobile.studentchdtu.service.Utils;
+import ua.edu.deanoffice.mobile.studentchdtu.service.client.Client;
 import ua.edu.deanoffice.mobile.studentchdtu.service.client.requests.Get;
 import ua.edu.deanoffice.mobile.studentchdtu.service.pojo.RetakeApplicationData;
 
@@ -38,13 +41,25 @@ public class RetakeApplicationActivity extends AppCompatActivity {
         Button button = findViewById(R.id.buttonApp);
         button.setOnClickListener((view)-> {
             Mobile.getInstance().getClient().getApplication(id, Utils.retakeApplicationDataToJSON(
-                    new RetakeApplicationData(editText.getText().toString(), (int)spinner.getSelectedItemId())), (get)->onResponse(get));
+                    new RetakeApplicationData(editText.getText().toString(), (int) spinner.getSelectedItemId())),
+                    new Client.OnResponseCallback() {
+                        @Override
+                        public void OnResponseSuccess(Response response) {
+                            onResponse(response);
+                        }
+
+                        @Override
+                        public void OnFailureSuccess(Response response) {
+                            Snackbar.make(findViewById(android.R.id.content), "Failed connect to server", Snackbar.LENGTH_LONG)
+                                    .setAction("No action", null).show();
+                        }
+                    });
         });
     }
 
-    public void onResponse(Get get){
+    public void onResponse(Response response){
         Intent intent = new Intent(RetakeApplicationActivity.this, ExamApplicationActivity.class);
-        String body = get.getResponseBody();
+        String body = (String)response.body();
         Mobile.getInstance().getCurrentApplication().load(Utils.JSONtoApplication(body));
         startActivity(intent);
     }

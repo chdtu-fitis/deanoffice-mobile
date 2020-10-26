@@ -1,11 +1,14 @@
 package ua.edu.deanoffice.mobile.studentchdtu.service.model.student;
 
-public class Student {
+import java.lang.reflect.Field;
 
-    private String name;
-    private String surname;
-    private String patronimic;
-    private StudentDegree[] degrees;
+public class Student extends ValidModel{
+
+    protected String name;
+    protected String surname;
+    protected String patronimic;
+    protected int course;
+    protected StudentDegree[] degrees;
 
     public String getName() {
         return name;
@@ -29,6 +32,14 @@ public class Student {
 
     public void setPatronimic(String patronimic) {
         this.patronimic = patronimic;
+    }
+
+    public int getCourse() {
+        return course;
+    }
+
+    public void setCourse(int course) {
+        this.course = course;
     }
 
     public StudentDegree[] getDegrees() {
