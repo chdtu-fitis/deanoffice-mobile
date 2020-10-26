@@ -24,12 +24,11 @@ public class MainMenuActivity extends AppCompatActivity {
         studentInfo[0] = findViewById(R.id.StudentName);
         studentInfo[1] = findViewById(R.id.StudentFacult);
         studentInfo[2] = findViewById(R.id.StudentGroup);
-
+        
         Mobile.getInstance().getClient().getUserData((resp)-> {
             Mobile.getInstance().setStudent(new Gson().fromJson(resp, Student.class));
             updateStudentInfo(Mobile.getInstance().getStudent());
         });
-
     }
 
     public void updateStudentInfo(Student user){

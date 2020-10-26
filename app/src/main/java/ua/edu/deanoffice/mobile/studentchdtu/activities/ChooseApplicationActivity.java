@@ -58,7 +58,6 @@ public class ChooseApplicationActivity extends AppCompatActivity {
                         default:
                             break;
                 }
-                Log.d("Test", "enter");
                 ChooseApplicationActivity.this.startActivity(intent);
                 finish();
             }

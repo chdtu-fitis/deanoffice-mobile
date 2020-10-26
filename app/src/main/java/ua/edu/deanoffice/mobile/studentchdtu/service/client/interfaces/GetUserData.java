@@ -9,6 +9,6 @@ import retrofit2.http.Headers;
 public interface GetUserData {
 
     @Headers({"Content-Type: application/json"})
-    @GET("info-about-student")
+    @GET("students")
     public Call<ResponseBody> getApplicationTypeList(@Header("Authorization") String token);
 }
