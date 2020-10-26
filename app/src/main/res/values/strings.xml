@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">StudentCHDTU</string>
+    <string name="app_name">Студент ЧДТУ</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_exam_application">ExamApplicationActivity</string>
     <string name="selected_item">Selected item:</string>

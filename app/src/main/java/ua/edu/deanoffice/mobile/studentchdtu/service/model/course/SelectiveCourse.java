@@ -8,6 +8,8 @@ public class SelectiveCourse extends ModelBase {
     private Degree degree;
     private int studyYear;
 
+    public boolean selected;
+
     public boolean isAvailable() {
         return available;
     }
