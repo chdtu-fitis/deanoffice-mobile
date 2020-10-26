@@ -20,7 +20,8 @@
         <activity android:name=".activities.DeducApplicationActivity" />
         <activity android:name=".activities.RetakeApplicationActivity" />
         <activity android:name=".activities.RenewApplicationActivity" />
-        <activity android:name=".activities.LoginActivity">
+        <activity android:name=".activities.LoginActivity" />
+        <activity android:name=".activities.SelectiveCoursesTestActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
