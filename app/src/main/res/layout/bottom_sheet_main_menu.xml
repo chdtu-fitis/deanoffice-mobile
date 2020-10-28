@@ -81,6 +81,7 @@
             android:id="@+id/StudentName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:text=""
             android:textColor="@color/white"
             android:textSize="18dp"
@@ -88,12 +89,14 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/imageView2"
-            app:layout_constraintVertical_bias="0.25" />
+            app:layout_constraintVertical_bias="0.100000024" />
 
         <TextView
             android:id="@+id/StudentFacult"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
             android:text="Завантаження"
             android:textColor="@color/white"
             android:textSize="18dp"
@@ -101,12 +104,13 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/StudentName"
-            app:layout_constraintVertical_bias="0.3" />
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/StudentGroup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:text=""
             android:textColor="@color/white"
             android:textSize="18dp"
@@ -114,7 +118,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/StudentFacult"
-            app:layout_constraintVertical_bias="0" />
+            app:layout_constraintVertical_bias="0.0" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <FrameLayout

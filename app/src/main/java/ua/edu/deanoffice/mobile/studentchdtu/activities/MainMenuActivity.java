@@ -67,7 +67,7 @@ public class MainMenuActivity extends AppCompatActivity {
         runOnUiThread(() -> {
             informationAboutStudent.get("Name").setText(user.getName() + " " + user.getSurname() + " " + user.getPatronimic());
             informationAboutStudent.get("Facult").setText(user.getDegrees()[0].getSpecialization().getSpeciality().getName());
-            informationAboutStudent.get("Group").setText(user.getDegrees()[0].getStudentGroup().getName());
+            informationAboutStudent.get("Group").setText(user.getDegrees()[0].getStudentGroup().getName() + "\n Курс: " + user.getYear());
         });
     }
 }
