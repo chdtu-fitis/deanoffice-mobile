@@ -13,19 +13,21 @@
         android:supportsRtl="true"
         android:theme="@style/CHDTU.AcitivityBackground"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activities.ChooseApplicationActivity"></activity>
+        <activity
+            android:name=".activities.MainMenuActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".activities.ChooseApplicationActivity" />
         <activity
             android:name=".activities.ExamApplicationActivity"
             android:label="@string/title_activity_exam_application" />
         <activity android:name=".activities.DeducApplicationActivity" />
         <activity android:name=".activities.RetakeApplicationActivity" />
         <activity android:name=".activities.RenewApplicationActivity" />
-        <activity android:name=".activities.LoginActivity" />
-        <activity android:name=".activities.SelectiveCoursesTestActivity"
+        <activity android:name=".activities.SelectiveCoursesTestActivity" />
+        <activity android:name=".activities.LoginActivity"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

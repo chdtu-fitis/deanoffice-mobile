@@ -10,10 +10,12 @@ import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -22,15 +24,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ua.edu.deanoffice.mobile.studentchdtu.R;
+import ua.edu.deanoffice.mobile.studentchdtu.activities.fragments.YearSelectiveCourseFragment;
 import ua.edu.deanoffice.mobile.studentchdtu.service.model.course.SelectiveCourse;
+import ua.edu.deanoffice.mobile.studentchdtu.service.model.student.SelectiveCourses;
 
 public class ChdtuAdapter extends RecyclerView.Adapter<ChdtuAdapter.ViewHolder> implements View.OnClickListener {
 
-    private List<SelectiveCourse> selectiveCourses;
-    Context mContext;
+    private SelectiveCourses selectiveCourses;
+    private FragmentManager fragmentManager;
 
-    public ChdtuAdapter(List<SelectiveCourse> selectiveCourses) {
+    public ChdtuAdapter(SelectiveCourses selectiveCourses, FragmentManager supportFragmentManager) {
         this.selectiveCourses = selectiveCourses;
+        this.fragmentManager = supportFragmentManager;
     }
 
     @NonNull
@@ -50,37 +55,26 @@ public class ChdtuAdapter extends RecyclerView.Adapter<ChdtuAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         final int pos = position;
-        viewHolder.name.setText(selectiveCourses.get(position).getCourse().getCourseName().getName());
-        viewHolder.checkBox.setChecked(selectiveCourses.get(position).selected);
-        viewHolder.checkBox.setTag(selectiveCourses.get(position));
-        viewHolder.checkBox.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                CheckBox cb = (CheckBox) v;
-                SelectiveCourse contact = (SelectiveCourse) cb.getTag();
-                contact.selected = cb.isChecked();
-                selectiveCourses.get(pos).selected = cb.isChecked();
-            }
-        });
+
+        for (SelectiveCourse course : selectiveCourses.getSelectiveCoursesSemester(pos+1)) {
+            YearSelectiveCourseFragment fragment = new YearSelectiveCourseFragment(course, R.layout.yearselectivecourse_fragment);
+            fragmentManager.beginTransaction().add(viewHolder.id, fragment).commit();
+        }
     }
 
     @Override
     public int getItemCount() {
-        return selectiveCourses.size();
+        return 2;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView name;
-        CheckBox checkBox;
-        ImageView info;
-        public SelectiveCourse selectiveCourse;
-
+        LinearLayout container;
+        int id;
         public ViewHolder(View itemLayoutView) {
             super(itemLayoutView);
-            name = (TextView) itemLayoutView.findViewById(R.id.selectivecoursename);
-            checkBox = (CheckBox) itemLayoutView.findViewById(R.id.selectivecheckbox);
-            info = (ImageView) itemLayoutView.findViewById(R.id.selectivecourseinfo);
+            id = R.id.containterCourses;
+            container = itemLayoutView.findViewById(R.id.containterCourses);
         }
-
     }
 
     @Override

@@ -13,12 +13,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.activities.views.ChdtuAdapter;
+import ua.edu.deanoffice.mobile.studentchdtu.mobile.Mobile;
+import ua.edu.deanoffice.mobile.studentchdtu.service.client.Client;
 import ua.edu.deanoffice.mobile.studentchdtu.service.model.course.SelectiveCourse;
+import ua.edu.deanoffice.mobile.studentchdtu.service.model.student.SelectiveCourses;
 
 public class SelectiveCoursesTestActivity extends AppCompatActivity {
 
@@ -31,93 +37,39 @@ public class SelectiveCoursesTestActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setCustomView(R.layout.selectivecourses_actionbar);
 
-        String json = "    {\n" +
-                "        \"id\": 1,\n" +
-                "        \"available\": true,\n" +
-                "        \"course\": {\n" +
-                "            \"id\": 1,\n" +
-                "            \"courseName\": {\n" +
-                "                \"id\": 1,\n" +
-                "                \"name\": \"CALS-технології в системах автоматизованого проектування\",\n" +
-                "                \"nameEng\": \"CALS-technology in computer-aided design\"\n" +
-                "            },\n" +
-                "            \"semester\": 2,\n" +
-                "            \"knowledgeControl\": {\n" +
-                "                \"id\": 2,\n" +
-                "                \"name\": \"залік\"\n" +
-                "            },\n" +
-                "            \"hours\": 144,\n" +
-                "            \"credits\": 4.0,\n" +
-                "            \"hoursPerCredit\": 36\n" +
-                "        },\n" +
-                "        \"teacher\": {\n" +
-                "            \"id\": 1,\n" +
-                "            \"surname\": \"Первунінський\",\n" +
-                "            \"name\": \"Станіслав\",\n" +
-                "            \"patronimic\": \"Михайлович\",\n" +
-                "            \"sex\": \"MALE\",\n" +
-                "            \"active\": true,\n" +
-                "            \"academicTitle\": null,\n" +
-                "            \"department\": {\n" +
-                "                \"id\": 4,\n" +
-                "                \"name\": \"кафедра програмного забезпечення автоматизованих систем\"\n" +
-                "            },\n" +
-                "            \"position\": {\n" +
-                "                \"id\": 1,\n" +
-                "                \"name\": \"професор\"\n" +
-                "            },\n" +
-                "            \"scientificDegree\": null\n" +
-                "        },\n" +
-                "        \"degree\": {\n" +
-                "            \"id\": 1,\n" +
-                "            \"name\": \"Бакалавр\"\n" +
-                "        },\n" +
-                "        \"department\": {\n" +
-                "            \"id\": 1,\n" +
-                "            \"name\": \"кафедра комп'ютерних систем\",\n" +
-                "            \"active\": true,\n" +
-                "            \"abbr\": \"КС\"\n" +
-                "        },\n" +
-                "        \"fieldsOfKnowledge\": null,\n" +
-                "        \"trainingCycle\": \"PROFESSIONAL\",\n" +
-                "        \"description\": \"\",\n" +
-                "        \"studyYear\": 2020\n" +
-                "    }";
-
-        List<SelectiveCourse> selectiveCourseList = new ArrayList<>();
-        for (int i = 0; i < 20; i++){
-            selectiveCourseList.add(new Gson().fromJson(json, SelectiveCourse.class));
-            Log.d("Test", selectiveCourseList.get(i).getCourse().getCourseName().getName());
-        }
-
-        RecyclerView recyclerView = findViewById(R.id.listview);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-
-        ChdtuAdapter adapter = new ChdtuAdapter(selectiveCourseList);
-        recyclerView.setAdapter(adapter);
-
-        Button btn = findViewById(R.id.confirm_selectivecourses);
-        btn.setOnClickListener((view)->{
-            List<SelectiveCourse> selectiveCourseListFinal = new ArrayList<>();
-
-            for (SelectiveCourse course : selectiveCourseList) {
-                if(course.selected) {
-                    selectiveCourseListFinal.add(course);
-                }
+        Mobile.getInstance().getClient().getSelectiveCourses(new Client.OnResponseCallback() {
+            @Override
+            public void onResponseSuccess(ResponseBody response) {
+                onResponse(response);
             }
 
-            if(selectiveCourseListFinal.size() < 5){
-                Toast.makeText(
-                        this,
-                        "Оберіть 5 дисциплін", Toast.LENGTH_LONG).show();
-                return;
+            @Override
+            public void onResponseFailure(ResponseBody response) {
+                Log.d("Test", "Error");
             }
-            ChdtuAdapter newAdapter = new ChdtuAdapter(selectiveCourseListFinal);
-            recyclerView.setAdapter(newAdapter);
-            TextView textView = findViewById(R.id.text_body);
-            textView.setText("Підтвердіть обрані предмети");
-            btn.setText("Підтвердити");
+        });
+    }
+
+
+    public void onResponse(ResponseBody response) {
+        runOnUiThread(() -> {
+            try {
+                SelectiveCourses selectiveCourses = new Gson().fromJson(response.string(), SelectiveCourses.class);
+
+                RecyclerView recyclerView = findViewById(R.id.listview);
+                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+                recyclerView.setLayoutManager(layoutManager);
+
+                ChdtuAdapter adapter = new ChdtuAdapter(selectiveCourses, getSupportFragmentManager());
+                recyclerView.setAdapter(adapter);
+
+                Button btn = findViewById(R.id.confirm_selectivecourses);
+                btn.setOnClickListener((view) -> {
+
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         });
     }
 }

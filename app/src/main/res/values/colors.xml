@@ -10,4 +10,5 @@
     <color name="chdtu_value1">#88BCF2</color>
     <color name="chdtu_value2">#2D7ED3</color>
     <color name="act_background">#F1F7FE</color>
+    <color name="red">#ff0000</color>
 </resources>
