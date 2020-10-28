@@ -57,14 +57,8 @@ public class ChdtuAdapter extends RecyclerView.Adapter<ChdtuAdapter.ViewHolder> 
             public void onClick(View v) {
                 CheckBox cb = (CheckBox) v;
                 SelectiveCourse contact = (SelectiveCourse) cb.getTag();
-
                 contact.selected = cb.isChecked();
                 selectiveCourses.get(pos).selected = cb.isChecked();
-
-                Toast.makeText(
-                        v.getContext(),
-                        "Clicked on Checkbox: " + cb.getText() + " is "
-                                + cb.isChecked(), Toast.LENGTH_LONG).show();
             }
         });
     }

@@ -8,7 +8,7 @@ public class Teacher extends ModelBase {
     private String sex;
     private boolean active;
     //academicTitle = null;
-    private Department department;
+    private DepartmentTeacher departmentTeacher;
     private Position position;
 
     public String getName() {
@@ -51,12 +51,12 @@ public class Teacher extends ModelBase {
         this.active = active;
     }
 
-    public Department getDepartment() {
-        return department;
+    public DepartmentTeacher getDepartmentTeacher() {
+        return departmentTeacher;
     }
 
-    public void setDepartment(Department department) {
-        this.department = department;
+    public void setDepartmentTeacher(DepartmentTeacher departmentTeacher) {
+        this.departmentTeacher = departmentTeacher;
     }
 
     public Position getPosition() {

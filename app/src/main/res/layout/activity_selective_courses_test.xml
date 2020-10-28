@@ -24,7 +24,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/textbody"
+        android:id="@+id/text_body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20sp"
@@ -49,7 +49,7 @@
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textbody" />
+        app:layout_constraintTop_toBottomOf="@+id/text_body" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
