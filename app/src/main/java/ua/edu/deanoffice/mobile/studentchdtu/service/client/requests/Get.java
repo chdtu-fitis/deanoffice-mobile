@@ -8,6 +8,7 @@ import retrofit2.Retrofit;
 import ua.edu.deanoffice.mobile.studentchdtu.mobile.Mobile;
 import ua.edu.deanoffice.mobile.studentchdtu.service.client.interfaces.GetApplication;
 import ua.edu.deanoffice.mobile.studentchdtu.service.client.interfaces.GetApplicationTypeList;
+import ua.edu.deanoffice.mobile.studentchdtu.service.client.interfaces.GetSelectiveCourses;
 import ua.edu.deanoffice.mobile.studentchdtu.service.client.interfaces.GetUserData;
 
 public class Get {
@@ -54,6 +55,17 @@ public class Get {
         GetUserData post = retrofit.create(GetUserData.class);
         try{
             Response resp = post.getApplicationTypeList("Bearer " + Mobile.getInstance().jwt.token).execute();
+            response = (ResponseBody)resp.body();
+            isSuccesful = true;
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public void getSelectiveCourses() {
+        GetSelectiveCourses post = retrofit.create(GetSelectiveCourses.class);
+        try{
+            Response resp = post.request("Bearer " + Mobile.getInstance().jwt.token, 2).execute();
             response = (ResponseBody)resp.body();
             isSuccesful = true;
         }catch (IOException e){

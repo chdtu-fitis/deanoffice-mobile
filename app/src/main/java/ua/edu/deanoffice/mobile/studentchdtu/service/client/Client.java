@@ -74,6 +74,18 @@ public class Client {
         });
     }
 
+    public void getSelectiveCourses(OnResponseCallback onResponsePostCallback) {
+        Get getRequest = new Get(retrofitBase);
+        executor.execute(() -> {
+            getRequest.getSelectiveCourses();
+            if(getRequest.isSuccesful()) {
+                onResponsePostCallback.onResponseSuccess(getRequest.getResponse());
+            }else {
+                onResponsePostCallback.onResponseFailure(getRequest.getResponse());
+            }
+        });
+    }
+
     public interface OnResponseCallback {
         void onResponseSuccess(ResponseBody response);
         void onResponseFailure(ResponseBody response);
