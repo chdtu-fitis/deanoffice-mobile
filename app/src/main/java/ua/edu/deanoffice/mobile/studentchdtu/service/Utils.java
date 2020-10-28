@@ -9,22 +9,22 @@ import ua.edu.deanoffice.mobile.studentchdtu.service.pojo.RetakeApplicationData;
 
 public class Utils {
 
-    private final static char[] notValidChars = { '=', '/', ' ', '-', '+'};
+    private final static char[] notValidChars = {'=', '/', ' ', '-', '+'};
 
     public static boolean isStringValid(String string) {
-        if(string.isEmpty()) {
+        if (string.isEmpty()) {
             return false;
         }
 
         for (char ch : notValidChars) {
-            if(string.contains(""+ch)) {
+            if (string.contains("" + ch)) {
                 return false;
             }
         }
         return true;
     }
 
-    public static Application JSONtoApplication (String json) {
+    public static Application JSONtoApplication(String json) {
         return new Gson().fromJson(json, Application.class);
     }
 

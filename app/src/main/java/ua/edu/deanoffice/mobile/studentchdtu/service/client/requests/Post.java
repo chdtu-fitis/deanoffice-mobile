@@ -7,19 +7,17 @@ import java.io.IOException;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import ua.edu.deanoffice.mobile.studentchdtu.mobile.Mobile;
 import ua.edu.deanoffice.mobile.studentchdtu.mobile.UserData.Credentials;
-import ua.edu.deanoffice.mobile.studentchdtu.service.client.interfaces.GetUserData;
 import ua.edu.deanoffice.mobile.studentchdtu.service.client.interfaces.PostRequest;
 
 public class Post {
 
     private Retrofit retrofit;
     private ResponseBody response;
-    private boolean isSuccesful = false;
+    private boolean isSuccessful = false;
 
-    public boolean isSuccesful() {
-        return isSuccesful;
+    public boolean isSuccessful() {
+        return isSuccessful;
     }
 
     public ResponseBody getResponse() {
@@ -32,12 +30,12 @@ public class Post {
 
     public void sendCredentials(Credentials cred) {
         PostRequest post = retrofit.create(PostRequest.class);
-        try{
+        try {
             Response resp = post.request(cred).execute();
             Log.d("Test", "Code: " + resp.code());
-            response = (ResponseBody)resp.body();
-            isSuccesful = true;
-        }catch (IOException e){
+            response = (ResponseBody) resp.body();
+            isSuccessful = true;
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
