@@ -10,6 +10,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.IOException;
+
+import okhttp3.ResponseBody;
 import retrofit2.Response;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.mobile.Mobile;
@@ -35,12 +38,12 @@ public class RenewApplicationActivity extends AppCompatActivity {
                     Utils.renewApplicationDataToJSON(new RenewApplicationData(textDate.getText().toString())),
                     new Client.OnResponseCallback() {
                         @Override
-                        public void OnResponseSuccess(Response response) {
+                        public void onResponseSuccess(ResponseBody response) {
                             onResponse(response);
                         }
 
                         @Override
-                        public void OnFailureSuccess(Response response) {
+                        public void onResponseFailure(ResponseBody response) {
                             Snackbar.make(findViewById(android.R.id.content), "Failed connect to server", Snackbar.LENGTH_LONG)
                                     .setAction("No action", null).show();
                         }
@@ -48,11 +51,14 @@ public class RenewApplicationActivity extends AppCompatActivity {
         });
     }
 
-    public void onResponse(Response response){
-        Intent intent = new Intent(RenewApplicationActivity.this, ExamApplicationActivity.class);
-        String body = (String)response.body();
-        Mobile.getInstance().getCurrentApplication().load(Utils.JSONtoApplication(body));
-        startActivity(intent);
+    public void onResponse(ResponseBody response){
+        try {
+            Intent intent = new Intent(RenewApplicationActivity.this, ExamApplicationActivity.class);
+            Mobile.getInstance().getCurrentApplication().load(Utils.JSONtoApplication(response.string()));
+            startActivity(intent);
+        }catch(IOException e){
+
+        }
     }
 
     @Override

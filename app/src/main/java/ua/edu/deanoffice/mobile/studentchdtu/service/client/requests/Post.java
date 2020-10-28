@@ -4,6 +4,7 @@ import android.util.Log;
 
 import java.io.IOException;
 
+import okhttp3.ResponseBody;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import ua.edu.deanoffice.mobile.studentchdtu.mobile.Mobile;
@@ -14,14 +15,14 @@ import ua.edu.deanoffice.mobile.studentchdtu.service.client.interfaces.PostReque
 public class Post {
 
     private Retrofit retrofit;
-    private Response response;
+    private ResponseBody response;
     private boolean isSuccesful = false;
 
     public boolean isSuccesful() {
         return isSuccesful;
     }
 
-    public Response getResponse() {
+    public ResponseBody getResponse() {
         return response;
     }
 
@@ -34,7 +35,7 @@ public class Post {
         try{
             Response resp = post.request(cred).execute();
             Log.d("Test", "Code: " + resp.code());
-            response = resp;
+            response = (ResponseBody)resp.body();
             isSuccesful = true;
         }catch (IOException e){
             e.printStackTrace();

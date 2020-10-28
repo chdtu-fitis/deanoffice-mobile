@@ -10,9 +10,11 @@ import android.widget.TextView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import okhttp3.ResponseBody;
 import retrofit2.Response;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.mobile.Mobile;
@@ -35,19 +37,23 @@ public class MainMenuActivity extends AppCompatActivity {
 
         Mobile.getInstance().getClient().getUserData(new Client.OnResponseCallback() {
             @Override
-            public void OnResponseSuccess(Response response) {
-                Student student = new Gson().fromJson((String) response.body(), Student.class);
-                if (student.isValid()) {
-                    Mobile.getInstance().setStudent(student);
-                    updateStudentInfo(Mobile.getInstance().getStudent());
-                } else {
-                    Intent intent = new Intent(MainMenuActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                    finish();
+            public void onResponseSuccess(ResponseBody response) {
+                try {
+                    Student student = new Gson().fromJson(response.string(), Student.class);
+                    if (student.isValid()) {
+                        Mobile.getInstance().setStudent(student);
+                        updateStudentInfo(Mobile.getInstance().getStudent());
+                    } else {
+                        Intent intent = new Intent(MainMenuActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
             @Override
-            public void OnFailureSuccess(Response response) {
+            public void onResponseFailure(ResponseBody response) {
                 Snackbar.make(findViewById(android.R.id.content), "Failed connect to server", Snackbar.LENGTH_LONG)
                         .setAction("No action", null).show();
                 Intent intent = new Intent(MainMenuActivity.this, LoginActivity.class);

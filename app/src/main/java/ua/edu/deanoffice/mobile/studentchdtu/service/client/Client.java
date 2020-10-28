@@ -1,15 +1,12 @@
 package ua.edu.deanoffice.mobile.studentchdtu.service.client;
 
 
-import com.google.android.material.snackbar.Snackbar;
-
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import retrofit2.Response;
+import okhttp3.ResponseBody;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import ua.edu.deanoffice.mobile.studentchdtu.mobile.Mobile;
 import ua.edu.deanoffice.mobile.studentchdtu.mobile.UserData.Credentials;
 import ua.edu.deanoffice.mobile.studentchdtu.service.client.requests.Get;
 import ua.edu.deanoffice.mobile.studentchdtu.service.client.requests.Post;
@@ -33,9 +30,9 @@ public class Client {
         executor.execute(() -> {
             getRequest.applicationTypeList();
             if(getRequest.isSuccesful()) {
-                onResponseGetCallback.OnResponseSuccess(getRequest.getResponse());
+                onResponseGetCallback.onResponseSuccess(getRequest.getResponse());
             }else{
-                onResponseGetCallback.OnFailureSuccess(getRequest.getResponse());
+                onResponseGetCallback.onResponseFailure(getRequest.getResponse());
             }
         });
     }
@@ -46,9 +43,9 @@ public class Client {
         executor.execute(() -> {
             getRequest.application(id, json);
             if(getRequest.isSuccesful()) {
-                onResponseGetCallback.OnResponseSuccess(getRequest.getResponse());
+                onResponseGetCallback.onResponseSuccess(getRequest.getResponse());
             }else{
-                onResponseGetCallback.OnFailureSuccess(getRequest.getResponse());
+                onResponseGetCallback.onResponseFailure(getRequest.getResponse());
             }
         });
     }
@@ -58,9 +55,9 @@ public class Client {
         executor.execute(() -> {
             postRequest.sendCredentials(credentials);
             if(postRequest.isSuccesful()) {
-                onResponsePostCallback.OnResponseSuccess(postRequest.getResponse());
+                onResponsePostCallback.onResponseSuccess(postRequest.getResponse());
             }else{
-                onResponsePostCallback.OnFailureSuccess(postRequest.getResponse());
+                onResponsePostCallback.onResponseFailure(postRequest.getResponse());
             }
         });
     }
@@ -70,15 +67,15 @@ public class Client {
         executor.execute(() -> {
             getRequest.getUserData();
             if(getRequest.isSuccesful()) {
-                onResponsePostCallback.OnResponseSuccess(getRequest.getResponse());
-            }else{
-                onResponsePostCallback.OnFailureSuccess(getRequest.getResponse());
+                onResponsePostCallback.onResponseSuccess(getRequest.getResponse());
+            }else {
+                onResponsePostCallback.onResponseFailure(getRequest.getResponse());
             }
         });
     }
 
     public interface OnResponseCallback {
-        void OnResponseSuccess(Response response);
-        void OnFailureSuccess(Response response);
+        void onResponseSuccess(ResponseBody response);
+        void onResponseFailure(ResponseBody response);
     }
 }
