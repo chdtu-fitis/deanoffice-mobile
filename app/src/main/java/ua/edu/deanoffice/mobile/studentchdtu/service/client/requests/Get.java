@@ -65,7 +65,7 @@ public class Get {
     public void getSelectiveCourses() {
         GetSelectiveCourses post = retrofit.create(GetSelectiveCourses.class);
         try{
-            Response resp = post.request("Bearer " + Mobile.getInstance().jwt.token, 2).execute();
+            Response resp = post.request("Bearer " + Mobile.getInstance().jwt.token, 2, Mobile.getInstance().getStudent().getDegrees()[0].getId()).execute();
             response = (ResponseBody)resp.body();
             isSuccessful = true;
         }catch (IOException e){

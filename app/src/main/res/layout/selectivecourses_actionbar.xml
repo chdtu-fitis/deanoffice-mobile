@@ -4,18 +4,22 @@
     android:layout_width = "match_parent"
     android:layout_height = "wrap_content"
     android:gravity = "center_vertical"
-    android:padding = "10dp">
+    android:padding = "10dp"
+    android:background="@color/chdtu_value1">
+
     <LinearLayout
         android:layout_width = "wrap_content"
         android:layout_height = "match_parent"
         android:layout_weight = "0.5">
-        <Button
-            android:background="@android:color/transparent"
-            android:id = "@+id/buttonCancel"
-            android:layout_width = "wrap_content"
-            android:layout_height = "wrap_content"
-            android:text = "Скасувати"
-            android:textSize = "20sp"
-            android:textColor = "@color/white" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:text="РЕЄСТРАЦІЯ НА ВИБІРКОВІ ДИСЦИПЛІНИ"
+            android:textColor="@color/white"/>
+
     </LinearLayout>
 </LinearLayout>

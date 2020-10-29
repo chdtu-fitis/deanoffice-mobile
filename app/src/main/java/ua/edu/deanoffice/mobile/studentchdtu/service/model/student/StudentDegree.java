@@ -2,9 +2,18 @@ package ua.edu.deanoffice.mobile.studentchdtu.service.model.student;
 
 public class StudentDegree extends ValidModel{
 
+    protected int id;
     private StudentGroup studentGroup;
     private Specialization specialization;
     private boolean active;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public StudentGroup getStudentGroup() {
         return studentGroup;

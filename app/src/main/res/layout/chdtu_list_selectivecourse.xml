@@ -4,14 +4,4 @@
     android:layout_width="match_parent"
     android:id="@+id/containterCourses"
     android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/semesterNumber"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/gray2"
-        android:textStyle="bold"
-        android:text="1 Семестр"/>
-
-
 </LinearLayout>

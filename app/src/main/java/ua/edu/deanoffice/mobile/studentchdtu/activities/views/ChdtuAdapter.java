@@ -1,41 +1,51 @@
 package ua.edu.deanoffice.mobile.studentchdtu.activities.views;
 
-import android.content.Context;
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.ArrayAdapter;
-import android.widget.CheckBox;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.snackbar.Snackbar;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import ua.edu.deanoffice.mobile.studentchdtu.R;
-import ua.edu.deanoffice.mobile.studentchdtu.activities.fragments.YearSelectiveCourseFragment;
+import ua.edu.deanoffice.mobile.studentchdtu.activities.fragments.SemesterFragment;
+import ua.edu.deanoffice.mobile.studentchdtu.activities.fragments.SelectiveCourseFragment;
 import ua.edu.deanoffice.mobile.studentchdtu.service.model.course.SelectiveCourse;
 import ua.edu.deanoffice.mobile.studentchdtu.service.model.student.SelectiveCourses;
 
 public class ChdtuAdapter extends RecyclerView.Adapter<ChdtuAdapter.ViewHolder> implements View.OnClickListener {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        public ViewHolder(View itemLayoutView) {
+            super(itemLayoutView);
+        }
+    }
+
+    private TextView selectiveCoursesCounter;
 
     private SelectiveCourses selectiveCourses;
     private FragmentManager fragmentManager;
 
-    public ChdtuAdapter(SelectiveCourses selectiveCourses, FragmentManager supportFragmentManager) {
+    private List<SelectiveCourseFragment> selectiveCourseFragmentsFirstSemester;
+    private List<SelectiveCourseFragment> selectiveCourseFragmentsSecondSemester;
+
+    private List<SelectiveCourse> selectedCourseFirstSemester;
+    private List<SelectiveCourse> selectiveCourseSecondSemester;
+
+    public ChdtuAdapter(SelectiveCourses selectiveCourses, FragmentManager supportFragmentManager, TextView selectiveCoursesCounter) {
         this.selectiveCourses = selectiveCourses;
         this.fragmentManager = supportFragmentManager;
+
+        selectiveCourseFragmentsFirstSemester = new ArrayList<>(selectiveCourses.getSelectiveCoursesFirstSemester().size());
+        selectiveCourseFragmentsSecondSemester = new ArrayList<>(selectiveCourses.getSelectiveCoursesSecondSemester().size());
+
+        selectedCourseFirstSemester = new ArrayList<>(selectiveCourses.getSelectiveCoursesFirstSemester().size());
+        selectiveCourseSecondSemester = new ArrayList<>(selectiveCourses.getSelectiveCoursesSecondSemester().size());
+        this.selectiveCoursesCounter = selectiveCoursesCounter;
     }
 
     @NonNull
@@ -48,6 +58,7 @@ public class ChdtuAdapter extends RecyclerView.Adapter<ChdtuAdapter.ViewHolder> 
         RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         itemLayoutView.setLayoutParams(lp);
         ViewHolder viewHolder = new ViewHolder(itemLayoutView);
+        itemLayoutView.setOnClickListener(this);
 
         return viewHolder;
     }
@@ -56,78 +67,92 @@ public class ChdtuAdapter extends RecyclerView.Adapter<ChdtuAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         final int pos = position;
 
-        for (SelectiveCourse course : selectiveCourses.getSelectiveCoursesSemester(pos+1)) {
-            YearSelectiveCourseFragment fragment = new YearSelectiveCourseFragment(course, R.layout.yearselectivecourse_fragment);
-            viewHolder.semeterNumber.setText((pos+1) + " семестр");
-            fragmentManager.beginTransaction().add(viewHolder.id, fragment).commit();
+        if (pos == 0) {
+            SemesterFragment fragment1 = new SemesterFragment(1, R.layout.semester_fragment);
+            fragmentManager.beginTransaction().add(R.id.containterCourses, fragment1).commit();
+
+            for (SelectiveCourse course : selectiveCourses.getSelectiveCoursesFirstSemester()) {
+                SelectiveCourseFragment fragment = new SelectiveCourseFragment(course, R.layout.selectivecourse_fragment, this);
+                selectiveCourseFragmentsFirstSemester.add(fragment);
+                fragmentManager.beginTransaction().add(R.id.containterCourses, fragment).commit();
+            }
+
+            SemesterFragment fragment2 = new SemesterFragment(2, R.layout.semester_fragment);
+            fragmentManager.beginTransaction().add(R.id.containterCourses, fragment2).commit();
+
+            for (SelectiveCourse course : selectiveCourses.getSelectiveCoursesSecondSemester()) {
+                SelectiveCourseFragment fragment = new SelectiveCourseFragment(course, R.layout.selectivecourse_fragment, this);
+                selectiveCourseFragmentsSecondSemester.add(fragment);
+                fragmentManager.beginTransaction().add(R.id.containterCourses, fragment).commit();
+            }
         }
     }
 
     @Override
     public int getItemCount() {
-        return 2;
-    }
-
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        LinearLayout container;
-        int id;
-        TextView semeterNumber;
-
-        public ViewHolder(View itemLayoutView) {
-            super(itemLayoutView);
-            id = R.id.containterCourses;
-            semeterNumber = itemLayoutView.findViewById(R.id.semesterNumber);
-            container = itemLayoutView.findViewById(R.id.containterCourses);
-        }
+        return selectiveCourses.getSelectiveCoursesFirstSemester().size() + selectiveCourses.getSelectiveCoursesSecondSemester().size();
     }
 
     @Override
     public void onClick(View v) {
-        int position = (Integer) v.getTag();
-        Object object = getItemId(position);
-        String selectiveCourse = (String) object;
-
-        switch (v.getId()) {
-            case R.id.selectivecourseinfo:
-                Snackbar.make(v, "Release date " + selectiveCourse, Snackbar.LENGTH_LONG)
-                        .setAction("No action", null).show();
-                break;
+        for (SelectiveCourseFragment frag : selectiveCourseFragmentsFirstSemester) {
+            frag.setCheckBoxInteractive(true);
         }
+        for (SelectiveCourseFragment frag : selectiveCourseFragmentsSecondSemester) {
+            frag.setCheckBoxInteractive(true);
+        }
+
+        int count = 0;
+        selectedCourseFirstSemester.clear();
+        for (int i = 0; i < selectiveCourses.getSelectiveCoursesFirstSemester().size(); i++) {
+            if (selectiveCourses.getSelectiveCoursesFirstSemester().get(i).selected) {
+                selectedCourseFirstSemester.add(selectiveCourses.getSelectiveCoursesFirstSemester().get(i));
+                count++;
+            }
+            if (count >= 3) {
+                for (SelectiveCourseFragment frag : selectiveCourseFragmentsFirstSemester) {
+                    if (!frag.isChecked()) {
+                        frag.setCheckBoxInteractive(false);
+                    }
+                }
+            }
+        }
+
+        count = 0;
+        selectiveCourseSecondSemester.clear();
+        for (int i = 0; i < selectiveCourses.getSelectiveCoursesSecondSemester().size(); i++) {
+            if (selectiveCourses.getSelectiveCoursesSecondSemester().get(i).selected) {
+                selectiveCourseSecondSemester.add(selectiveCourses.getSelectiveCoursesSecondSemester().get(i));
+                count++;
+            }
+            if (count >= 2) {
+                for (SelectiveCourseFragment frag : selectiveCourseFragmentsSecondSemester) {
+                    if (!frag.isChecked()) {
+                        frag.setCheckBoxInteractive(false);
+                    }
+                }
+            }
+        }
+
+        selectiveCoursesCounter.setText("3 в 1 семестрі (" + getSelectedCourseFirstSemester().size() + "/3)" +
+                ", 2 в 2 семестрі(" + getSelectiveCourseSecondSemester().size() + "/2)");
     }
 
-   /* @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        // Get the data item for this position
-        String selectiveCourse = getItem(position);
-        // Check if an existing view is being reused, otherwise inflate the view
-        ViewHolder viewHolder; // view lookup cache stored in tag
+    public List<SelectiveCourse> getSelectedCourseFirstSemester() {
+        return selectedCourseFirstSemester;
+    }
 
-        final View result;
+    public List<SelectiveCourse> getSelectiveCourseSecondSemester() {
+        return selectiveCourseSecondSemester;
+    }
 
-        if (convertView == null) {
-            viewHolder = new ViewHolder();
-            LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.chdtu_list_selectivecourse, parent, false);
-            viewHolder.name = (TextView) convertView.findViewById(R.id.selectivecoursename);
-            viewHolder.checkBox = (CheckBox) convertView.findViewById(R.id.selectivecheckbox);
-            viewHolder.info = (ImageView) convertView.findViewById(R.id.selectivecourseinfo);
-
-            result = convertView;
-
-            convertView.setTag(viewHolder);
-        } else {
-            viewHolder = (ViewHolder) convertView.getTag();
-            result = convertView;
+    public void clearSelected() {
+        for (SelectiveCourseFragment courseFragment : selectiveCourseFragmentsFirstSemester) {
+            courseFragment.setChecked(false);
         }
-
-        Animation animation = AnimationUtils.loadAnimation(mContext, (position > lastPosition) ? R.anim.up_from_bottom : R.anim.down_from_top);
-        result.startAnimation(animation);
-        lastPosition = position;
-
-        viewHolder.name.setText(selectiveCourse);
-        viewHolder.info.setOnClickListener(this);
-        viewHolder.info.setTag(position);
-        // Return the completed view to render on screen
-        return convertView;
-    }*/
+        for (SelectiveCourseFragment courseFragment : selectiveCourseFragmentsSecondSemester) {
+            courseFragment.setChecked(false);
+        }
+        onClick(null);
+    }
 }

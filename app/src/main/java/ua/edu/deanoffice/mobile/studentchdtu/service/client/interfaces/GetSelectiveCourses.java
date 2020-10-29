@@ -12,5 +12,5 @@ public interface GetSelectiveCourses {
 
     @Headers({"Content-Type: application/json"})
     @GET("selective-courses")
-    Call<ResponseBody> request(@Header("Authorization") String token, @Query("semester") int semester);
+    Call<ResponseBody> request(@Header("Authorization") String token, @Query("semester") int semester, @Query("studentDegreeId") int id);
 }

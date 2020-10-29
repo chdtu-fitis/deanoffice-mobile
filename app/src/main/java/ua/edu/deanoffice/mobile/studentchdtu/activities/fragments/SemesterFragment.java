@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,15 +13,13 @@ import androidx.fragment.app.Fragment;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.service.model.course.SelectiveCourse;
 
-public class YearSelectiveCourseFragment extends Fragment {
+public class SemesterFragment extends Fragment {
+
     private final int layout;
-    private SelectiveCourse selectiveCourse;
-    private CheckBox checkBox;
-    private ImageView imageInfo;
+    private int semester;
 
-
-    public YearSelectiveCourseFragment(SelectiveCourse selectiveCourse, int layout) {
-        this.selectiveCourse = selectiveCourse;
+    public SemesterFragment(int semester, int layout) {
+        this.semester = semester;
         this.layout = layout;
     }
 
@@ -33,13 +30,6 @@ public class YearSelectiveCourseFragment extends Fragment {
 
     @Override
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
-        checkBox = view.findViewById(R.id.selectivecheckbox);
-        imageInfo = view.findViewById(R.id.selectivecourseinfo);
-        ((TextView)view.findViewById(R.id.selectivecoursename)).setText(selectiveCourse.getCourse().getCourseName().getName());
-
-        imageInfo.setOnClickListener((viewClick) -> {
-
-        });
+        ((TextView)view.findViewById(R.id.semesterNumber)).setText(semester + " семестр");
     }
-
 }
