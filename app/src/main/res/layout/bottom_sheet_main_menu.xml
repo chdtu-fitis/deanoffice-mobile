@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:behavior_hideable="false"
-    app:behavior_peekHeight="100dp"
+    app:behavior_peekHeight="50sp"
     app:layout_behavior="ua.edu.deanoffice.mobile.studentchdtu.activities.views.LockableBottomSheetBehaviour">
 
-   <LinearLayout
+    <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -33,92 +33,107 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_marginTop="-69.5dp"
-            android:layout_height="420dp"
+            android:layout_height="320sp"
             android:background="@color/chdtu_value2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/bigLogo" />
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/studentimg"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:elevation="4dp"
-        android:src="@drawable/ic_student"
-        app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.1" />
-
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/ConstraintLayout_StudentInfo"
+        android:layout_width="370dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rect_lightblue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/studentimg"
-        app:layout_constraintVertical_bias="0.05">
-
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:src="@drawable/ic_field"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="0.3">
 
         <TextView
             android:id="@+id/StudentName"
-            android:layout_width="wrap_content"
+            android:layout_width="360sp"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text=""
+            android:gravity="left"
+            android:text="Тест Тест Тестович"
             android:textColor="@color/white"
             android:textSize="18dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/imageView2"
-            app:layout_constraintVertical_bias="0.100000024" />
-
-        <TextView
-            android:id="@+id/StudentFacult"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:gravity="center"
-            android:text="Завантаження"
-            android:textColor="@color/white"
-            android:textSize="18dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/StudentName"
+            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView
-            android:id="@+id/StudentGroup"
-            android:layout_width="wrap_content"
+            android:id="@+id/StudentFacult"
+            android:layout_width="360sp"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text=""
+            android:gravity="left"
+            android:text="Факультет технічних технологій"
+            android:textColor="@color/white"
+            android:textSize="18dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/StudentName"
+            app:layout_constraintVertical_bias="0.025" />
+
+        <TextView
+            android:id="@+id/StudentGroupAndYear"
+            android:layout_width="360sp"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text="Спеціальність: 122 - Комп'ютерні науки"
             android:textColor="@color/white"
             android:textSize="18dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/StudentFacult"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.025" />
+
+        <TextView
+            android:id="@+id/StudentSpecialization"
+            android:layout_width="360sp"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text="Освітня програма: Комп'ютерні науки та прикладне програмування"
+            android:textColor="@color/white"
+            android:textSize="18dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/StudentGroupAndYear"
+            app:layout_constraintVertical_bias="0.025" />
+
+        <TextView
+            android:id="@+id/StudentForm"
+            android:layout_width="360sp"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text="Група: ФТТ-2020 Курс: 2"
+            android:textColor="@color/white"
+            android:textSize="18dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/StudentSpecialization"
+            app:layout_constraintVertical_bias="0.025" />
+
+        <TextView
+            android:id="@+id/StudentTermin"
+            android:layout_width="360sp"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text="Форма навчання: денна скорочена"
+            android:textColor="@color/white"
+            android:textSize="18dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/StudentForm"
+            app:layout_constraintVertical_bias="0.025" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <FrameLayout
@@ -127,25 +142,28 @@
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ConstraintLayout_StudentInfo"
-        app:layout_constraintVertical_bias="0"
-        app:layout_constraintHorizontal_bias="0.5">
+        app:layout_constraintVertical_bias="0.1">
+
         <ImageButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/ic_button_chdtu" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <TextView
-                android:textSize="22dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:gravity="center_horizontal|center_vertical"
                 android:text="Налаштування"
-                android:textColor="@color/white"/>
+                android:textColor="@color/white"
+                android:textSize="22dp" />
         </LinearLayout>
     </FrameLayout>
 
@@ -155,23 +173,39 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_options">
+        app:layout_constraintTop_toBottomOf="@+id/layout_options"
+        app:layout_constraintVertical_bias="0.100000024">
+
         <ImageButton
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/ic_button_chdtu" />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
             <TextView
-                android:textSize="22dp"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:gravity="center_horizontal|center_vertical"
                 android:text="Вихід"
-                android:textColor="@color/red"/>
-            </LinearLayout>
+                android:textColor="@color/white"
+                android:textSize="22dp" />
+        </LinearLayout>
     </FrameLayout>
+
+    <ImageView
+        android:id="@+id/studentimg"
+        android:layout_width="26dp"
+        android:layout_height="28dp"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/ic_student"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/linearLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.050000012" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

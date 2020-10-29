@@ -1,41 +1,31 @@
 package ua.edu.deanoffice.mobile.studentchdtu.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.widget.TextView;
 
-import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.Gson;
-
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import okhttp3.ResponseBody;
-import retrofit2.Response;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
-import ua.edu.deanoffice.mobile.studentchdtu.mobile.Mobile;
-import ua.edu.deanoffice.mobile.studentchdtu.service.client.Client;
 import ua.edu.deanoffice.mobile.studentchdtu.service.model.student.Student;
 
 public class MainMenuActivity extends AppCompatActivity {
 
-    TextView[] studentInfo = new TextView[3];
-    Map<String, TextView> informationAboutStudent = new HashMap<>();
+    Map<String, TextView> studentInformationViews = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-        informationAboutStudent.put("Name", (TextView) findViewById(R.id.StudentName));
-        informationAboutStudent.put("Facult", (TextView) findViewById(R.id.StudentFacult));
-        informationAboutStudent.put("Group", (TextView) findViewById(R.id.StudentGroup));
+        studentInformationViews.put("Name", (TextView) findViewById(R.id.StudentName));
+        studentInformationViews.put("Facult", (TextView) findViewById(R.id.StudentFacult));
+        studentInformationViews.put("GroupAndYear", (TextView) findViewById(R.id.StudentGroupAndYear));
 
-        Mobile.getInstance().getClient().getUserData(new Client.OnResponseCallback() {
+        /*Mobile.getInstance().getClient().getUserData(new Client.OnResponseCallback() {
             @Override
             public void onResponseSuccess(ResponseBody response) {
                 try {
@@ -60,14 +50,14 @@ public class MainMenuActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
-        });
+        });*/
     }
 
     public void updateStudentInfo(Student user) {
         runOnUiThread(() -> {
-            informationAboutStudent.get("Name").setText(user.getName() + " " + user.getSurname() + " " + user.getPatronimic());
-            informationAboutStudent.get("Facult").setText(user.getDegrees()[0].getSpecialization().getSpeciality().getName());
-            informationAboutStudent.get("Group").setText(user.getDegrees()[0].getStudentGroup().getName() + "\n Курс: " + ((int)Math.ceil((double)(user.getYear())/2d)));
+            studentInformationViews.get("Name").setText(user.getSurname() + " " + user.getName() + " " + user.getPatronimic());
+            studentInformationViews.get("Facult").setText(user.getDegrees()[0].getSpecialization().getSpeciality().getName());
+            studentInformationViews.get("GroupAndYear").setText(user.getDegrees()[0].getStudentGroup().getName() + " Курс: " + ((int)Math.ceil((double)(user.getYear())/2d)));
         });
     }
 }
