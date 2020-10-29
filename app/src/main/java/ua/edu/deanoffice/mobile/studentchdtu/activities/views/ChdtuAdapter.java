@@ -58,6 +58,7 @@ public class ChdtuAdapter extends RecyclerView.Adapter<ChdtuAdapter.ViewHolder> 
 
         for (SelectiveCourse course : selectiveCourses.getSelectiveCoursesSemester(pos+1)) {
             YearSelectiveCourseFragment fragment = new YearSelectiveCourseFragment(course, R.layout.yearselectivecourse_fragment);
+            viewHolder.semeterNumber.setText((pos+1) + " семестр");
             fragmentManager.beginTransaction().add(viewHolder.id, fragment).commit();
         }
     }
@@ -70,9 +71,12 @@ public class ChdtuAdapter extends RecyclerView.Adapter<ChdtuAdapter.ViewHolder> 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         LinearLayout container;
         int id;
+        TextView semeterNumber;
+
         public ViewHolder(View itemLayoutView) {
             super(itemLayoutView);
             id = R.id.containterCourses;
+            semeterNumber = itemLayoutView.findViewById(R.id.semesterNumber);
             container = itemLayoutView.findViewById(R.id.containterCourses);
         }
     }

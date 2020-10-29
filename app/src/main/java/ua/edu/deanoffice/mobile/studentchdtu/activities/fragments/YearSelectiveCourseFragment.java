@@ -20,6 +20,7 @@ public class YearSelectiveCourseFragment extends Fragment {
     private CheckBox checkBox;
     private ImageView imageInfo;
 
+
     public YearSelectiveCourseFragment(SelectiveCourse selectiveCourse, int layout) {
         this.selectiveCourse = selectiveCourse;
         this.layout = layout;

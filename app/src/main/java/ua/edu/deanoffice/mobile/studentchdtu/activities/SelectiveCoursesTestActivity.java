@@ -72,4 +72,21 @@ public class SelectiveCoursesTestActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void Draw(String json) {
+        SelectiveCourses selectiveCourses = new Gson().fromJson(json, SelectiveCourses.class);
+
+        RecyclerView recyclerView = findViewById(R.id.listview);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+
+        ChdtuAdapter adapter = new ChdtuAdapter(selectiveCourses, getSupportFragmentManager());
+        recyclerView.setAdapter(adapter);
+
+        Button btn = findViewById(R.id.confirm_selectivecourses);
+        btn.setOnClickListener((view) -> {
+
+        });
+
+    }
 }
