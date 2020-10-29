@@ -31,11 +31,11 @@ public class LoginActivity extends AppCompatActivity {
         EditText textLogin = findViewById(R.id.textFieldLogin);
         EditText textPassword = findViewById(R.id.textFieldPassword);
 
-        button.setOnClickListener((view)->{
+        button.setOnClickListener((view) -> {
             String login = textLogin.getText().toString();
-            String password = textPassword.getText().toString().replaceAll("\\."," ");
+            String password = textPassword.getText().toString();
 
-            if(!Utils.isStringValid(login) && !Utils.isStringValid(password)) {
+            if (!Utils.isStringValid(login) && !Utils.isStringValid(password)) {
                 return;
             }
 
@@ -44,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
                 public void onResponseSuccess(ResponseBody response) {
                     onResponse(response);
                 }
+
                 @Override
                 public void onResponseFailure(ResponseBody response) {
                     Snackbar.make(findViewById(android.R.id.content), "Failed connect to server", Snackbar.LENGTH_LONG)
@@ -61,7 +62,7 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

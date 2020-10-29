@@ -29,9 +29,9 @@ public class Client {
 
         executor.execute(() -> {
             getRequest.applicationTypeList();
-            if(getRequest.isSuccessful()) {
+            if (getRequest.isSuccessful()) {
                 onResponseGetCallback.onResponseSuccess(getRequest.getResponse());
-            }else{
+            } else {
                 onResponseGetCallback.onResponseFailure(getRequest.getResponse());
             }
         });
@@ -42,9 +42,9 @@ public class Client {
 
         executor.execute(() -> {
             getRequest.application(id, json);
-            if(getRequest.isSuccessful()) {
+            if (getRequest.isSuccessful()) {
                 onResponseGetCallback.onResponseSuccess(getRequest.getResponse());
-            }else{
+            } else {
                 onResponseGetCallback.onResponseFailure(getRequest.getResponse());
             }
         });
@@ -54,9 +54,9 @@ public class Client {
         Post postRequest = new Post(retrofitBase);
         executor.execute(() -> {
             postRequest.sendCredentials(credentials);
-            if(postRequest.isSuccessful()) {
+            if (postRequest.isSuccessful()) {
                 onResponsePostCallback.onResponseSuccess(postRequest.getResponse());
-            }else{
+            } else {
                 onResponsePostCallback.onResponseFailure(postRequest.getResponse());
             }
         });
@@ -66,9 +66,9 @@ public class Client {
         Get getRequest = new Get(retrofitBase);
         executor.execute(() -> {
             getRequest.getUserData();
-            if(getRequest.isSuccessful()) {
+            if (getRequest.isSuccessful()) {
                 onResponsePostCallback.onResponseSuccess(getRequest.getResponse());
-            }else {
+            } else {
                 onResponsePostCallback.onResponseFailure(getRequest.getResponse());
             }
         });
@@ -78,9 +78,9 @@ public class Client {
         Get getRequest = new Get(retrofitBase);
         executor.execute(() -> {
             getRequest.getSelectiveCourses();
-            if(getRequest.isSuccessful()) {
+            if (getRequest.isSuccessful()) {
                 onResponsePostCallback.onResponseSuccess(getRequest.getResponse());
-            }else {
+            } else {
                 onResponsePostCallback.onResponseFailure(getRequest.getResponse());
             }
         });
@@ -88,6 +88,7 @@ public class Client {
 
     public interface OnResponseCallback {
         void onResponseSuccess(ResponseBody response);
+
         void onResponseFailure(ResponseBody response);
     }
 }

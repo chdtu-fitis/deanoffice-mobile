@@ -30,12 +30,12 @@ public class Post {
 
     public void sendCredentials(Credentials cred) {
         PostRequest post = retrofit.create(PostRequest.class);
-        try{
+        try {
             Response resp = post.request(cred).execute();
             Log.d("Test", "Code: " + resp.code());
-            response = (ResponseBody)resp.body();
+            response = (ResponseBody) resp.body();
             isSuccessful = true;
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
