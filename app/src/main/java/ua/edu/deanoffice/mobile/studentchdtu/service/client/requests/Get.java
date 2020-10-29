@@ -5,16 +5,24 @@ import java.io.IOException;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import ua.edu.deanoffice.mobile.studentchdtu.mobile.Mobile;
 import ua.edu.deanoffice.mobile.studentchdtu.service.client.interfaces.GetApplication;
 import ua.edu.deanoffice.mobile.studentchdtu.service.client.interfaces.GetApplicationTypeList;
+import ua.edu.deanoffice.mobile.studentchdtu.service.client.interfaces.GetSelectiveCourses;
+import ua.edu.deanoffice.mobile.studentchdtu.service.client.interfaces.GetUserData;
 
 public class Get {
 
     private Retrofit retrofit;
-    private String responseBody;
+    private ResponseBody response;
+    private boolean isSuccessful = false;
 
-    public String getResponseBody() {
-        return responseBody;
+    public boolean isSuccessful() {
+        return isSuccessful;
+    }
+
+    public ResponseBody getResponse() {
+        return response;
     }
 
     public Get(Retrofit retrofit) {
@@ -23,20 +31,44 @@ public class Get {
 
     public void applicationTypeList() {
         GetApplicationTypeList req = retrofit.create(GetApplicationTypeList.class);
-        try{
+        try {
             Response resp = req.getApplicationTypeList().execute();
-            responseBody = ((ResponseBody)resp.body()).string();
-        }catch (IOException e){
+            response = (ResponseBody) resp.body();
+            isSuccessful = true;
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void application(int id, String json) {
         GetApplication req = retrofit.create(GetApplication.class);
-        try{
+        try {
             Response resp = req.getRequest(id, json).execute();
-            responseBody = ((ResponseBody)resp.body()).string();
-        }catch (IOException e){
+            response = (ResponseBody) resp.body();
+            isSuccessful = true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getUserData() {
+        GetUserData post = retrofit.create(GetUserData.class);
+        try {
+            Response resp = post.getApplicationTypeList("Bearer " + Mobile.getInstance().jwt.token).execute();
+            response = (ResponseBody) resp.body();
+            isSuccessful = true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getSelectiveCourses() {
+        GetSelectiveCourses post = retrofit.create(GetSelectiveCourses.class);
+        try {
+            Response resp = post.request("Bearer " + Mobile.getInstance().jwt.token, 2).execute();
+            response = (ResponseBody) resp.body();
+            isSuccessful = true;
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

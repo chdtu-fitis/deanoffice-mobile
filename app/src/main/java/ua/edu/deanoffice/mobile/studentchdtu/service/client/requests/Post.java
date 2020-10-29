@@ -4,22 +4,24 @@ import android.util.Log;
 
 import java.io.IOException;
 
-import okhttp3.Headers;
 import okhttp3.ResponseBody;
-import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.http.Header;
 import ua.edu.deanoffice.mobile.studentchdtu.mobile.UserData.Credentials;
 import ua.edu.deanoffice.mobile.studentchdtu.service.client.interfaces.PostRequest;
 
 public class Post {
 
     private Retrofit retrofit;
-    private String responseBody = "";
+    private ResponseBody response;
+    private boolean isSuccessful = false;
 
-    public String getResponseBody() {
-        return responseBody;
+    public boolean isSuccessful() {
+        return isSuccessful;
+    }
+
+    public ResponseBody getResponse() {
+        return response;
     }
 
     public Post(Retrofit retrofit) {
@@ -28,11 +30,12 @@ public class Post {
 
     public void sendCredentials(Credentials cred) {
         PostRequest post = retrofit.create(PostRequest.class);
-        try{
+        try {
             Response resp = post.request(cred).execute();
             Log.d("Test", "Code: " + resp.code());
-            responseBody = ((ResponseBody)resp.body()).string();
-        }catch (IOException e){
+            response = (ResponseBody) resp.body();
+            isSuccessful = true;
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

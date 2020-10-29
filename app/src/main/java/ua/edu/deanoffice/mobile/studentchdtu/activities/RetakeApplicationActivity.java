@@ -10,10 +10,16 @@ import android.widget.Spinner;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import ua.edu.deanoffice.mobile.studentchdtu.mobile.ApplicationCache;
+import com.google.android.material.snackbar.Snackbar;
+
+import java.io.IOException;
+
+import okhttp3.ResponseBody;
+import retrofit2.Response;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.mobile.Mobile;
 import ua.edu.deanoffice.mobile.studentchdtu.service.Utils;
+import ua.edu.deanoffice.mobile.studentchdtu.service.client.Client;
 import ua.edu.deanoffice.mobile.studentchdtu.service.client.requests.Get;
 import ua.edu.deanoffice.mobile.studentchdtu.service.pojo.RetakeApplicationData;
 
@@ -38,15 +44,31 @@ public class RetakeApplicationActivity extends AppCompatActivity {
         Button button = findViewById(R.id.buttonApp);
         button.setOnClickListener((view)-> {
             Mobile.getInstance().getClient().getApplication(id, Utils.retakeApplicationDataToJSON(
-                    new RetakeApplicationData(editText.getText().toString(), (int)spinner.getSelectedItemId())), (get)->onResponse(get));
+                    new RetakeApplicationData(editText.getText().toString(), (int) spinner.getSelectedItemId())),
+                    new Client.OnResponseCallback() {
+                        @Override
+                        public void onResponseSuccess(ResponseBody response) {
+                            onResponse(response);
+                        }
+
+                        @Override
+                        public void onResponseFailure(ResponseBody response) {
+                            Snackbar.make(findViewById(android.R.id.content), "Failed connect to server", Snackbar.LENGTH_LONG)
+                                    .setAction("No action", null).show();
+                        }
+                    });
         });
     }
 
-    public void onResponse(Get get){
-        Intent intent = new Intent(RetakeApplicationActivity.this, ExamApplicationActivity.class);
-        String body = get.getResponseBody();
-        Mobile.getInstance().getCurrentApplication().load(Utils.JSONtoApplication(body));
-        startActivity(intent);
+    public void onResponse(ResponseBody response){
+        try {
+            Intent intent = new Intent(RetakeApplicationActivity.this, ExamApplicationActivity.class);
+            String body = (String) response.string();
+            Mobile.getInstance().getCurrentApplication().load(Utils.JSONtoApplication(body));
+            startActivity(intent);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     @Override

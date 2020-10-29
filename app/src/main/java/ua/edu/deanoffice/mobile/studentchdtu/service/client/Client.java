@@ -4,6 +4,7 @@ package ua.edu.deanoffice.mobile.studentchdtu.service.client;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import okhttp3.ResponseBody;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import ua.edu.deanoffice.mobile.studentchdtu.mobile.UserData.Credentials;
@@ -17,43 +18,77 @@ public class Client {
 
     public Client() {
         retrofitBase = new Retrofit.Builder()
-                .baseUrl("http://192.168.1.106:8080/")
+                .baseUrl("http://25.19.241.234:8075/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         executor = Executors.newCachedThreadPool();
     }
 
-    public void getApplicationList(OnResponseGetCallback onResponseGetCallback) {
+    public void getApplicationList(OnResponseCallback onResponseGetCallback) {
         Get getRequest = new Get(retrofitBase);
 
-        executor.execute(()->{
+        executor.execute(() -> {
             getRequest.applicationTypeList();
-            onResponseGetCallback.onResponseGet(getRequest);
+            if (getRequest.isSuccessful()) {
+                onResponseGetCallback.onResponseSuccess(getRequest.getResponse());
+            } else {
+                onResponseGetCallback.onResponseFailure(getRequest.getResponse());
+            }
         });
     }
 
-    public void getApplication(final int id, final String json, OnResponseGetCallback onResponseGetCallback) {
+    public void getApplication(final int id, final String json, OnResponseCallback onResponseGetCallback) {
         Get getRequest = new Get(retrofitBase);
 
-        executor.execute(()->{
+        executor.execute(() -> {
             getRequest.application(id, json);
-            onResponseGetCallback.onResponseGet(getRequest);
+            if (getRequest.isSuccessful()) {
+                onResponseGetCallback.onResponseSuccess(getRequest.getResponse());
+            } else {
+                onResponseGetCallback.onResponseFailure(getRequest.getResponse());
+            }
         });
     }
 
-    public void getUser(Credentials credentials, OnResponsePostCallback onResponsePostCallback) {
+    public void getUser(Credentials credentials, OnResponseCallback onResponsePostCallback) {
         Post postRequest = new Post(retrofitBase);
-        executor.execute(()->{
+        executor.execute(() -> {
             postRequest.sendCredentials(credentials);
-            onResponsePostCallback.onResponsePost(postRequest.getResponseBody());
+            if (postRequest.isSuccessful()) {
+                onResponsePostCallback.onResponseSuccess(postRequest.getResponse());
+            } else {
+                onResponsePostCallback.onResponseFailure(postRequest.getResponse());
+            }
         });
     }
 
-    public interface OnResponseGetCallback {
-        void onResponseGet(Get get);
+    public void getUserData(OnResponseCallback onResponsePostCallback) {
+        Get getRequest = new Get(retrofitBase);
+        executor.execute(() -> {
+            getRequest.getUserData();
+            if (getRequest.isSuccessful()) {
+                onResponsePostCallback.onResponseSuccess(getRequest.getResponse());
+            } else {
+                onResponsePostCallback.onResponseFailure(getRequest.getResponse());
+            }
+        });
     }
 
-    public interface OnResponsePostCallback {
-        void onResponsePost(String responseBody);
+    public void getSelectiveCourses(OnResponseCallback onResponsePostCallback) {
+        Get getRequest = new Get(retrofitBase);
+        executor.execute(() -> {
+            getRequest.getSelectiveCourses();
+            if (getRequest.isSuccessful()) {
+                onResponsePostCallback.onResponseSuccess(getRequest.getResponse());
+            } else {
+                onResponsePostCallback.onResponseFailure(getRequest.getResponse());
+            }
+        });
+    }
+
+    public interface OnResponseCallback {
+        void onResponseSuccess(ResponseBody response);
+
+        void onResponseFailure(ResponseBody response);
     }
 }

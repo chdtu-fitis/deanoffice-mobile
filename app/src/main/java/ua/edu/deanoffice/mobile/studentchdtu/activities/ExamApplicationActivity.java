@@ -24,7 +24,6 @@ public class ExamApplicationActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exam_application);
-        Log.d("Test", "Enter");
 
         TextView applicationHeader = findViewById(R.id.applicationHeader);
         TextView applicationBody = findViewById(R.id.applicationBody);
