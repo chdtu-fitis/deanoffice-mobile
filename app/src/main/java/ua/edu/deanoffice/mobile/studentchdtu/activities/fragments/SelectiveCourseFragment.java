@@ -1,7 +1,6 @@
 package ua.edu.deanoffice.mobile.studentchdtu.activities.fragments;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,10 +21,11 @@ public class SelectiveCourseFragment extends Fragment {
     private CheckBox checkBox;
     private ImageView imageInfo;
     private Button btnCheckBox;
-
+    private boolean interactive;
     private View.OnClickListener listener;
 
     public void setCheckBoxInteractive(boolean interactive) {
+        checkBox.setClickable(interactive);
         btnCheckBox.setClickable(interactive);
     }
 
@@ -38,10 +38,11 @@ public class SelectiveCourseFragment extends Fragment {
         selectiveCourse.selected = checked;
     }
 
-    public SelectiveCourseFragment(SelectiveCourse selectiveCourse, int layout, View.OnClickListener listener) {
+    public SelectiveCourseFragment(SelectiveCourse selectiveCourse, int layout, View.OnClickListener listener, boolean interactive) {
         this.selectiveCourse = selectiveCourse;
         this.layout = layout;
         this.listener = listener;
+        this.interactive = interactive;
     }
 
     @Override
@@ -53,20 +54,21 @@ public class SelectiveCourseFragment extends Fragment {
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
         checkBox = view.findViewById(R.id.selectivecheckbox);
         imageInfo = view.findViewById(R.id.selectivecourseinfo);
-        ((TextView)view.findViewById(R.id.selectivecoursename)).setText(selectiveCourse.getCourse().getCourseName().getName());
+        ((TextView) view.findViewById(R.id.selectivecoursename)).setText(selectiveCourse.getCourse().getCourseName().getName());
+        checkBox.setChecked(selectiveCourse.selected);
 
         imageInfo.setOnClickListener((viewClick) -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(viewClick.getContext());
             ViewGroup viewGroup = viewClick.findViewById(android.R.id.content);
             View dialogView = LayoutInflater.from(viewClick.getContext()).inflate(R.layout.selectivecourse_info_dialog, viewGroup, false);
 
-            ((TextView)dialogView.findViewById(R.id.selectiveCourseName)).setText(selectiveCourse.getCourse().getCourseName().getName());
-            ((TextView)dialogView.findViewById(R.id.selectiveCourseDescription)).setText(selectiveCourse.getDescription());
+            ((TextView) dialogView.findViewById(R.id.selectiveCourseName)).setText(selectiveCourse.getCourse().getCourseName().getName());
+            ((TextView) dialogView.findViewById(R.id.selectiveCourseDescription)).setText(selectiveCourse.getDescription());
             builder.setView(dialogView);
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
 
-            ((Button)dialogView.findViewById(R.id.buttonOk)).setOnClickListener((viewOk) -> {
+            ((Button) dialogView.findViewById(R.id.buttonOk)).setOnClickListener((viewOk) -> {
                 alertDialog.dismiss();
             });
         });
@@ -77,5 +79,7 @@ public class SelectiveCourseFragment extends Fragment {
             selectiveCourse.selected = checkBox.isChecked();
             listener.onClick(viewButton);
         });
+
+        setCheckBoxInteractive(interactive);
     }
 }

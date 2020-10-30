@@ -36,7 +36,9 @@ public class ChdtuAdapter extends RecyclerView.Adapter<ChdtuAdapter.ViewHolder> 
     private List<SelectiveCourse> selectedCourseFirstSemester;
     private List<SelectiveCourse> selectiveCourseSecondSemester;
 
-    public ChdtuAdapter(SelectiveCourses selectiveCourses, FragmentManager supportFragmentManager, TextView selectiveCoursesCounter) {
+    private boolean interactive;
+
+    public ChdtuAdapter(SelectiveCourses selectiveCourses, FragmentManager supportFragmentManager, TextView selectiveCoursesCounter, boolean disableCheckBoxes) {
         this.selectiveCourses = selectiveCourses;
         this.fragmentManager = supportFragmentManager;
 
@@ -46,6 +48,7 @@ public class ChdtuAdapter extends RecyclerView.Adapter<ChdtuAdapter.ViewHolder> 
         selectedCourseFirstSemester = new ArrayList<>(selectiveCourses.getSelectiveCoursesFirstSemester().size());
         selectiveCourseSecondSemester = new ArrayList<>(selectiveCourses.getSelectiveCoursesSecondSemester().size());
         this.selectiveCoursesCounter = selectiveCoursesCounter;
+        interactive = disableCheckBoxes;
     }
 
     @NonNull
@@ -72,7 +75,7 @@ public class ChdtuAdapter extends RecyclerView.Adapter<ChdtuAdapter.ViewHolder> 
             fragmentManager.beginTransaction().add(R.id.containterCourses, fragment1).commit();
 
             for (SelectiveCourse course : selectiveCourses.getSelectiveCoursesFirstSemester()) {
-                SelectiveCourseFragment fragment = new SelectiveCourseFragment(course, R.layout.selectivecourse_fragment, this);
+                SelectiveCourseFragment fragment = new SelectiveCourseFragment(course, R.layout.selectivecourse_fragment, this, interactive);
                 selectiveCourseFragmentsFirstSemester.add(fragment);
                 fragmentManager.beginTransaction().add(R.id.containterCourses, fragment).commit();
             }
@@ -81,7 +84,7 @@ public class ChdtuAdapter extends RecyclerView.Adapter<ChdtuAdapter.ViewHolder> 
             fragmentManager.beginTransaction().add(R.id.containterCourses, fragment2).commit();
 
             for (SelectiveCourse course : selectiveCourses.getSelectiveCoursesSecondSemester()) {
-                SelectiveCourseFragment fragment = new SelectiveCourseFragment(course, R.layout.selectivecourse_fragment, this);
+                SelectiveCourseFragment fragment = new SelectiveCourseFragment(course, R.layout.selectivecourse_fragment, this, interactive);
                 selectiveCourseFragmentsSecondSemester.add(fragment);
                 fragmentManager.beginTransaction().add(R.id.containterCourses, fragment).commit();
             }
@@ -93,49 +96,62 @@ public class ChdtuAdapter extends RecyclerView.Adapter<ChdtuAdapter.ViewHolder> 
         return selectiveCourses.getSelectiveCoursesFirstSemester().size() + selectiveCourses.getSelectiveCoursesSecondSemester().size();
     }
 
-    @Override
-    public void onClick(View v) {
+    public void disableCheckBoxes() {
         for (SelectiveCourseFragment frag : selectiveCourseFragmentsFirstSemester) {
-            frag.setCheckBoxInteractive(true);
+            frag.setCheckBoxInteractive(false);
         }
         for (SelectiveCourseFragment frag : selectiveCourseFragmentsSecondSemester) {
-            frag.setCheckBoxInteractive(true);
+            frag.setCheckBoxInteractive(false);
         }
+        interactive = false;
+    }
 
-        int count = 0;
-        selectedCourseFirstSemester.clear();
-        for (int i = 0; i < selectiveCourses.getSelectiveCoursesFirstSemester().size(); i++) {
-            if (selectiveCourses.getSelectiveCoursesFirstSemester().get(i).selected) {
-                selectedCourseFirstSemester.add(selectiveCourses.getSelectiveCoursesFirstSemester().get(i));
-                count++;
+    @Override
+    public void onClick(View v) {
+        if (interactive) {
+            for (SelectiveCourseFragment frag : selectiveCourseFragmentsFirstSemester) {
+                frag.setCheckBoxInteractive(true);
             }
-            if (count >= 3) {
-                for (SelectiveCourseFragment frag : selectiveCourseFragmentsFirstSemester) {
-                    if (!frag.isChecked()) {
-                        frag.setCheckBoxInteractive(false);
+            for (SelectiveCourseFragment frag : selectiveCourseFragmentsSecondSemester) {
+                frag.setCheckBoxInteractive(true);
+            }
+
+
+            int count = 0;
+            selectedCourseFirstSemester.clear();
+            for (int i = 0; i < selectiveCourses.getSelectiveCoursesFirstSemester().size(); i++) {
+                if (selectiveCourses.getSelectiveCoursesFirstSemester().get(i).selected) {
+                    selectedCourseFirstSemester.add(selectiveCourses.getSelectiveCoursesFirstSemester().get(i));
+                    count++;
+                }
+                if (count >= 3) {
+                    for (SelectiveCourseFragment frag : selectiveCourseFragmentsFirstSemester) {
+                        if (!frag.isChecked()) {
+                            frag.setCheckBoxInteractive(false);
+                        }
                     }
                 }
             }
-        }
 
-        count = 0;
-        selectiveCourseSecondSemester.clear();
-        for (int i = 0; i < selectiveCourses.getSelectiveCoursesSecondSemester().size(); i++) {
-            if (selectiveCourses.getSelectiveCoursesSecondSemester().get(i).selected) {
-                selectiveCourseSecondSemester.add(selectiveCourses.getSelectiveCoursesSecondSemester().get(i));
-                count++;
-            }
-            if (count >= 2) {
-                for (SelectiveCourseFragment frag : selectiveCourseFragmentsSecondSemester) {
-                    if (!frag.isChecked()) {
-                        frag.setCheckBoxInteractive(false);
+            count = 0;
+            selectiveCourseSecondSemester.clear();
+            for (int i = 0; i < selectiveCourses.getSelectiveCoursesSecondSemester().size(); i++) {
+                if (selectiveCourses.getSelectiveCoursesSecondSemester().get(i).selected) {
+                    selectiveCourseSecondSemester.add(selectiveCourses.getSelectiveCoursesSecondSemester().get(i));
+                    count++;
+                }
+                if (count >= 2) {
+                    for (SelectiveCourseFragment frag : selectiveCourseFragmentsSecondSemester) {
+                        if (!frag.isChecked()) {
+                            frag.setCheckBoxInteractive(false);
+                        }
                     }
                 }
             }
-        }
 
-        selectiveCoursesCounter.setText("3 в 1 семестрі (" + getSelectedCourseFirstSemester().size() + "/3)" +
-                ", 2 в 2 семестрі(" + getSelectiveCourseSecondSemester().size() + "/2)");
+            selectiveCoursesCounter.setText("3 в 1 семестрі (" + getSelectedCourseFirstSemester().size() + "/3)" +
+                    ", 2 в 2 семестрі(" + getSelectiveCourseSecondSemester().size() + "/2)");
+        }
     }
 
     public List<SelectiveCourse> getSelectedCourseFirstSemester() {

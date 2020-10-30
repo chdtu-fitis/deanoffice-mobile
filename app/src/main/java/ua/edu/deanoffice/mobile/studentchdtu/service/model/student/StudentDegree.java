@@ -5,6 +5,10 @@ public class StudentDegree extends ValidModel{
     protected int id;
     private StudentGroup studentGroup;
     private Specialization specialization;
+    private String payment;
+    private String tuitionForm;
+    private String tuitionTerm;
+
     private boolean active;
 
     public int getId() {
@@ -37,5 +41,29 @@ public class StudentDegree extends ValidModel{
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public String getPayment() {
+        return payment;
+    }
+
+    public void setPayment(String payment) {
+        this.payment = payment;
+    }
+
+    public String getTuitionForm() {
+        return tuitionForm;
+    }
+
+    public void setTuitionForm(String tuitionForm) {
+        this.tuitionForm = tuitionForm;
+    }
+
+    public String getTuitionTerm() {
+        return tuitionTerm;
+    }
+
+    public void setTuitionTerm(String tuitionTerm) {
+        this.tuitionTerm = tuitionTerm;
     }
 }
