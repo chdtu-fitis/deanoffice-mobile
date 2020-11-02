@@ -1,0 +1,25 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<LinearLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+    xmlns:app = "http://schemas.android.com/apk/res-auto"
+    android:layout_width = "match_parent"
+    android:layout_height = "wrap_content"
+    android:gravity = "center_vertical"
+    android:padding = "10dp"
+    android:background="@color/chdtu_value1">
+
+    <LinearLayout
+        android:layout_width = "wrap_content"
+        android:layout_height = "match_parent"
+        android:layout_weight = "0.5">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:text="РЕЄСТРАЦІЯ НА ВИБІРКОВІ ДИСЦИПЛІНИ"
+            android:textColor="@color/white"/>
+
+    </LinearLayout>
+</LinearLayout>

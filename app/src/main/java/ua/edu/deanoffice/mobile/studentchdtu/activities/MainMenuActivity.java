@@ -1,15 +1,25 @@
 package ua.edu.deanoffice.mobile.studentchdtu.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
+
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import okhttp3.ResponseBody;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
+import ua.edu.deanoffice.mobile.studentchdtu.mobile.Mobile;
+import ua.edu.deanoffice.mobile.studentchdtu.service.client.Client;
 import ua.edu.deanoffice.mobile.studentchdtu.service.model.student.Student;
 
 public class MainMenuActivity extends AppCompatActivity {
@@ -23,9 +33,26 @@ public class MainMenuActivity extends AppCompatActivity {
 
         studentInformationViews.put("Name", (TextView) findViewById(R.id.StudentName));
         studentInformationViews.put("Facult", (TextView) findViewById(R.id.StudentFacult));
+        studentInformationViews.put("Program", (TextView) findViewById(R.id.StudentProgram));
+        studentInformationViews.put("Specialization", (TextView) findViewById(R.id.StudentSpecialization));
         studentInformationViews.put("GroupAndYear", (TextView) findViewById(R.id.StudentGroupAndYear));
+        studentInformationViews.put("Termin", (TextView) findViewById(R.id.StudentTermin));
 
-        /*Mobile.getInstance().getClient().getUserData(new Client.OnResponseCallback() {
+        ImageButton btnExit = findViewById(R.id.buttonExit);
+        btnExit.setOnClickListener((view) -> {
+            Intent intent = new Intent(MainMenuActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        });
+
+        Button btnSelection = findViewById(R.id.coursesSelecion);
+        btnSelection.setOnClickListener((view) -> {
+            Intent intent = new Intent(MainMenuActivity.this, SelectiveCoursesActivity.class);
+            startActivity(intent);
+            finish();
+        });
+
+        Mobile.getInstance().getClient().getUserData(new Client.OnResponseCallback() {
             @Override
             public void onResponseSuccess(ResponseBody response) {
                 try {
@@ -42,22 +69,26 @@ public class MainMenuActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
+
             @Override
             public void onResponseFailure(ResponseBody response) {
                 Snackbar.make(findViewById(android.R.id.content), "Failed connect to server", Snackbar.LENGTH_LONG)
                         .setAction("No action", null).show();
                 Intent intent = new Intent(MainMenuActivity.this, LoginActivity.class);
                 startActivity(intent);
-                finish();
             }
-        });*/
+        });
     }
 
     public void updateStudentInfo(Student user) {
         runOnUiThread(() -> {
             studentInformationViews.get("Name").setText(user.getSurname() + " " + user.getName() + " " + user.getPatronimic());
-            studentInformationViews.get("Facult").setText(user.getDegrees()[0].getSpecialization().getSpeciality().getName());
-            studentInformationViews.get("GroupAndYear").setText(user.getDegrees()[0].getStudentGroup().getName() + " Курс: " + ((int)Math.ceil((double)(user.getYear())/2d)));
+            studentInformationViews.get("Facult").setText("Факультет інформаційних технологій і систем");
+            studentInformationViews.get("Program").setText("Спеціальність: " + user.getDegrees()[0].getSpecialization().getSpeciality().getName());
+            studentInformationViews.get("Specialization").setText("Освітня програма: " + user.getDegrees()[0].getSpecialization().getName());
+            studentInformationViews.get("GroupAndYear").setText("Група: " + user.getDegrees()[0].getStudentGroup().getName());
+            studentInformationViews.get("Termin").setText("Форма навчання: " + (user.getDegrees()[0].getTuitionForm().equals("FULL_TIME") ? "Денна" : "Заочна")
+                    + (user.getDegrees()[0].getTuitionTerm().equals("REGULAR") ? "" : "Скорочена"));
         });
     }
 }

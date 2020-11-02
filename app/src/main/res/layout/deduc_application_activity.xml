@@ -19,12 +19,10 @@
                     android:layout_margin="5dp"
                     android:hint="Введіть дату з якої ви хочете відрахуватись\n зі складу здобувачів вищої освіти"
                     android:inputType="date"/>
-
                 <Button
                     android:id="@+id/buttonNext"
                     android:layout_width="128dp"
                     android:layout_height="wrap_content"
                     android:text="Далі" />
         </LinearLayout>
-
 </LinearLayout>

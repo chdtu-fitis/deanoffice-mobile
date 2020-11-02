@@ -6,33 +6,91 @@
     android:layout_height="match_parent"
     tools:context=".activities.LoginActivity">
 
+    <TextView
+        android:layout_width="255dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+        android:text="Логін"
+        android:textColor="@color/gray2"
+        android:textSize="11sp"
+        app:layout_constraintBottom_toTopOf="@+id/textFieldLogin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
     <EditText
         android:id="@+id/textFieldLogin"
         style="@style/CHDTU.InputText"
-        android:layout_width="247dp"
-        android:layout_height="40dp"
-        android:hint="Логін"
+        android:layout_width="255dp"
+        android:layout_height="42dp"
         android:inputType="textPersonName"
         android:textAlignment="textStart"
-        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:layout_constraintVertical_bias="0.05" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.55" />
 
-    <EditText
-        style="@style/CHDTU.InputText"
-        android:id="@+id/textFieldPassword"
-        android:layout_width="247dp"
-        android:layout_height="40dp"
-        android:inputType="textPassword"
-        android:hint="Пароль"
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="255dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+        android:text="Пароль"
+        android:textColor="@color/gray2"
+        android:textSize="11sp"
+        app:layout_constraintBottom_toTopOf="@+id/layoutPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/layoutPassword"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textFieldLogin"
-        app:layout_constraintVertical_bias="0.03" />
+        app:layout_constraintVertical_bias="0.14">
+
+        <EditText
+            android:id="@+id/textFieldPassword"
+            style="@style/CHDTU.InputText"
+            android:layout_width="255dp"
+            android:layout_height="42dp"
+            android:inputType="textPassword"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_show"
+            app:layout_constraintBottom_toBottomOf="@+id/textFieldPassword"
+            app:layout_constraintEnd_toEndOf="@+id/textFieldPassword"
+            app:layout_constraintHorizontal_bias="0.95"
+            app:layout_constraintStart_toStartOf="@+id/textFieldPassword"
+            app:layout_constraintTop_toTopOf="@+id/textFieldPassword"
+            app:layout_constraintVertical_bias="0.5" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:layout_width="255dp"
+        android:layout_height="wrap_content"
+        android:text="Повідомлення про помилку"
+        android:textColor="@android:color/holo_red_light"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonLogin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layoutPassword"
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -40,26 +98,36 @@
         android:layout_height="wrap_content"
         android:elevation="10dp"
         android:src="@drawable/ic_gerb"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/textFieldLogin"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.52"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.3" />
+        app:layout_constraintVertical_bias="0.7" />
 
     <Button
         android:id="@+id/buttonLogin"
-        android:layout_width="100dp"
-        android:layout_height="40dp"
-        android:background="@color/chdtu_value2"
-        android:elevation="5dp"
+        android:layout_width="113dp"
+        android:layout_height="43dp"
+        android:background="@drawable/round_rect_shape"
         android:text="Увійти"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textFieldPassword"
-        app:layout_constraintVertical_bias="0.06" />
+        app:layout_constraintTop_toBottomOf="@+id/layoutPassword"
+        app:layout_constraintVertical_bias="0.25" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="25dp"
+        android:text="2020"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

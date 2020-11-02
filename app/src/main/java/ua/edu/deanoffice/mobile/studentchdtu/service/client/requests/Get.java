@@ -31,44 +31,44 @@ public class Get {
 
     public void applicationTypeList() {
         GetApplicationTypeList req = retrofit.create(GetApplicationTypeList.class);
-        try {
+        try{
             Response resp = req.getApplicationTypeList().execute();
-            response = (ResponseBody) resp.body();
+            response = (ResponseBody)resp.body();
             isSuccessful = true;
-        } catch (IOException e) {
+        }catch (IOException e){
             e.printStackTrace();
         }
     }
 
     public void application(int id, String json) {
         GetApplication req = retrofit.create(GetApplication.class);
-        try {
+        try{
             Response resp = req.getRequest(id, json).execute();
-            response = (ResponseBody) resp.body();
+            response = (ResponseBody)resp.body();
             isSuccessful = true;
-        } catch (IOException e) {
+        }catch (IOException e){
             e.printStackTrace();
         }
     }
 
     public void getUserData() {
         GetUserData post = retrofit.create(GetUserData.class);
-        try {
+        try{
             Response resp = post.getApplicationTypeList("Bearer " + Mobile.getInstance().jwt.token).execute();
-            response = (ResponseBody) resp.body();
+            response = (ResponseBody)resp.body();
             isSuccessful = true;
-        } catch (IOException e) {
+        }catch (IOException e){
             e.printStackTrace();
         }
     }
 
     public void getSelectiveCourses() {
         GetSelectiveCourses post = retrofit.create(GetSelectiveCourses.class);
-        try {
-            Response resp = post.request("Bearer " + Mobile.getInstance().jwt.token, 2).execute();
-            response = (ResponseBody) resp.body();
+        try{
+            Response resp = post.request("Bearer " + Mobile.getInstance().jwt.token, 2, Mobile.getInstance().getStudent().getDegrees()[0].getId()).execute();
+            response = (ResponseBody)resp.body();
             isSuccessful = true;
-        } catch (IOException e) {
+        }catch (IOException e){
             e.printStackTrace();
         }
     }
