@@ -49,7 +49,6 @@ public class SelectiveCoursesActivity extends AppCompatActivity {
                 Log.d("Test", "Error");
             }
         });
-        //Draw();
     }
 
 
@@ -105,59 +104,6 @@ public class SelectiveCoursesActivity extends AppCompatActivity {
                 });
             } catch (IOException e) {
                 e.printStackTrace();
-            }
-        });
-    }
-
-    public void Draw() {
-        SelectiveCourses selectiveCourses = new Gson().fromJson("", SelectiveCourses.class);
-
-        RecyclerView recyclerView = findViewById(R.id.listview);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-
-        ChdtuAdapter adapter = new ChdtuAdapter(selectiveCourses, getSupportFragmentManager(), selectiveCoursesCounter, true);
-
-        recyclerView.setAdapter(adapter);
-
-        Button btn_confirm = findViewById(R.id.confirm_selectivecourses);
-        btn_confirm.setOnClickListener((view) -> {
-
-        });
-
-        Button btn_clear = findViewById(R.id.clear_selectivecourses);
-        btn_clear.setOnClickListener((view) -> {
-            adapter.clearSelected();
-        });
-
-        Button btn = findViewById(R.id.confirm_selectivecourses);
-        btn.setOnClickListener((view) -> {
-            if (adapter.getSelectedCourseFirstSemester().size() == 3 && adapter.getSelectiveCourseSecondSemester().size() == 2) {
-                selectiveCoursesCounter.setText("Підтвердіть вибрані дисципліни");
-                btn_confirm.setText("Підтвердити");
-                btn_clear.setText("Скасувати");
-
-                btn_confirm.setOnClickListener((viewConfirm) -> {
-                    Intent intent = new Intent(SelectiveCoursesActivity.this, MainMenuActivity.class);
-                    startActivity(intent);
-                    finish();
-                });
-                btn_clear.setOnClickListener((viewClear) -> {
-                    Intent intent = new Intent(SelectiveCoursesActivity.this, SelectiveCoursesActivity.class);
-                    startActivity(intent);
-                    finish();
-                });
-
-                SelectiveCourses selectiveCoursesFinal = new SelectiveCourses();
-                selectiveCoursesFinal.setSelectiveCoursesFirstSemester(adapter.getSelectedCourseFirstSemester());
-                selectiveCoursesFinal.setSelectiveCoursesSecondSemester(adapter.getSelectiveCourseSecondSemester());
-
-                ChdtuAdapter adapterFinal = new ChdtuAdapter(selectiveCoursesFinal, getSupportFragmentManager(), null, false);
-                recyclerView.setAdapter(adapterFinal);
-                adapterFinal.disableCheckBoxes();
-            } else {
-                Snackbar.make(findViewById(android.R.id.content), "Оберіть дисципліни", Snackbar.LENGTH_LONG)
-                        .setAction("No action", null).show();
             }
         });
     }
