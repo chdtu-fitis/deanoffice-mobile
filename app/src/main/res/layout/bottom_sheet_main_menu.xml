@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     app:behavior_hideable="false"
     app:behavior_peekHeight="50sp"
-    app:layout_behavior="ua.edu.deanoffice.mobile.studentchdtu.activities.views.LockableBottomSheetBehaviour">
+    app:layout_behavior="ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.LockableBottomSheetBehaviour">
 
     <LinearLayout
         android:id="@+id/linearLayout"
