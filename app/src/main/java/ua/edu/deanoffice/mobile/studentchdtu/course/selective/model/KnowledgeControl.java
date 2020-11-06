@@ -1,6 +1,7 @@
 package ua.edu.deanoffice.mobile.studentchdtu.course.selective.model;
 
 public class KnowledgeControl extends ModelBase {
+
     private String name;
 
     public String getName() {

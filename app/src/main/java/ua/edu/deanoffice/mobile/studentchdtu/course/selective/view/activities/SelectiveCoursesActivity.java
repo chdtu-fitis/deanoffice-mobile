@@ -36,11 +36,11 @@ public class SelectiveCoursesActivity extends AppCompatActivity {
 
         selectiveCoursesCounter = findViewById(R.id.text_body);
 
-        App.getInstance().getClient().getRequests().request(App.getInstance().jwt.token,
+        App.getInstance().getClient().getRequests().request(App.getInstance().getJwt().getToken(),
                 App.getInstance().getCurrentStudent().getDegrees()[0].getId()).enqueue(new Callback<SelectiveCourses>() {
             @Override
             public void onResponse(Call<SelectiveCourses> call, Response<SelectiveCourses> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     SelectiveCoursesActivity.this.onResponse(response.body());
                 }
             }
@@ -55,51 +55,50 @@ public class SelectiveCoursesActivity extends AppCompatActivity {
 
     public void onResponse(SelectiveCourses selectiveCourses) {
         runOnUiThread(() -> {
-                RecyclerView recyclerView = findViewById(R.id.listview);
-                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-                recyclerView.setLayoutManager(layoutManager);
+            RecyclerView recyclerView = findViewById(R.id.listview);
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+            recyclerView.setLayoutManager(layoutManager);
 
-                ChdtuAdapter adapter = new ChdtuAdapter(selectiveCourses, getSupportFragmentManager(), selectiveCoursesCounter, true);
+            ChdtuAdapter adapter = new ChdtuAdapter(selectiveCourses, getSupportFragmentManager(), selectiveCoursesCounter, true);
 
-                recyclerView.setAdapter(adapter);
+            recyclerView.setAdapter(adapter);
 
-                Button btn_confirm = findViewById(R.id.confirm_selectivecourses);
+            Button btn_clear = findViewById(R.id.clear_selectivecourses);
+            btn_clear.setOnClickListener((view) -> {
+                adapter.clearSelected();
+            });
 
-                Button btn_clear = findViewById(R.id.clear_selectivecourses);
-                btn_clear.setOnClickListener((view) -> {
-                    adapter.clearSelected();
-                });
+            Button btn_confirm = findViewById(R.id.confirm_selectivecourses);
+            btn_confirm.setOnClickListener((view) -> {
+                if (adapter.getSelectedCourseFirstSemester().size() == 3 && adapter.getSelectiveCourseSecondSemester().size() == 2) {
+                    selectiveCoursesCounter.setText("Підтвердіть вибрані дисципліни");
+                    btn_confirm.setText("Підтвердити");
+                    btn_clear.setText("Скасувати");
 
-                btn_confirm.setOnClickListener((view) -> {
-                    if (adapter.getSelectedCourseFirstSemester().size() == 3 && adapter.getSelectiveCourseSecondSemester().size() == 2) {
-                        selectiveCoursesCounter.setText("Підтвердіть вибрані дисципліни");
-                        btn_confirm.setText("Підтвердити");
-                        btn_clear.setText("Скасувати");
+                    btn_confirm.setOnClickListener((viewConfirm) -> {
+                        Intent intent = new Intent(SelectiveCoursesActivity.this, MainMenuActivity.class);
+                        startActivity(intent);
+                        finish();
+                    });
 
-                        btn_confirm.setOnClickListener((viewConfirm) -> {
-                            Intent intent = new Intent(SelectiveCoursesActivity.this, MainMenuActivity.class);
-                            startActivity(intent);
-                            finish();
-                        });
+                    btn_clear.setOnClickListener((viewClear) -> {
+                        Intent intent = new Intent(SelectiveCoursesActivity.this, SelectiveCoursesActivity.class);
+                        startActivity(intent);
+                        finish();
+                    });
 
-                        btn_clear.setOnClickListener((viewClear) -> {
-                            Intent intent = new Intent(SelectiveCoursesActivity.this, SelectiveCoursesActivity.class);
-                            startActivity(intent);
-                            finish();
-                        });
+                    SelectiveCourses selectiveCoursesFinal = new SelectiveCourses();
+                    selectiveCoursesFinal.setSelectiveCoursesFirstSemester(adapter.getSelectedCourseFirstSemester());
+                    selectiveCoursesFinal.setSelectiveCoursesSecondSemester(adapter.getSelectiveCourseSecondSemester());
 
-                        SelectiveCourses selectiveCoursesFinal = new SelectiveCourses();
-                        selectiveCoursesFinal.setSelectiveCoursesFirstSemester(adapter.getSelectedCourseFirstSemester());
-                        selectiveCoursesFinal.setSelectiveCoursesSecondSemester(adapter.getSelectiveCourseSecondSemester());
-
-                        ChdtuAdapter adapterFinal = new ChdtuAdapter(selectiveCoursesFinal, getSupportFragmentManager(), null, false);
-                        recyclerView.setAdapter(adapterFinal);
-                        adapterFinal.disableCheckBoxes();
-                    } else {
-                        Snackbar.make(findViewById(android.R.id.content), "Оберіть дисципліни", Snackbar.LENGTH_LONG)
-                                .setAction("No action", null).show();
-                    }
-                });
+                    ChdtuAdapter adapterFinal = new ChdtuAdapter(selectiveCoursesFinal, getSupportFragmentManager(), null, false);
+                    recyclerView.setAdapter(adapterFinal);
+                    adapterFinal.disableCheckBoxes();
+                } else {
+                    Snackbar.make(findViewById(android.R.id.content), "Оберіть дисципліни", Snackbar.LENGTH_LONG)
+                            .setAction("No action", null).show();
+                }
+            });
         });
     }
 

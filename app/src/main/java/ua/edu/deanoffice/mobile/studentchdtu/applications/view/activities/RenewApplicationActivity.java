@@ -36,11 +36,10 @@ public class RenewApplicationActivity extends AppCompatActivity {
                     Utils.renewApplicationDataToJSON(new RenewApplicationData(textDate.getText().toString()))).enqueue(new Callback<Application>() {
                 @Override
                 public void onResponse(Call<Application> call, Response<Application> response) {
-                    if(response.isSuccessful()) {
+                    if (response.isSuccessful()) {
                         RenewApplicationActivity.this.onResponse(response.body());
                     }
                 }
-
                 @Override
                 public void onFailure(Call<Application> call, Throwable t) {
                     Snackbar.make(findViewById(android.R.id.content), "Failed connect to server", Snackbar.LENGTH_LONG)

@@ -27,6 +27,6 @@ public class SemesterFragment extends Fragment {
 
     @Override
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
-        ((TextView)view.findViewById(R.id.semesterNumber)).setText(semester + " семестр");
+        ((TextView) view.findViewById(R.id.semesterNumber)).setText(semester + " семестр");
     }
 }

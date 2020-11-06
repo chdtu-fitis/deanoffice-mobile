@@ -1,8 +1,6 @@
 package ua.edu.deanoffice.mobile.studentchdtu.user.profile.model;
 
-import android.os.Debug;
 import android.util.Log;
-
 import java.lang.reflect.Field;
 
 public abstract class ValidModel {
@@ -16,7 +14,7 @@ public abstract class ValidModel {
                 }
             }
             return true;
-        } catch (IllegalAccessException e){
+        } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
         return false;

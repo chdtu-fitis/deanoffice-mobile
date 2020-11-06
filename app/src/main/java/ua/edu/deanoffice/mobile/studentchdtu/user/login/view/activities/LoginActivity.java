@@ -25,7 +25,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        App.getInstance().jwt = null;
+        App.getInstance().setJwt(null);
 
         Button button = findViewById(R.id.buttonLogin);
         EditText textLogin = findViewById(R.id.textFieldLogin);
@@ -42,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
             App.getInstance().getClient().getRequests().requestAuthStudent(new Credentials(login, password)).enqueue(new Callback<JWToken>() {
                 @Override
                 public void onResponse(Call<JWToken> call, Response<JWToken> response) {
-                    if(response.isSuccessful()) {
+                    if (response.isSuccessful()) {
                         LoginActivity.this.onResponse(response.body());
                     }
                 }
@@ -57,8 +57,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void onResponse(JWToken jwt) {
-        App.getInstance().jwt = jwt;
-        if (App.getInstance().jwt.isValid()) {
+        App.getInstance().setJwt(jwt);
+        if (App.getInstance().getJwt().isValid()) {
             Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);
             startActivity(intent);
             finish();

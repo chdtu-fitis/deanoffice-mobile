@@ -61,10 +61,10 @@ public class MainMenuActivity extends AppCompatActivity {
             finish();
         });
 
-        App.getInstance().getClient().getRequests().requestStudentInfo(App.getInstance().jwt.token).enqueue(new Callback<Student>() {
+        App.getInstance().getClient().getRequests().requestStudentInfo(App.getInstance().getJwt().getToken()).enqueue(new Callback<Student>() {
             @Override
             public void onResponse(Call<Student> call, Response<Student> response) {
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
                     Student student = response.body();
                     if (student.isValid()) {
                         App.getInstance().setCurrentStudent(student);

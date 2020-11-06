@@ -1,4 +1,5 @@
 package ua.edu.deanoffice.mobile.studentchdtu.course.selective.model;
+
 import java.util.List;
 
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.model.ValidModel;

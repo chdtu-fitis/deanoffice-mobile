@@ -19,6 +19,7 @@ import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCou
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourses;
 
 public class ChdtuAdapter extends RecyclerView.Adapter<ChdtuAdapter.ViewHolder> implements View.OnClickListener {
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public ViewHolder(View itemLayoutView) {
             super(itemLayoutView);

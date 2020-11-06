@@ -31,12 +31,12 @@ public class DeducApplicationActivity extends AppCompatActivity {
         EditText textDate = findViewById(R.id.editDate1);
         Button buttonNext = findViewById(R.id.buttonNext);
 
-        buttonNext.setOnClickListener((view)->{
+        buttonNext.setOnClickListener((view) -> {
             App.getInstance().getClient().getRequests().requestStudentInfo(id,
                     Utils.renewApplicationDataToJSON(new RenewApplicationData(textDate.getText().toString()))).enqueue(new Callback<Application>() {
                 @Override
                 public void onResponse(Call<Application> call, Response<Application> response) {
-                    if(response.isSuccessful()) {
+                    if (response.isSuccessful()) {
                         DeducApplicationActivity.this.onResponse(response.body());
                     }
                 }

@@ -7,7 +7,6 @@ public class Teacher extends ModelBase {
     private String patronimic;
     private String sex;
     private boolean active;
-    //academicTitle = null;
     private DepartmentTeacher departmentTeacher;
     private Position position;
 

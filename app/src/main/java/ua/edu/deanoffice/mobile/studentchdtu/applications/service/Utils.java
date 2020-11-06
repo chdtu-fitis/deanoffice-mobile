@@ -29,5 +29,4 @@ public class Utils {
     public static String renewApplicationDataToJSON(RenewApplicationData renewApplicationData) {
         return new Gson().toJson(renewApplicationData);
     }
-
 }

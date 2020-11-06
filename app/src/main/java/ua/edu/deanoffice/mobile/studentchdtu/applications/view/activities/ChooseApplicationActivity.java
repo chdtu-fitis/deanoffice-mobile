@@ -3,10 +3,8 @@ package ua.edu.deanoffice.mobile.studentchdtu.applications.view.activities;
 import android.content.Intent;
 import android.os.Bundle;
 
-
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -32,37 +30,29 @@ public class ChooseApplicationActivity extends AppCompatActivity {
                 "Поновлення до складу здобувачів вищої освіти після академічної відпустки",
                 "Відрахування за власним бажанням"
         };
-
         ArrayAdapter adapter = new ArrayAdapter(this, R.layout.multiline_spinner_dropdown_item, temp);
-
         spinner.setAdapter(adapter);
 
+        button.setOnClickListener((v) -> {
+            Intent intent = new Intent(ChooseApplicationActivity.this, RetakeApplicationActivity.class);
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ChooseApplicationActivity.this, RetakeApplicationActivity.class);
-
-                switch (1+(int)spinner.getSelectedItemId()){
-                    case 1:
-                        intent = new Intent(ChooseApplicationActivity.this, RetakeApplicationActivity.class);
-                        break;
-                    case 2:
-                        intent = new Intent(ChooseApplicationActivity.this, RenewApplicationActivity.class);
-                        break;
-                    case 3:
-                        intent = new Intent(ChooseApplicationActivity.this, DeducApplicationActivity.class);
-                        break;
-
-                        default:
-                            break;
-                }
-                ChooseApplicationActivity.this.startActivity(intent);
-                finish();
+            switch (1 + (int) spinner.getSelectedItemId()) {
+                case 1:
+                    intent = new Intent(ChooseApplicationActivity.this, RetakeApplicationActivity.class);
+                    break;
+                case 2:
+                    intent = new Intent(ChooseApplicationActivity.this, RenewApplicationActivity.class);
+                    break;
+                case 3:
+                    intent = new Intent(ChooseApplicationActivity.this, DeducApplicationActivity.class);
+                    break;
+                default:
+                    break;
             }
+            ChooseApplicationActivity.this.startActivity(intent);
+            finish();
         });
     }
-
 
 
 }
