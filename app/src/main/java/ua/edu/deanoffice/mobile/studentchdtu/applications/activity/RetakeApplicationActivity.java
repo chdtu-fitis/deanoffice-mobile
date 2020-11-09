@@ -2,6 +2,7 @@ package ua.edu.deanoffice.mobile.studentchdtu.applications.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,9 +41,11 @@ public class RetakeApplicationActivity extends AppCompatActivity {
         Button button = findViewById(R.id.buttonApp);
         button.setOnClickListener((view) -> {
             App.getInstance().getClient().createRequest(ApplicationRequests.class)
-                    .requestStudentInfo(id, Utils.retakeApplicationDataToJSON(new RetakeApplicationData(editText.getText().toString(), (int) spinner.getSelectedItemId()))).enqueue(new Callback<Application>() {
+                    .requestStudentInfo(Utils.retakeApplicationDataToJSON(new RetakeApplicationData(editText.getText().toString(), (int) spinner.getSelectedItemId())),
+                            id, App.getInstance().getJwt().getToken()).enqueue(new Callback<Application>() {
                 @Override
                 public void onResponse(Call<Application> call, Response<Application> response) {
+                    Log.d("Test", response.code() + "");
                     if (response.isSuccessful()) {
                         RetakeApplicationActivity.this.onResponse(response.body());
                     }

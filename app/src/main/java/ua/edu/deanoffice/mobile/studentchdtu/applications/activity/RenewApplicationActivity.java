@@ -34,7 +34,8 @@ public class RenewApplicationActivity extends AppCompatActivity {
 
         buttonNext.setOnClickListener((view) -> {
             App.getInstance().getClient().createRequest(ApplicationRequests.class)
-                    .requestStudentInfo(id, Utils.renewApplicationDataToJSON(new RenewApplicationData(textDate.getText().toString()))).enqueue(new Callback<Application>() {
+                    .requestStudentInfo(Utils.renewApplicationDataToJSON(new RenewApplicationData(textDate.getText().toString())), id,
+                            App.getInstance().getJwt().getToken()).enqueue(new Callback<Application>() {
                 @Override
                 public void onResponse(Call<Application> call, Response<Application> response) {
                     if (response.isSuccessful()) {
