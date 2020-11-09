@@ -11,11 +11,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourse;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.view.activities.MainMenuActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.ChdtuAdapter;
 import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
@@ -76,11 +78,7 @@ public class SelectiveCoursesActivity extends AppCompatActivity {
                         btn_confirm.setText("Підтвердити");
                         btn_clear.setText("Скасувати");
 
-                        btn_confirm.setOnClickListener((viewConfirm) -> {
-                            Intent intent = new Intent(SelectiveCoursesActivity.this, MainMenuActivity.class);
-                            startActivity(intent);
-                            finish();
-                        });
+
 
                         btn_clear.setOnClickListener((viewClear) -> {
                             Intent intent = new Intent(SelectiveCoursesActivity.this, SelectiveCoursesActivity.class);
@@ -95,6 +93,13 @@ public class SelectiveCoursesActivity extends AppCompatActivity {
                         ChdtuAdapter adapterFinal = new ChdtuAdapter(selectiveCoursesFinal, getSupportFragmentManager(), null, false);
                         recyclerView.setAdapter(adapterFinal);
                         adapterFinal.disableCheckBoxes();
+
+                        btn_confirm.setOnClickListener((viewConfirm) -> {
+                            Intent intent = new Intent(SelectiveCoursesActivity.this, SelectiveCoursesConfirmed.class);
+                            intent.putExtra("courses", new Gson().toJson(selectiveCoursesFinal));
+                            startActivity(intent);
+                            finish();
+                        });
                     } else {
                         Snackbar.make(findViewById(android.R.id.content), "Оберіть дисципліни", Snackbar.LENGTH_LONG)
                                 .setAction("No action", null).show();
