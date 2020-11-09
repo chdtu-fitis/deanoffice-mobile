@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ua.edu.deanoffice.mobile.studentchdtu.R;
-import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragments.SemesterFragment;
-import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragments.SelectiveCourseFragment;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.SemesterFragment;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.SelectiveCourseFragment;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourse;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourses;
 

@@ -1,4 +1,4 @@
-package ua.edu.deanoffice.mobile.studentchdtu.applications.service;
+package ua.edu.deanoffice.mobile.studentchdtu.applications;
 
 import com.google.gson.Gson;
 

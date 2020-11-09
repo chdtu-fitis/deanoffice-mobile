@@ -1,4 +1,4 @@
-package ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.activities;
+package ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,7 +16,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
-import ua.edu.deanoffice.mobile.studentchdtu.user.profile.view.activities.MainMenuActivity;
+import ua.edu.deanoffice.mobile.studentchdtu.user.profile.view.activity.MainMenuActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.ChdtuAdapter;
 import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourses;
@@ -36,7 +36,7 @@ public class SelectiveCoursesActivity extends AppCompatActivity {
 
         selectiveCoursesCounter = findViewById(R.id.text_body);
 
-        App.getInstance().getClient().getRequests().request(App.getInstance().getJwt().getToken(),
+        App.getInstance().getClient().getRequests().requestSelectiveCourses(App.getInstance().getJwt().getToken(),
                 App.getInstance().getCurrentStudent().getDegrees()[0].getId()).enqueue(new Callback<SelectiveCourses>() {
             @Override
             public void onResponse(Call<SelectiveCourses> call, Response<SelectiveCourses> response) {

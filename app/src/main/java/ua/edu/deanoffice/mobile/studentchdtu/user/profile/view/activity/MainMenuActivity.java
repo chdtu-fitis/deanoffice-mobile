@@ -1,4 +1,4 @@
-package ua.edu.deanoffice.mobile.studentchdtu.user.profile.view.activities;
+package ua.edu.deanoffice.mobile.studentchdtu.user.profile.view.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,10 +18,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
-import ua.edu.deanoffice.mobile.studentchdtu.applications.view.activities.ChooseApplicationActivity;
-import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.activities.SelectiveCoursesActivity;
+import ua.edu.deanoffice.mobile.studentchdtu.applications.view.activity.ChooseApplicationActivity;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.activity.SelectiveCoursesActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
-import ua.edu.deanoffice.mobile.studentchdtu.user.login.view.activities.LoginActivity;
+import ua.edu.deanoffice.mobile.studentchdtu.user.login.view.activity.LoginActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.model.Student;
 
 public class MainMenuActivity extends AppCompatActivity {

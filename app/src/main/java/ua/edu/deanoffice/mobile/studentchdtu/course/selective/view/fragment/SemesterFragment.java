@@ -1,4 +1,4 @@
-package ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragments;
+package ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

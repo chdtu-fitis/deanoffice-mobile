@@ -1,4 +1,4 @@
-package ua.edu.deanoffice.mobile.studentchdtu.user.login.view.activities;
+package ua.edu.deanoffice.mobile.studentchdtu.user.login.view.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,9 +15,9 @@ import retrofit2.Response;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
 import ua.edu.deanoffice.mobile.studentchdtu.user.login.model.Credentials;
-import ua.edu.deanoffice.mobile.studentchdtu.applications.service.Utils;
+import ua.edu.deanoffice.mobile.studentchdtu.applications.Utils;
 import ua.edu.deanoffice.mobile.studentchdtu.user.login.model.JWToken;
-import ua.edu.deanoffice.mobile.studentchdtu.user.profile.view.activities.MainMenuActivity;
+import ua.edu.deanoffice.mobile.studentchdtu.user.profile.view.activity.MainMenuActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
