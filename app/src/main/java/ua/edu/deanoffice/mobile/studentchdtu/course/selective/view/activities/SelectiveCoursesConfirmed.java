@@ -1,6 +1,7 @@
 package ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
@@ -22,7 +23,10 @@ public class SelectiveCoursesConfirmed extends AppCompatActivity {
         String coursesJson = bundle.getString("courses");
         SelectiveCourses selectiveCourses = new Gson().fromJson(coursesJson, SelectiveCourses.class);
         RecyclerView recyclerView = findViewById(R.id.listview1);
-        ChdtuAdapter adapter = new ChdtuAdapter(selectiveCourses, getSupportFragmentManager(), null, false);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+
+        ChdtuAdapter adapter = new ChdtuAdapter(selectiveCourses, getSupportFragmentManager(), null, true);
         recyclerView.setAdapter(adapter);
         adapter.disableCheckBoxes();
     }
