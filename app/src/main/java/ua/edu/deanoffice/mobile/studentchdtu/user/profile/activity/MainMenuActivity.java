@@ -1,4 +1,4 @@
-package ua.edu.deanoffice.mobile.studentchdtu.user.profile.view.activity;
+package ua.edu.deanoffice.mobile.studentchdtu.user.profile.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,11 +18,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
-import ua.edu.deanoffice.mobile.studentchdtu.applications.view.activity.ChooseApplicationActivity;
+import ua.edu.deanoffice.mobile.studentchdtu.applications.activity.ChooseApplicationActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.activity.SelectiveCoursesActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
-import ua.edu.deanoffice.mobile.studentchdtu.user.login.view.activity.LoginActivity;
+import ua.edu.deanoffice.mobile.studentchdtu.user.login.activity.LoginActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.model.Student;
+import ua.edu.deanoffice.mobile.studentchdtu.user.profile.service.ProfileRequests;
 
 public class MainMenuActivity extends AppCompatActivity {
 
@@ -61,7 +62,8 @@ public class MainMenuActivity extends AppCompatActivity {
             finish();
         });
 
-        App.getInstance().getClient().getRequests().requestStudentInfo(App.getInstance().getJwt().getToken()).enqueue(new Callback<Student>() {
+        App.getInstance().getClient().createRequest(ProfileRequests.class)
+                .requestStudentInfo(App.getInstance().getJwt().getToken()).enqueue(new Callback<Student>() {
             @Override
             public void onResponse(Call<Student> call, Response<Student> response) {
                 if (response.isSuccessful()) {

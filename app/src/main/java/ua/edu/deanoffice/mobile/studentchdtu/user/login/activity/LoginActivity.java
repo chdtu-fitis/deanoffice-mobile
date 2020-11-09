@@ -1,4 +1,4 @@
-package ua.edu.deanoffice.mobile.studentchdtu.user.login.view.activity;
+package ua.edu.deanoffice.mobile.studentchdtu.user.login.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,7 +17,8 @@ import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
 import ua.edu.deanoffice.mobile.studentchdtu.user.login.model.Credentials;
 import ua.edu.deanoffice.mobile.studentchdtu.applications.Utils;
 import ua.edu.deanoffice.mobile.studentchdtu.user.login.model.JWToken;
-import ua.edu.deanoffice.mobile.studentchdtu.user.profile.view.activity.MainMenuActivity;
+import ua.edu.deanoffice.mobile.studentchdtu.user.login.service.LoginRequests;
+import ua.edu.deanoffice.mobile.studentchdtu.user.profile.activity.MainMenuActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -39,7 +40,8 @@ public class LoginActivity extends AppCompatActivity {
                 return;
             }
 
-            App.getInstance().getClient().getRequests().requestAuthStudent(new Credentials(login, password)).enqueue(new Callback<JWToken>() {
+            App.getInstance().getClient().createRequest(LoginRequests.class)
+                    .requestAuthStudent(new Credentials(login, password)).enqueue(new Callback<JWToken>() {
                 @Override
                 public void onResponse(Call<JWToken> call, Response<JWToken> response) {
                     if (response.isSuccessful()) {
@@ -53,6 +55,7 @@ public class LoginActivity extends AppCompatActivity {
                             .setAction("No action", null).show();
                 }
             });
+
         });
     }
 
