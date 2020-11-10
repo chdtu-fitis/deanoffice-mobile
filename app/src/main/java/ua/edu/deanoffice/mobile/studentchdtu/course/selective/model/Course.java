@@ -1,6 +1,6 @@
 package ua.edu.deanoffice.mobile.studentchdtu.course.selective.model;
 
-public class Course extends  ModelBase {
+public class Course extends ModelBase {
 
     private CourseName courseName;
     private int semester;

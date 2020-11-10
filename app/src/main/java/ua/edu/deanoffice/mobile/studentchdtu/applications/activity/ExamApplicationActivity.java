@@ -1,4 +1,4 @@
-package ua.edu.deanoffice.mobile.studentchdtu.applications.view.activities;
+package ua.edu.deanoffice.mobile.studentchdtu.applications.activity;
 
 import android.content.Intent;
 import android.os.Bundle;

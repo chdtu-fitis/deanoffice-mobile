@@ -11,8 +11,7 @@
         android:textColor="@color/gray2"
         android:textStyle="bold"
         android:layout_marginLeft="20sp"
-        android:layout_marginTop="20sp"
-        android:layout_marginBottom="20sp"
+        android:layout_marginBottom="15sp"
         android:textSize="20sp"
         android:text="1 Семестр"/>
 

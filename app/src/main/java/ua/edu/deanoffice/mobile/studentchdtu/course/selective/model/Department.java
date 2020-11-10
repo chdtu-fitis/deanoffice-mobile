@@ -1,6 +1,7 @@
 package ua.edu.deanoffice.mobile.studentchdtu.course.selective.model;
 
 public class Department {
+
     private int id;
     private String name;
     private boolean active;

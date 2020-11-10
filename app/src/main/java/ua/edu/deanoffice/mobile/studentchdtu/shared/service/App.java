@@ -7,7 +7,8 @@ import ua.edu.deanoffice.mobile.studentchdtu.user.profile.model.Student;
 
 public class App {
     private static App instance = new App();
-    public static App getInstance(){
+
+    public static App getInstance() {
         return instance;
     }
 
@@ -15,7 +16,20 @@ public class App {
     private ApplicationCache currentApplication;
     private Student currentStudent;
 
-    public JWToken jwt;
+    private JWToken jwt;
+
+    private App() {
+        client = new Client();
+        currentApplication = new ApplicationCache();
+    }
+
+    public JWToken getJwt() {
+        return jwt;
+    }
+
+    public void setJwt(JWToken jwt) {
+        this.jwt = jwt;
+    }
 
     public Client getClient() {
         return client;
@@ -31,10 +45,5 @@ public class App {
 
     public void setCurrentStudent(Student currentStudent) {
         this.currentStudent = currentStudent;
-    }
-
-    private App() {
-        client = new Client();
-        currentApplication = new ApplicationCache();
     }
 }

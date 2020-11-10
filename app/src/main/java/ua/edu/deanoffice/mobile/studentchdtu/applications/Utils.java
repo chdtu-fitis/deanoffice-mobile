@@ -1,4 +1,4 @@
-package ua.edu.deanoffice.mobile.studentchdtu.applications.service;
+package ua.edu.deanoffice.mobile.studentchdtu.applications;
 
 import com.google.gson.Gson;
 
@@ -29,5 +29,4 @@ public class Utils {
     public static String renewApplicationDataToJSON(RenewApplicationData renewApplicationData) {
         return new Gson().toJson(renewApplicationData);
     }
-
 }

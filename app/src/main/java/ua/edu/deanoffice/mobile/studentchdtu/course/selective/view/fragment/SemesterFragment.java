@@ -1,4 +1,4 @@
-package ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragments;
+package ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -27,6 +27,6 @@ public class SemesterFragment extends Fragment {
 
     @Override
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
-        ((TextView)view.findViewById(R.id.semesterNumber)).setText(semester + " семестр");
+        ((TextView) view.findViewById(R.id.semesterNumber)).setText(semester + " семестр");
     }
 }

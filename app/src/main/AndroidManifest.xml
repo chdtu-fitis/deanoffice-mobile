@@ -13,24 +13,21 @@
         android:supportsRtl="true"
         android:theme="@style/CHDTU.AcitivityBackground"
         android:usesCleartextTraffic="true">
-        <activity android:name=".course.selective.view.activities.SelectiveCoursesConfirmed"></activity>
         <activity
-            android:name=".user.profile.view.activities.MainMenuActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".applications.view.activities.ChooseApplicationActivity" />
+            android:name=".user.profile.activity.MainMenuActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".applications.activity.ChooseApplicationActivity" />
         <activity
-            android:name=".applications.view.activities.ExamApplicationActivity"
+            android:name=".applications.activity.ExamApplicationActivity"
             android:label="@string/title_activity_exam_application" />
-        <activity android:name=".applications.view.activities.DeducApplicationActivity" />
-        <activity android:name=".applications.view.activities.RetakeApplicationActivity" />
-        <activity android:name=".applications.view.activities.RenewApplicationActivity" />
-        <activity android:name=".course.selective.view.activities.SelectiveCoursesActivity" />
-        <activity
-            android:name=".user.login.view.activities.LoginActivity"
+        <activity android:name=".applications.activity.DeducApplicationActivity" />
+        <activity android:name=".applications.activity.RetakeApplicationActivity" />
+        <activity android:name=".applications.activity.RenewApplicationActivity" />
+        <activity android:name=".course.selective.view.activity.SelectiveCoursesActivity" />
+        <activity android:name=".user.login.activity.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

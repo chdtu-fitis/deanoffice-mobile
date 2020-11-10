@@ -1,4 +1,4 @@
-package ua.edu.deanoffice.mobile.studentchdtu.user.login.view.activities;
+package ua.edu.deanoffice.mobile.studentchdtu.user.login.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,9 +15,10 @@ import retrofit2.Response;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
 import ua.edu.deanoffice.mobile.studentchdtu.user.login.model.Credentials;
-import ua.edu.deanoffice.mobile.studentchdtu.applications.service.Utils;
+import ua.edu.deanoffice.mobile.studentchdtu.applications.Utils;
 import ua.edu.deanoffice.mobile.studentchdtu.user.login.model.JWToken;
-import ua.edu.deanoffice.mobile.studentchdtu.user.profile.view.activities.MainMenuActivity;
+import ua.edu.deanoffice.mobile.studentchdtu.user.login.service.LoginRequests;
+import ua.edu.deanoffice.mobile.studentchdtu.user.profile.activity.MainMenuActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -25,7 +26,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        App.getInstance().jwt = null;
+        App.getInstance().setJwt(null);
 
         Button button = findViewById(R.id.buttonLogin);
         EditText textLogin = findViewById(R.id.textFieldLogin);
@@ -39,10 +40,11 @@ public class LoginActivity extends AppCompatActivity {
                 return;
             }
 
-            App.getInstance().getClient().getRequests().requestAuthStudent(new Credentials(login, password)).enqueue(new Callback<JWToken>() {
+            App.getInstance().getClient().createRequest(LoginRequests.class)
+                    .requestAuthStudent(new Credentials(login, password)).enqueue(new Callback<JWToken>() {
                 @Override
                 public void onResponse(Call<JWToken> call, Response<JWToken> response) {
-                    if(response.isSuccessful()) {
+                    if (response.isSuccessful()) {
                         LoginActivity.this.onResponse(response.body());
                     }
                 }
@@ -53,12 +55,13 @@ public class LoginActivity extends AppCompatActivity {
                             .setAction("No action", null).show();
                 }
             });
+
         });
     }
 
     public void onResponse(JWToken jwt) {
-        App.getInstance().jwt = jwt;
-        if (App.getInstance().jwt.isValid()) {
+        App.getInstance().setJwt(jwt);
+        if (App.getInstance().getJwt().isValid()) {
             Intent intent = new Intent(LoginActivity.this, MainMenuActivity.class);
             startActivity(intent);
             finish();

@@ -1,4 +1,4 @@
-package ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragments;
+package ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,6 +16,7 @@ import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourse;
 
 public class SelectiveCourseFragment extends Fragment {
+
     private final int layout;
     private SelectiveCourse selectiveCourse;
     private CheckBox checkBox;

@@ -5,7 +5,7 @@ import ua.edu.deanoffice.mobile.studentchdtu.user.profile.model.ValidModel;
 
 public class JWToken extends ValidModel {
 
-    public String token;
+    private String token;
 
     public JWToken() {
     }
@@ -17,5 +17,9 @@ public class JWToken extends ValidModel {
     @Override
     public boolean isValid() {
         return !(token.isEmpty() || token == null);
+    }
+
+    public String getToken() {
+        return token;
     }
 }
