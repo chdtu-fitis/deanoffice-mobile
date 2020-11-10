@@ -24,7 +24,7 @@ import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCou
 
 public class SelectiveCoursesActivity extends AppCompatActivity {
 
-    TextView selectiveCoursesCounter;
+    private TextView selectiveCoursesCounter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +54,6 @@ public class SelectiveCoursesActivity extends AppCompatActivity {
         });
     }
 
-
     public void onResponse(SelectiveCourses selectiveCourses) {
         runOnUiThread(() -> {
             RecyclerView recyclerView = findViewById(R.id.listview);
@@ -65,25 +64,25 @@ public class SelectiveCoursesActivity extends AppCompatActivity {
 
             recyclerView.setAdapter(adapter);
 
-            Button btn_clear = findViewById(R.id.clear_selectivecourses);
-            btn_clear.setOnClickListener((view) -> {
+            Button clearBtn = findViewById(R.id.clear_selectivecourses);
+            clearBtn.setOnClickListener((view) -> {
                 adapter.clearSelected();
             });
 
-            Button btn_confirm = findViewById(R.id.confirm_selectivecourses);
-            btn_confirm.setOnClickListener((view) -> {
+            Button confirmBtn = findViewById(R.id.confirm_selectivecourses);
+            confirmBtn.setOnClickListener((view) -> {
                 if (adapter.getSelectedCourseFirstSemester().size() == 3 && adapter.getSelectiveCourseSecondSemester().size() == 2) {
                     selectiveCoursesCounter.setText("Підтвердіть вибрані дисципліни");
-                    btn_confirm.setText("Підтвердити");
-                    btn_clear.setText("Скасувати");
+                    confirmBtn.setText("Підтвердити");
+                    clearBtn.setText("Скасувати");
 
-                    btn_confirm.setOnClickListener((viewConfirm) -> {
+                    confirmBtn.setOnClickListener((viewConfirm) -> {
                         Intent intent = new Intent(SelectiveCoursesActivity.this, MainMenuActivity.class);
                         startActivity(intent);
                         finish();
                     });
 
-                    btn_clear.setOnClickListener((viewClear) -> {
+                    clearBtn.setOnClickListener((viewClear) -> {
                         Intent intent = new Intent(SelectiveCoursesActivity.this, SelectiveCoursesActivity.class);
                         startActivity(intent);
                         finish();
