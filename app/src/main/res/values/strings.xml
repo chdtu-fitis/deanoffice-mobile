@@ -4,4 +4,6 @@
     <string name="title_activity_exam_application">ExamApplicationActivity</string>
     <string name="selected_item">Selected item:</string>
     <string name="title_activity_main_menu">MainMenuActivity</string>
+
+    <string name="error_login">Неправильно введений логін або пароль</string>
 </resources>
