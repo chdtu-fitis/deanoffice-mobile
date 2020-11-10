@@ -1,10 +1,13 @@
-package ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.activities;
+package ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import com.google.gson.Gson;
 
@@ -12,6 +15,7 @@ import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourse;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourses;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.ChdtuAdapter;
+import ua.edu.deanoffice.mobile.studentchdtu.user.profile.activity.MainMenuActivity;
 
 public class SelectiveCoursesConfirmed extends AppCompatActivity {
 
@@ -29,5 +33,11 @@ public class SelectiveCoursesConfirmed extends AppCompatActivity {
         ChdtuAdapter adapter = new ChdtuAdapter(selectiveCourses, getSupportFragmentManager(), null, true);
         recyclerView.setAdapter(adapter);
         adapter.disableCheckBoxes();
+        Button selectiveCoursesButton = findViewById(R.id.menu_selectivecourses);
+        selectiveCoursesButton.setOnClickListener((viewClear) -> {
+            Intent intent = new Intent(SelectiveCoursesConfirmed.this, MainMenuActivity.class);
+            startActivity(intent);
+            finish();
+        });
     }
 }

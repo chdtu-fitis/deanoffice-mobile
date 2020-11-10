@@ -17,6 +17,7 @@
             android:name=".user.profile.activity.MainMenuActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".applications.activity.ChooseApplicationActivity" />
+        <activity android:name=".course.selective.view.activity.SelectiveCoursesConfirmed" />
         <activity
             android:name=".applications.activity.ExamApplicationActivity"
             android:label="@string/title_activity_exam_application" />

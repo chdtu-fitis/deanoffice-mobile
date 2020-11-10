@@ -85,4 +85,6 @@ public class SelectiveCourse extends ModelBase {
     public void setDescription(String description) {
         this.description = description;
     }
+
+
 }

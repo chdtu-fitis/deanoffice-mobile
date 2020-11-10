@@ -2,6 +2,7 @@ package ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -11,11 +12,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.ConfirmedSelectiveCourses;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.service.SelectiveCourseRequests;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.activity.MainMenuActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.ChdtuAdapter;
@@ -76,12 +80,6 @@ public class SelectiveCoursesActivity extends AppCompatActivity {
                     confirmBtn.setText("Підтвердити");
                     clearBtn.setText("Скасувати");
 
-                    confirmBtn.setOnClickListener((viewConfirm) -> {
-                        Intent intent = new Intent(SelectiveCoursesActivity.this, MainMenuActivity.class);
-                        startActivity(intent);
-                        finish();
-                    });
-
                     clearBtn.setOnClickListener((viewClear) -> {
                         Intent intent = new Intent(SelectiveCoursesActivity.this, SelectiveCoursesActivity.class);
                         startActivity(intent);
@@ -95,6 +93,30 @@ public class SelectiveCoursesActivity extends AppCompatActivity {
                     ChdtuAdapter adapterFinal = new ChdtuAdapter(selectiveCoursesFinal, getSupportFragmentManager(), null, false);
                     recyclerView.setAdapter(adapterFinal);
                     adapterFinal.disableCheckBoxes();
+
+                    confirmBtn.setOnClickListener((viewConfirm) -> {
+                        ConfirmedSelectiveCourses confirmedSelectiveCourses = new ConfirmedSelectiveCourses();
+                        confirmedSelectiveCourses.setCourseIdsForFirstSemester(selectiveCoursesFinal.getIdsFirstSemester());
+                        confirmedSelectiveCourses.setCourseIdsForSecondSemester(selectiveCoursesFinal.getIdsSecondSemester());
+                        confirmedSelectiveCourses.setStudentDegreeId(App.getInstance().getCurrentStudent().getDegrees()[0].getId());
+                        App.getInstance().getClient().createRequest(SelectiveCourseRequests.class).confirmedSelectiveCourses(
+                                App.getInstance().getJwt().getToken(),confirmedSelectiveCourses).enqueue(new Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                Intent intent = new Intent(SelectiveCoursesActivity.this, SelectiveCoursesConfirmed.class);
+                                intent.putExtra("courses", new Gson().toJson(selectiveCoursesFinal));
+                                startActivity(intent);
+                                finish();
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                               t.printStackTrace();
+                            }
+                        });
+
+                    });
+
                 } else {
                     Snackbar.make(findViewById(android.R.id.content), "Оберіть дисципліни", Snackbar.LENGTH_LONG)
                             .setAction("No action", null).show();
