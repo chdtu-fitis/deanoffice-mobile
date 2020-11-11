@@ -4,10 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
+import android.text.method.PasswordTransformationMethod;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -22,6 +27,8 @@ import ua.edu.deanoffice.mobile.studentchdtu.user.profile.activity.MainMenuActiv
 
 public class LoginActivity extends AppCompatActivity {
 
+    boolean isVisible = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +38,18 @@ public class LoginActivity extends AppCompatActivity {
         Button button = findViewById(R.id.buttonLogin);
         EditText textLogin = findViewById(R.id.textFieldLogin);
         EditText textPassword = findViewById(R.id.textFieldPassword);
+        TextView errorText = findViewById(R.id.errorText);
+        ImageView showPassword = findViewById(R.id.showPassword);
+
+        showPassword.setOnClickListener((view) -> {
+            if(isVisible) {
+                textPassword.setTransformationMethod(new PasswordTransformationMethod());
+            }else {
+                textPassword.setTransformationMethod(null);
+            }
+            textPassword.setSelection(textPassword.getText().length());
+            isVisible = !isVisible;
+        });
 
         button.setOnClickListener((view) -> {
             String login = textLogin.getText().toString();
@@ -46,13 +65,14 @@ public class LoginActivity extends AppCompatActivity {
                 public void onResponse(Call<JWToken> call, Response<JWToken> response) {
                     if (response.isSuccessful()) {
                         LoginActivity.this.onResponse(response.body());
+                    }else {
+                        errorText.setText("Виникла помилка, перевірьте правильність введених даних" + "(" + response.code() +")");
                     }
                 }
 
                 @Override
                 public void onFailure(Call<JWToken> call, Throwable t) {
-                    Snackbar.make(findViewById(android.R.id.content), "Failed connect to server", Snackbar.LENGTH_LONG)
-                            .setAction("No action", null).show();
+                    errorText.setText("Виникли проблеми з мережею, перевірьте підключення до інтернету.");
                 }
             });
 

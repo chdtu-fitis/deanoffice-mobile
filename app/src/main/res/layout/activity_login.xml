@@ -70,6 +70,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
+            android:id="@+id/showPassword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_show"
@@ -83,9 +84,10 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
+        android:id="@+id/errorText"
         android:layout_width="255dp"
         android:layout_height="wrap_content"
-        android:text="Повідомлення про помилку"
+        android:text=""
         android:textColor="@android:color/holo_red_light"
         android:textSize="10sp"
         app:layout_constraintBottom_toTopOf="@+id/buttonLogin"
