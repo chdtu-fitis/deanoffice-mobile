@@ -2,6 +2,7 @@ package ua.edu.deanoffice.mobile.studentchdtu.user.login.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
@@ -42,13 +43,13 @@ public class LoginActivity extends AppCompatActivity {
         ImageView showPassword = findViewById(R.id.showPassword);
 
         showPassword.setOnClickListener((view) -> {
-            if(isVisible) {
+            if (isVisible) {
                 textPassword.setTransformationMethod(new PasswordTransformationMethod());
-            }else {
+            } else {
                 textPassword.setTransformationMethod(null);
             }
-            textPassword.setSelection(textPassword.getText().length());
             isVisible = !isVisible;
+            textPassword.setSelection(textPassword.getText().length());
         });
 
         button.setOnClickListener((view) -> {
@@ -56,8 +57,15 @@ public class LoginActivity extends AppCompatActivity {
             String password = textPassword.getText().toString();
 
             if (!Utils.isStringValid(login) && !Utils.isStringValid(password)) {
+                errorText.setText("Виникла помилка, перевірьте правильність введених даних");
                 return;
             }
+
+            final ProgressDialog progressDoalog;
+            progressDoalog = new ProgressDialog(LoginActivity.this);
+            progressDoalog.setMessage("Завантаження");
+            progressDoalog.setProgressStyle(R.style.ProgressBar);
+            progressDoalog.show();
 
             App.getInstance().getClient().createRequest(LoginRequests.class)
                     .requestAuthStudent(new Credentials(login, password)).enqueue(new Callback<JWToken>() {
@@ -65,14 +73,16 @@ public class LoginActivity extends AppCompatActivity {
                 public void onResponse(Call<JWToken> call, Response<JWToken> response) {
                     if (response.isSuccessful()) {
                         LoginActivity.this.onResponse(response.body());
-                    }else {
-                        errorText.setText("Виникла помилка, перевірьте правильність введених даних" + "(" + response.code() +")");
+                    } else {
+                        errorText.setText("Виникла помилка, перевірьте правильність введених даних" + "(" + response.code() + ")");
                     }
+                    progressDoalog.dismiss();
                 }
 
                 @Override
                 public void onFailure(Call<JWToken> call, Throwable t) {
                     errorText.setText("Виникли проблеми з мережею, перевірьте підключення до інтернету.");
+                    progressDoalog.dismiss();
                 }
             });
 
