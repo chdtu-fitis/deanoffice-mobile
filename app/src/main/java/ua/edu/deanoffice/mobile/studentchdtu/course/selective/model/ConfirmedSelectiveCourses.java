@@ -3,7 +3,7 @@ import java.util.List;
 
 public class ConfirmedSelectiveCourses {
     private List<Integer> selectiveCourses;
-    private int studentDegreeId;
+    private ExistingId studentDegree;
 
     public List<Integer> getSelectiveCourses() {
         return selectiveCourses;
@@ -13,11 +13,11 @@ public class ConfirmedSelectiveCourses {
         this.selectiveCourses = selectiveCourses;
     }
 
-    public int getStudentDegreeId() {
-        return studentDegreeId;
+    public ExistingId getStudentDegreeId() {
+        return studentDegree;
     }
 
-    public void setStudentDegreeId(int studentDegreeId) {
-        this.studentDegreeId = studentDegreeId;
+    public void setStudentDegreeId(ExistingId studentDegreeId) {
+        this.studentDegree = studentDegreeId;
     }
 }

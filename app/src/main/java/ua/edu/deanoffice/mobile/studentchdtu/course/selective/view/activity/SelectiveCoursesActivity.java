@@ -18,12 +18,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 
+import java.io.IOException;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.ConfirmedSelectiveCourses;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.ExistingId;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourse;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCoursesStudentDegree;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.service.SelectiveCourseRequests;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.activity.MainMenuActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.ChdtuAdapter;
@@ -101,19 +106,43 @@ public class SelectiveCoursesActivity extends AppCompatActivity {
                     confirmBtn.setOnClickListener((viewConfirm) -> {
                         ConfirmedSelectiveCourses confirmedSelectiveCourses = new ConfirmedSelectiveCourses();
                         confirmedSelectiveCourses.setSelectiveCourses(selectiveCoursesFinal.getSelectiveCoursesId());
-                        confirmedSelectiveCourses.setStudentDegreeId(App.getInstance().getCurrentStudent().getDegrees()[0].getId());
+                        ExistingId existingId = new ExistingId();
+                        existingId.setId(App.getInstance().getCurrentStudent().getDegrees()[0].getId());
+                        confirmedSelectiveCourses.setStudentDegreeId(existingId);
+
+                        Log.d("Test", new Gson().toJson(confirmedSelectiveCourses));
+
                         App.getInstance().getClient().createRequest(SelectiveCourseRequests.class).confirmedSelectiveCourses(
-                                App.getInstance().getJwt().getToken(), confirmedSelectiveCourses).enqueue(new Callback<ResponseBody>() {
+                                App.getInstance().getJwt().getToken(), confirmedSelectiveCourses).enqueue(new Callback<SelectiveCoursesStudentDegree>() {
                             @Override
-                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                Intent intent = new Intent(SelectiveCoursesActivity.this, SelectiveCoursesConfirmed.class);
-                                intent.putExtra("courses", new Gson().toJson(selectiveCoursesFinal));
-                                startActivity(intent);
-                                finish();
+                            public void onResponse(Call<SelectiveCoursesStudentDegree> call, Response<SelectiveCoursesStudentDegree> response) {
+                                try{
+                                    Log.d("Test", ""+response.errorBody().string());
+                                }catch (IOException e){
+                                    e.printStackTrace();
+                                }
+
+                                if(response.isSuccessful()){
+                                    Log.d("Test", new Gson().toJson(response.body()));
+                                    boolean confirmed = true;
+
+                                    for(int i = 0; i < confirmedSelectiveCourses.getSelectiveCourses().size(); i++) {
+                                        if(!confirmedSelectiveCourses.getSelectiveCourses().contains(response.body().getSelectiveCourses().get(i).getId())) {
+                                            confirmed = false;
+                                        }
+                                    }
+
+                                    if(confirmed){
+                                        Intent intent = new Intent(SelectiveCoursesActivity.this, SelectiveCoursesConfirmed.class);
+                                        intent.putExtra("courses", new Gson().toJson(selectiveCoursesFinal));
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                }
                             }
 
                             @Override
-                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            public void onFailure(Call<SelectiveCoursesStudentDegree> call, Throwable t) {
                                 t.printStackTrace();
                                 error("Помилка під час підключення до серверу, спробуйте пізніше.");
                             }
