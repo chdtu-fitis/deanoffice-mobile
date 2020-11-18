@@ -93,7 +93,7 @@ public class MainMenuActivity extends AppCompatActivity {
             studentInformationViews.get("Name").setText(user.getSurname() + " " + user.getName() + " " + user.getPatronimic());
             studentInformationViews.get("Facult").setText("Факультет інформаційних технологій і систем");
             studentInformationViews.get("Degree").setText(user.getDegrees()[0].getSpecialization().getDegree().getName());
-            studentInformationViews.get("Speciality").setText(user.getDegrees()[0].getSpecialization().getSpeciality().getName());
+            studentInformationViews.get("Speciality").setText(user.getDegrees()[0].getSpecialization().getSpeciality().getCode() + " - " + user.getDegrees()[0].getSpecialization().getSpeciality().getName());
             studentInformationViews.get("Specialization").setText(user.getDegrees()[0].getSpecialization().getName());
             studentInformationViews.get("GroupAndYear").setText(user.getDegrees()[0].getStudentGroup().getName());
             studentInformationViews.get("Termin").setText((user.getDegrees()[0].getTuitionForm().equals("FULL_TIME") ? "Денна" : "Заочна")
