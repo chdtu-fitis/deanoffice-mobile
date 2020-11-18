@@ -3,10 +3,14 @@ package ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -43,7 +47,7 @@ public class SelectiveCoursesActivity extends AppCompatActivity {
 
         App.getInstance().getClient().createRequest(SelectiveCourseRequests.class)
                 .requestSelectiveCourses(App.getInstance().getJwt().getToken(),
-                App.getInstance().getCurrentStudent().getDegrees()[0].getId()).enqueue(new Callback<SelectiveCourses>() {
+                        App.getInstance().getCurrentStudent().getDegrees()[0].getId()).enqueue(new Callback<SelectiveCourses>() {
             @Override
             public void onResponse(Call<SelectiveCourses> call, Response<SelectiveCourses> response) {
                 if (response.isSuccessful()) {
@@ -96,11 +100,10 @@ public class SelectiveCoursesActivity extends AppCompatActivity {
 
                     confirmBtn.setOnClickListener((viewConfirm) -> {
                         ConfirmedSelectiveCourses confirmedSelectiveCourses = new ConfirmedSelectiveCourses();
-                        confirmedSelectiveCourses.setCourseIdsForFirstSemester(selectiveCoursesFinal.getIdsFirstSemester());
-                        confirmedSelectiveCourses.setCourseIdsForSecondSemester(selectiveCoursesFinal.getIdsSecondSemester());
+                        confirmedSelectiveCourses.setSelectiveCourses(selectiveCoursesFinal.getSelectiveCoursesId());
                         confirmedSelectiveCourses.setStudentDegreeId(App.getInstance().getCurrentStudent().getDegrees()[0].getId());
                         App.getInstance().getClient().createRequest(SelectiveCourseRequests.class).confirmedSelectiveCourses(
-                                App.getInstance().getJwt().getToken(),confirmedSelectiveCourses).enqueue(new Callback<ResponseBody>() {
+                                App.getInstance().getJwt().getToken(), confirmedSelectiveCourses).enqueue(new Callback<ResponseBody>() {
                             @Override
                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                 Intent intent = new Intent(SelectiveCoursesActivity.this, SelectiveCoursesConfirmed.class);
@@ -111,7 +114,8 @@ public class SelectiveCoursesActivity extends AppCompatActivity {
 
                             @Override
                             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                               t.printStackTrace();
+                                t.printStackTrace();
+                                error("Помилка під час підключення до серверу, спробуйте пізніше.");
                             }
                         });
 
@@ -131,4 +135,20 @@ public class SelectiveCoursesActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
+    public void error(String text) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+        ViewGroup viewGroup = findViewById(android.R.id.content);
+        View dialogView = LayoutInflater.from(getApplicationContext()).inflate(R.layout.dialog_selectivecourse_info, viewGroup, false);
+        ((TextView) dialogView.findViewById(R.id.selectiveCourseName)).setText("Помилка");
+        ((TextView) dialogView.findViewById(R.id.selectiveCourseDescription)).setText(text);
+        builder.setView(dialogView);
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+        ((Button) dialogView.findViewById(R.id.buttonOk)).setOnClickListener((viewOk) -> {
+            alertDialog.dismiss();
+        });
+    }
 }
+

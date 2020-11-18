@@ -1,5 +1,6 @@
 package ua.edu.deanoffice.mobile.studentchdtu.course.selective.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.model.ValidModel;
@@ -29,24 +30,15 @@ public class SelectiveCourses extends ValidModel {
         return semester == 1 ? getSelectiveCoursesFirstSemester() : getSelectiveCoursesSecondSemester();
     }
 
-    public int[] getIdsFirstSemester() {
-        int [] ids = new int [selectiveCoursesFirstSemester.size()];
-        int i = 0;
-        for (SelectiveCourse selectiveCourse:selectiveCoursesFirstSemester) {
-            ids[i] = selectiveCourse.getId();
-            i++;
+    public List<Integer> getSelectiveCoursesId() {
+        List<Integer> selectiveCoursesIds = new ArrayList<>();
+        for (SelectiveCourse selectiveCourse : selectiveCoursesFirstSemester) {
+            selectiveCoursesIds.add(selectiveCourse.getId());
         }
-        return ids;
-    }
 
-    public int[] getIdsSecondSemester() {
-        int [] ids = new int [selectiveCoursesSecondSemester.size()];
-        int i = 0;
-        for (SelectiveCourse selectiveCourse:selectiveCoursesSecondSemester) {
-            ids[i] = selectiveCourse.getId();
-            i++;
+        for (SelectiveCourse selectiveCourse : selectiveCoursesSecondSemester) {
+            selectiveCoursesIds.add(selectiveCourse.getId());
         }
-        return ids;
+        return selectiveCoursesIds;
     }
-
 }
