@@ -41,4 +41,5 @@ public class SelectiveCourses extends ValidModel {
         }
         return selectiveCoursesIds;
     }
+
 }
