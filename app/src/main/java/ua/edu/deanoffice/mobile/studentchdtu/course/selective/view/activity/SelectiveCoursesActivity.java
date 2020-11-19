@@ -85,7 +85,7 @@ public class SelectiveCoursesActivity extends AppCompatActivity {
             Button confirmBtn = findViewById(R.id.confirm_selectivecourses);
             confirmBtn.setOnClickListener((view) -> {
                 if (adapter.getSelectedCourseFirstSemester().size() == 3 && adapter.getSelectiveCourseSecondSemester().size() == 2) {
-                    selectiveCoursesCounter.setText("Підтвердіть вибрані дисципліни");
+                    selectiveCoursesCounter.setText("Підтвердіть обрані дисципліни");
                     confirmBtn.setText("Підтвердити");
                     clearBtn.setText("Скасувати");
 
