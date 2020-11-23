@@ -1,12 +1,14 @@
 package ua.edu.deanoffice.mobile.studentchdtu.course.selective.model;
 
+import java.math.BigDecimal;
+
 public class Course extends ModelBase {
 
     private CourseName courseName;
     private int semester;
     private KnowledgeControl knowledgeControl;
     private int hours;
-    private int credits;
+    private BigDecimal credits;
     private int hoursPerCredit;
 
     public CourseName getCourseName() {
@@ -41,11 +43,11 @@ public class Course extends ModelBase {
         this.hours = hours;
     }
 
-    public int getCredits() {
+    public BigDecimal getCredits() {
         return credits;
     }
 
-    public void setCredits(int credits) {
+    public void setCredits(BigDecimal credits) {
         this.credits = credits;
     }
 

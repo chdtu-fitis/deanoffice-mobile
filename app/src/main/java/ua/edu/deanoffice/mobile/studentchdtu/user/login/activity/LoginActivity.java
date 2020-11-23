@@ -2,12 +2,18 @@ package ua.edu.deanoffice.mobile.studentchdtu.user.login.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
+import android.text.method.PasswordTransformationMethod;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -22,6 +28,8 @@ import ua.edu.deanoffice.mobile.studentchdtu.user.profile.activity.MainMenuActiv
 
 public class LoginActivity extends AppCompatActivity {
 
+    boolean isVisible = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,14 +39,33 @@ public class LoginActivity extends AppCompatActivity {
         Button button = findViewById(R.id.buttonLogin);
         EditText textLogin = findViewById(R.id.textFieldLogin);
         EditText textPassword = findViewById(R.id.textFieldPassword);
+        TextView errorText = findViewById(R.id.errorText);
+        ImageView showPassword = findViewById(R.id.showPassword);
+
+        showPassword.setOnClickListener((view) -> {
+            if (isVisible) {
+                textPassword.setTransformationMethod(new PasswordTransformationMethod());
+            } else {
+                textPassword.setTransformationMethod(null);
+            }
+            isVisible = !isVisible;
+            textPassword.setSelection(textPassword.getText().length());
+        });
 
         button.setOnClickListener((view) -> {
             String login = textLogin.getText().toString();
             String password = textPassword.getText().toString();
 
             if (!Utils.isStringValid(login) && !Utils.isStringValid(password)) {
+                errorText.setText("Виникла помилка, перевірьте правильність введених даних");
                 return;
             }
+
+            final ProgressDialog progressDoalog;
+            progressDoalog = new ProgressDialog(LoginActivity.this);
+            progressDoalog.setMessage("Завантаження");
+            progressDoalog.setProgressStyle(R.style.ProgressBar);
+            progressDoalog.show();
 
             App.getInstance().getClient().createRequest(LoginRequests.class)
                     .requestAuthStudent(new Credentials(login, password)).enqueue(new Callback<JWToken>() {
@@ -46,13 +73,16 @@ public class LoginActivity extends AppCompatActivity {
                 public void onResponse(Call<JWToken> call, Response<JWToken> response) {
                     if (response.isSuccessful()) {
                         LoginActivity.this.onResponse(response.body());
+                    } else {
+                        errorText.setText("Виникла помилка, перевірьте правильність введених даних" + "(" + response.code() + ")");
                     }
+                    progressDoalog.dismiss();
                 }
 
                 @Override
                 public void onFailure(Call<JWToken> call, Throwable t) {
-                    Snackbar.make(findViewById(android.R.id.content), "Failed connect to server", Snackbar.LENGTH_LONG)
-                            .setAction("No action", null).show();
+                    errorText.setText("Виникли проблеми з мережею, перевірьте підключення до інтернету.");
+                    progressDoalog.dismiss();
                 }
             });
 

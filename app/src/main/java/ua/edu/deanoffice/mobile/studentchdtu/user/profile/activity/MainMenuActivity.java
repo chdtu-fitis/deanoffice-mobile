@@ -34,12 +34,13 @@ public class MainMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-        studentInformationViews.put("Name", (TextView) findViewById(R.id.StudentName));
-        studentInformationViews.put("Facult", (TextView) findViewById(R.id.StudentFacult));
-        studentInformationViews.put("Program", (TextView) findViewById(R.id.StudentProgram));
-        studentInformationViews.put("Specialization", (TextView) findViewById(R.id.StudentSpecialization));
-        studentInformationViews.put("GroupAndYear", (TextView) findViewById(R.id.StudentGroupAndYear));
-        studentInformationViews.put("Termin", (TextView) findViewById(R.id.StudentTermin));
+        studentInformationViews.put("Name", (TextView) findViewById(R.id.studentNameTextView));
+        studentInformationViews.put("Facult", (TextView) findViewById(R.id.facultyNameTextView));
+        studentInformationViews.put("Degree", (TextView) findViewById(R.id.degreeNameTextView));
+        studentInformationViews.put("Speciality", (TextView) findViewById(R.id.specialityNameTextView));
+        studentInformationViews.put("Specialization", (TextView) findViewById(R.id.specializationNameTextView));
+        studentInformationViews.put("GroupAndYear", (TextView) findViewById(R.id.groupNameTextView));
+        studentInformationViews.put("Termin", (TextView) findViewById(R.id.tuitionFormNameTextView));
 
         ImageButton btnExit = findViewById(R.id.buttonExit);
         btnExit.setOnClickListener((view) -> {
@@ -81,8 +82,6 @@ public class MainMenuActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Student> call, Throwable t) {
-                Snackbar.make(findViewById(android.R.id.content), "Failed connect to server", Snackbar.LENGTH_LONG)
-                        .setAction("No action", null).show();
                 Intent intent = new Intent(MainMenuActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
@@ -93,10 +92,11 @@ public class MainMenuActivity extends AppCompatActivity {
         runOnUiThread(() -> {
             studentInformationViews.get("Name").setText(user.getSurname() + " " + user.getName() + " " + user.getPatronimic());
             studentInformationViews.get("Facult").setText("Факультет інформаційних технологій і систем");
-            studentInformationViews.get("Program").setText("Спеціальність: " + user.getDegrees()[0].getSpecialization().getSpeciality().getName());
-            studentInformationViews.get("Specialization").setText("Освітня програма: " + user.getDegrees()[0].getSpecialization().getName());
-            studentInformationViews.get("GroupAndYear").setText("Група: " + user.getDegrees()[0].getStudentGroup().getName());
-            studentInformationViews.get("Termin").setText("Форма навчання: " + (user.getDegrees()[0].getTuitionForm().equals("FULL_TIME") ? "Денна" : "Заочна")
+            studentInformationViews.get("Degree").setText(user.getDegrees()[0].getSpecialization().getDegree().getName());
+            studentInformationViews.get("Speciality").setText(user.getDegrees()[0].getSpecialization().getSpeciality().getCode() + " - " + user.getDegrees()[0].getSpecialization().getSpeciality().getName());
+            studentInformationViews.get("Specialization").setText(user.getDegrees()[0].getSpecialization().getName());
+            studentInformationViews.get("GroupAndYear").setText(user.getDegrees()[0].getStudentGroup().getName());
+            studentInformationViews.get("Termin").setText((user.getDegrees()[0].getTuitionForm().equals("FULL_TIME") ? "Денна" : "Заочна")
                     + (user.getDegrees()[0].getTuitionTerm().equals("REGULAR") ? "" : "Скорочена"));
         });
     }
