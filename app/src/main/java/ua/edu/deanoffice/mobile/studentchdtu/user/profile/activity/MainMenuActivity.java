@@ -1,5 +1,6 @@
 package ua.edu.deanoffice.mobile.studentchdtu.user.profile.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -30,6 +31,7 @@ import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.activity.Sele
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.SelectiveCoursesFragment;
 import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
 import ua.edu.deanoffice.mobile.studentchdtu.user.login.activity.LoginActivity;
+import ua.edu.deanoffice.mobile.studentchdtu.user.profile.fragment.StudentInformationFragment;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.model.Student;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.service.ProfileRequests;
 
@@ -50,6 +52,42 @@ public class MainMenuActivity extends AppCompatActivity {
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.open_drawer, R.string.close_drawer);
         NavigationView navigationView = findViewById(R.id.nav_view);
+
+
+        final ProgressDialog progressDoalog;
+        progressDoalog = new ProgressDialog(this);
+        progressDoalog.setMessage("Завантаження");
+        progressDoalog.setProgressStyle(R.style.ProgressBar);
+        progressDoalog.show();
+
+        App.getInstance().getClient().createRequest(ProfileRequests.class)
+                .requestStudentInfo(App.getInstance().getJwt().getToken()).enqueue(new Callback<Student>() {
+            @Override
+            public void onResponse(Call<Student> call, Response<Student> response) {
+                if (response.isSuccessful()) {
+                    Student student = response.body();
+                    if (student.isValid()) {
+                        App.getInstance().setCurrentStudent(student);
+                        ((TextView)navigationView.getHeaderView(0).findViewById(R.id.student_name)).setText(student.getSurname() + " " + student.getName() + " " + student.getPatronimic());
+                        //updateStudentInfo(App.getInstance().getCurrentStudent());
+                    } else {
+                        Intent intent = new Intent(MainMenuActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                }
+                progressDoalog.dismiss();
+            }
+
+            @Override
+            public void onFailure(Call<Student> call, Throwable t) {
+                progressDoalog.dismiss();
+                Intent intent = new Intent(MainMenuActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -57,6 +95,10 @@ public class MainMenuActivity extends AppCompatActivity {
                     case R.id.nav_selectivecourses:
                         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                                 new SelectiveCoursesFragment()).commit();
+                        break;
+                    case R.id.nav_info:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                                new StudentInformationFragment(App.getInstance().getCurrentStudent())).commit();
                         break;
                 }
 
@@ -97,31 +139,6 @@ public class MainMenuActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });*/
-
-        App.getInstance().getClient().createRequest(ProfileRequests.class)
-                .requestStudentInfo(App.getInstance().getJwt().getToken()).enqueue(new Callback<Student>() {
-            @Override
-            public void onResponse(Call<Student> call, Response<Student> response) {
-                if (response.isSuccessful()) {
-                    Student student = response.body();
-                    if (student.isValid()) {
-                        App.getInstance().setCurrentStudent(student);
-                        ((TextView)navigationView.getHeaderView(0).findViewById(R.id.student_name)).setText(student.getSurname() + " " + student.getName() + " " + student.getPatronimic());
-                        //updateStudentInfo(App.getInstance().getCurrentStudent());
-                    } else {
-                        Intent intent = new Intent(MainMenuActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Student> call, Throwable t) {
-                Intent intent = new Intent(MainMenuActivity.this, LoginActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 
     public void updateStudentInfo(Student user) {
@@ -130,16 +147,6 @@ public class MainMenuActivity extends AppCompatActivity {
             Intent intent = new Intent(MainMenuActivity.this, SelectiveCoursesActivity.class);
             startActivity(intent);
             finish();
-        });
-        runOnUiThread(() -> {
-            studentInformationViews.get("Name").setText(user.getSurname() + " " + user.getName() + " " + user.getPatronimic());
-            studentInformationViews.get("Facult").setText("Факультет інформаційних технологій і систем");
-            studentInformationViews.get("Degree").setText(user.getDegrees()[0].getSpecialization().getDegree().getName());
-            studentInformationViews.get("Speciality").setText(user.getDegrees()[0].getSpecialization().getSpeciality().getCode() + " " + user.getDegrees()[0].getSpecialization().getSpeciality().getName());
-            studentInformationViews.get("Specialization").setText(user.getDegrees()[0].getSpecialization().getName());
-            studentInformationViews.get("GroupAndYear").setText(user.getDegrees()[0].getStudentGroup().getName());
-            studentInformationViews.get("Termin").setText((user.getDegrees()[0].getTuitionForm().equals("FULL_TIME") ? "Денна" : "Заочна")
-                    + (user.getDegrees()[0].getTuitionTerm().equals("REGULAR") ? "" : "Скорочена"));
         });
     }
 

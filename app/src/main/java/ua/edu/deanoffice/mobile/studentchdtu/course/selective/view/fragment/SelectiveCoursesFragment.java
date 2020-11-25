@@ -50,7 +50,7 @@ public class SelectiveCoursesFragment extends Fragment {
 
     @Override
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Реєстрація на вибіркові дисципліни");
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Реєстрація на вибіркові дисципліни");
         this.view = view;
         selectiveCoursesCounter = view.findViewById(R.id.text_body);
 
@@ -82,7 +82,9 @@ public class SelectiveCoursesFragment extends Fragment {
                         selectiveCoursesFinal.setSelectiveCoursesFirstSemester(selectiveCoursesFirst);
                         selectiveCoursesFinal.setSelectiveCoursesSecondSemester(selectiveCoursesSecond);
 
-                        getFragmentManager().beginTransaction().replace(R.id.fragment_container, new SelectiveCoursesConfirmedFragment(selectiveCoursesFinal)).commit();
+                        if (getFragmentManager() != null) {
+                            getFragmentManager().beginTransaction().replace(R.id.fragment_container, new SelectiveCoursesConfirmedFragment(selectiveCoursesFinal)).commit();
+                        }
                     } else {
                         RequestAvailableSelectiveCoursesList();
                     }
@@ -186,7 +188,9 @@ public class SelectiveCoursesFragment extends Fragment {
                                     }
 
                                     if (confirmed) {
-                                        getFragmentManager().beginTransaction().replace(R.id.fragment_container, new SelectiveCoursesConfirmedFragment(selectiveCoursesFinal)).commit();
+                                        if (getFragmentManager() != null) {
+                                            getFragmentManager().beginTransaction().replace(R.id.fragment_container, new SelectiveCoursesConfirmedFragment(selectiveCoursesFinal)).commit();
+                                        }
                                     }
                                 } else {
                                     try {

@@ -37,6 +37,4 @@
         app:headerLayout="@layout/navigationbar_header"
         app:menu="@menu/drawer_menu"/>
 
-
-
 </androidx.drawerlayout.widget.DrawerLayout>
