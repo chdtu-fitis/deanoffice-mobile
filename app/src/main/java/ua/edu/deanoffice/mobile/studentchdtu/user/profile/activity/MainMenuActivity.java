@@ -3,12 +3,20 @@ package ua.edu.deanoffice.mobile.studentchdtu.user.profile.activity;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +27,7 @@ import retrofit2.Response;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.applications.activity.ChooseApplicationActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.activity.SelectiveCoursesActivity;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.SelectiveCoursesFragment;
 import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
 import ua.edu.deanoffice.mobile.studentchdtu.user.login.activity.LoginActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.model.Student;
@@ -27,11 +36,38 @@ import ua.edu.deanoffice.mobile.studentchdtu.user.profile.service.ProfileRequest
 public class MainMenuActivity extends AppCompatActivity {
 
     Map<String, TextView> studentInformationViews = new HashMap<>();
+    private DrawerLayout drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(null);
+        drawer = findViewById(R.id.drawer_layout);
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.open_drawer, R.string.close_drawer);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.nav_selectivecourses:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                                new SelectiveCoursesFragment()).commit();
+                        break;
+                }
+
+                return true;
+            }
+        });
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                new MainMenuFragment()).commit();
 
         /*studentInformationViews.put("Name", (TextView) findViewById(R.id.studentNameTextView));
         studentInformationViews.put("Facult", (TextView) findViewById(R.id.facultyNameTextView));
@@ -86,16 +122,16 @@ public class MainMenuActivity extends AppCompatActivity {
             }
         });*/
 
+
+    }
+
+    public void updateStudentInfo(Student user) {
         Button btnSelection = findViewById(R.id.btn_selecrivecourses);
         btnSelection.setOnClickListener((view) -> {
             Intent intent = new Intent(MainMenuActivity.this, SelectiveCoursesActivity.class);
             startActivity(intent);
             finish();
         });
-
-    }
-
-    public void updateStudentInfo(Student user) {
         runOnUiThread(() -> {
             studentInformationViews.get("Name").setText(user.getSurname() + " " + user.getName() + " " + user.getPatronimic());
             studentInformationViews.get("Facult").setText("Факультет інформаційних технологій і систем");
@@ -106,5 +142,14 @@ public class MainMenuActivity extends AppCompatActivity {
             studentInformationViews.get("Termin").setText((user.getDegrees()[0].getTuitionForm().equals("FULL_TIME") ? "Денна" : "Заочна")
                     + (user.getDegrees()[0].getTuitionTerm().equals("REGULAR") ? "" : "Скорочена"));
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 }

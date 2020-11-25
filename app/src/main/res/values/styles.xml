@@ -24,9 +24,9 @@
         <item name="actionBarStyle">@style/MyActionBar</item>
     </style>
 
-    <style name="MyActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+    <style name="MyActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid">
+        <item name="windowNoTitle">true</item>
         <item name="background">@color/chdtu_value1</item>
-        <item name="titleTextStyle">@style/MyActionBarTitle</item>
     </style>
 
     <style name="MyActionBarTitle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
@@ -41,4 +41,5 @@
         <item name="android:background">@drawable/round_rect_shape_white</item>
         <item name="android:indeterminateDrawable">@drawable/chdtu_progressbar</item>
     </style>
+
 </resources>
