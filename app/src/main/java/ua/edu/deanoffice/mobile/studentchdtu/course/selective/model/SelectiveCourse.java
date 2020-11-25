@@ -11,7 +11,6 @@ public class SelectiveCourse extends ModelBase {
     private String trainingCycle;
     private String description;
     private int studyYear;
-
     public boolean selected;
 
     public boolean isAvailable() {
@@ -85,4 +84,6 @@ public class SelectiveCourse extends ModelBase {
     public void setDescription(String description) {
         this.description = description;
     }
+
+
 }
