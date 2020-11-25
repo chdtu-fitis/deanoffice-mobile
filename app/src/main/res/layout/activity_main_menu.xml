@@ -18,7 +18,8 @@
             android:layout_height="?attr/actionBarSize"
             android:id="@+id/toolbar"
             android:background="@color/chdtu_value1"
-            android:theme="@style/MyActionBar"
+            app:titleTextColor="@color/white"
+            app:popupTheme="@style/MyActionBar"
             android:elevation="4sp"/>
 
         <FrameLayout
@@ -36,12 +37,6 @@
         app:headerLayout="@layout/navigationbar_header"
         app:menu="@menu/drawer_menu"/>
 
-    <com.google.android.material.navigation.NavigationView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="end"
-        android:id="@+id/info"
-        app:headerLayout="@layout/infobar_header" />
 
 
 </androidx.drawerlayout.widget.DrawerLayout>

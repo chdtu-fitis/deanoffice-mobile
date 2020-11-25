@@ -96,7 +96,7 @@ public class MainMenuActivity extends AppCompatActivity {
             Intent intent = new Intent(MainMenuActivity.this, ChooseApplicationActivity.class);
             startActivity(intent);
             finish();
-        });
+        });*/
 
         App.getInstance().getClient().createRequest(ProfileRequests.class)
                 .requestStudentInfo(App.getInstance().getJwt().getToken()).enqueue(new Callback<Student>() {
@@ -106,7 +106,8 @@ public class MainMenuActivity extends AppCompatActivity {
                     Student student = response.body();
                     if (student.isValid()) {
                         App.getInstance().setCurrentStudent(student);
-                        updateStudentInfo(App.getInstance().getCurrentStudent());
+                        ((TextView)navigationView.getHeaderView(0).findViewById(R.id.student_name)).setText(student.getSurname() + " " + student.getName() + " " + student.getPatronimic());
+                        //updateStudentInfo(App.getInstance().getCurrentStudent());
                     } else {
                         Intent intent = new Intent(MainMenuActivity.this, LoginActivity.class);
                         startActivity(intent);
@@ -120,9 +121,7 @@ public class MainMenuActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainMenuActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
-        });*/
-
-
+        });
     }
 
     public void updateStudentInfo(Student user) {
