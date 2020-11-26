@@ -1,11 +1,9 @@
 package ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -15,8 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourses;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.ChdtuAdapter;
-import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.activity.SelectiveCoursesConfirmed;
-import ua.edu.deanoffice.mobile.studentchdtu.user.profile.activity.MainMenuActivity;
 
 public class SelectiveCoursesConfirmedFragment extends Fragment {
 

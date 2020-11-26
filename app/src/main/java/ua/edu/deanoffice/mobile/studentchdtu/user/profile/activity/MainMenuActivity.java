@@ -65,7 +65,6 @@ public class MainMenuActivity extends AppCompatActivity {
                     if (student.isValid()) {
                         App.getInstance().setCurrentStudent(student);
                         ((TextView)navigationView.getHeaderView(0).findViewById(R.id.student_name)).setText(student.getSurname() + " " + student.getName() + " " + student.getPatronimic());
-                        //updateStudentInfo(App.getInstance().getCurrentStudent());
                     } else {
                         Intent intent = new Intent(MainMenuActivity.this, LoginActivity.class);
                         startActivity(intent);
@@ -95,6 +94,11 @@ public class MainMenuActivity extends AppCompatActivity {
                         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                                 new StudentInformationFragment(App.getInstance().getCurrentStudent())).commit();
                         break;
+                    case R.id.nav_exitFrom:
+                        Intent intent = new Intent(MainMenuActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                        break;
                 }
                 return true;
             }
@@ -104,44 +108,6 @@ public class MainMenuActivity extends AppCompatActivity {
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                 new MainMenuFragment()).commit();
-
-        /*studentInformationViews.put("Name", (TextView) findViewById(R.id.studentNameTextView));
-        studentInformationViews.put("Facult", (TextView) findViewById(R.id.facultyNameTextView));
-        studentInformationViews.put("Degree", (TextView) findViewById(R.id.degreeNameTextView));
-        studentInformationViews.put("Speciality", (TextView) findViewById(R.id.specialityNameTextView));
-        studentInformationViews.put("Specialization", (TextView) findViewById(R.id.specializationNameTextView));
-        studentInformationViews.put("GroupAndYear", (TextView) findViewById(R.id.groupNameTextView));
-        studentInformationViews.put("Termin", (TextView) findViewById(R.id.tuitionFormNameTextView));
-
-        ImageButton btnExit = findViewById(R.id.buttonExit);
-        btnExit.setOnClickListener((view) -> {
-            Intent intent = new Intent(MainMenuActivity.this, LoginActivity.class);
-            startActivity(intent);
-            finish();
-        });
-
-        Button btnSelection = findViewById(R.id.coursesSelecion);
-        btnSelection.setOnClickListener((view) -> {
-            Intent intent = new Intent(MainMenuActivity.this, SelectiveCoursesActivity.class);
-            startActivity(intent);
-            finish();
-        });
-
-        Button btnApplication = findViewById(R.id.applications);
-        btnApplication.setOnClickListener((view) -> {
-            Intent intent = new Intent(MainMenuActivity.this, ChooseApplicationActivity.class);
-            startActivity(intent);
-            finish();
-        });*/
-    }
-
-    public void updateStudentInfo(Student user) {
-        Button btnSelection = findViewById(R.id.btn_selecrivecourses);
-        btnSelection.setOnClickListener((view) -> {
-            Intent intent = new Intent(MainMenuActivity.this, SelectiveCoursesActivity.class);
-            startActivity(intent);
-            finish();
-        });
     }
 
     @Override
