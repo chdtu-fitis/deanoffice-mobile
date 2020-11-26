@@ -162,8 +162,7 @@ public class SelectiveCoursesFragment extends Fragment {
                     confirmBtn.setOnClickListener((viewConfirm) -> {
                         ConfirmedSelectiveCourses confirmedSelectiveCourses = new ConfirmedSelectiveCourses();
                         confirmedSelectiveCourses.setSelectiveCourses(selectiveCoursesFinal.getSelectiveCoursesIds());
-                        ExistingId existingId = new ExistingId();
-                        existingId.setId(App.getInstance().getCurrentStudent().getDegrees()[0].getId());
+                        ExistingId existingId = new ExistingId(App.getInstance().getCurrentStudent().getDegrees()[0].getId());
                         confirmedSelectiveCourses.setStudentDegreeId(existingId);
 
                         final ProgressDialog progressDoalog;
