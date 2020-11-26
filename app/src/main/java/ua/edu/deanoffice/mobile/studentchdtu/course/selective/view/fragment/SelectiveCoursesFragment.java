@@ -98,16 +98,14 @@ public class SelectiveCoursesFragment extends Fragment {
                 error("Помилка під час підключення до серверу, спробуйте пізніше.");
             }
         });
-
-
     }
 
     public void RequestAvailableSelectiveCoursesList() {
-        final ProgressDialog progressDoalog;
-        progressDoalog = new ProgressDialog(getContext());
-        progressDoalog.setMessage("Завантаження");
-        progressDoalog.setProgressStyle(R.style.ProgressBar);
-        progressDoalog.show();
+        final ProgressDialog progressDialog;
+        progressDialog = new ProgressDialog(getContext());
+        progressDialog.setMessage("Завантаження");
+        progressDialog.setProgressStyle(R.style.ProgressBar);
+        progressDialog.show();
         App.getInstance().getClient().createRequest(SelectiveCourseRequests.class)
                 .requestSelectiveCourses(App.getInstance().getJwt().getToken(),
                         App.getInstance().getCurrentStudent().getDegrees()[0].getId()).enqueue(new Callback<SelectiveCourses>() {
@@ -116,12 +114,12 @@ public class SelectiveCoursesFragment extends Fragment {
                 if (response.isSuccessful()) {
                     SelectiveCoursesFragment.this.onResponse(response.body());
                 }
-                progressDoalog.dismiss();
+                progressDialog.dismiss();
             }
 
             @Override
             public void onFailure(Call<SelectiveCourses> call, Throwable t) {
-                progressDoalog.dismiss();
+                progressDialog.dismiss();
             }
         });
     }

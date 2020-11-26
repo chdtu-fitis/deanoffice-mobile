@@ -13,9 +13,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.view.MenuItem;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.TextView;
-
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -26,7 +24,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
-import ua.edu.deanoffice.mobile.studentchdtu.applications.activity.ChooseApplicationActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.activity.SelectiveCoursesActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.SelectiveCoursesFragment;
 import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
@@ -53,12 +50,11 @@ public class MainMenuActivity extends AppCompatActivity {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.open_drawer, R.string.close_drawer);
         NavigationView navigationView = findViewById(R.id.nav_view);
 
-
-        final ProgressDialog progressDoalog;
-        progressDoalog = new ProgressDialog(this);
-        progressDoalog.setMessage("Завантаження");
-        progressDoalog.setProgressStyle(R.style.ProgressBar);
-        progressDoalog.show();
+        final ProgressDialog progressDialog;
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Завантаження");
+        progressDialog.setProgressStyle(R.style.ProgressBar);
+        progressDialog.show();
 
         App.getInstance().getClient().createRequest(ProfileRequests.class)
                 .requestStudentInfo(App.getInstance().getJwt().getToken()).enqueue(new Callback<Student>() {
@@ -76,17 +72,16 @@ public class MainMenuActivity extends AppCompatActivity {
                         finish();
                     }
                 }
-                progressDoalog.dismiss();
+                progressDialog.dismiss();
             }
 
             @Override
             public void onFailure(Call<Student> call, Throwable t) {
-                progressDoalog.dismiss();
+                progressDialog.dismiss();
                 Intent intent = new Intent(MainMenuActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
         });
-
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -101,7 +96,6 @@ public class MainMenuActivity extends AppCompatActivity {
                                 new StudentInformationFragment(App.getInstance().getCurrentStudent())).commit();
                         break;
                 }
-
                 return true;
             }
         });
