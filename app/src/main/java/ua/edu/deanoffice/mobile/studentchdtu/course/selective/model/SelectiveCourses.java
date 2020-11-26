@@ -30,7 +30,7 @@ public class SelectiveCourses extends ValidModel {
         return semester == 1 ? getSelectiveCoursesFirstSemester() : getSelectiveCoursesSecondSemester();
     }
 
-    public List<Integer> getSelectiveCoursesId() {
+    public List<Integer> getSelectiveCoursesIds() {
         List<Integer> selectiveCoursesIds = new ArrayList<>();
         for (SelectiveCourse selectiveCourse : selectiveCoursesFirstSemester) {
             selectiveCoursesIds.add(selectiveCourse.getId());

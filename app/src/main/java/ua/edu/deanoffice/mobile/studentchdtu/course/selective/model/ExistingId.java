@@ -4,6 +4,10 @@ public class ExistingId {
 
     private int id;
 
+    public ExistingId(int id) {
+        this.id = id;
+    }
+
     public int getId() {
         return id;
     }
