@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_info"
+            android:icon="@drawable/ic_info"
+            android:title="Інформація про студента" />
+        <item
+            android:id="@+id/nav_schedule"
+            android:icon="@drawable/ic_schedule"
+            android:title="Розклад" />
+        <item
+            android:id="@+id/nav_selectivecourses"
+            android:icon="@drawable/ic_selectivecourses"
+            android:title="Вибіркові дисципліни" />
+        <item
+            android:id="@+id/nav_applications"
+            android:icon="@drawable/ic_applications"
+            android:title="Заяви" />
+
+    </group>
+
+    <group
+        android:id="@+id/exitmen"
+        android:checkableBehavior="none">
+        <item
+            android:id="@+id/nav_exitFrom"
+            android:icon="@drawable/ic_exit"
+            android:title="Вийти" />
+    </group>
+
+</menu>

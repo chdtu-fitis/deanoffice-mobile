@@ -21,5 +21,4 @@ public interface SelectiveCourseRequests {
 
     @POST("selective-courses/registration")
     Call<StudentDegreeSelectiveCoursesIds> confirmedSelectiveCourses(@Header("Authorization") String token, @Body ConfirmedSelectiveCourses selectiveCourses);
-
 }
