@@ -56,11 +56,11 @@ public class LoginActivity extends AppCompatActivity {
                 return;
             }
 
-            final ProgressDialog progressDoalog;
-            progressDoalog = new ProgressDialog(LoginActivity.this);
-            progressDoalog.setMessage("Завантаження");
-            progressDoalog.setProgressStyle(R.style.ProgressBar);
-            progressDoalog.show();
+            final ProgressDialog progressDialog;
+            progressDialog = new ProgressDialog(LoginActivity.this);
+            progressDialog.setMessage("Завантаження");
+            progressDialog.setProgressStyle(R.style.ProgressBar);
+            progressDialog.show();
 
             App.getInstance().getClient().createRequest(LoginRequests.class)
                     .requestAuthStudent(new Credentials(login, password)).enqueue(new Callback<JWToken>() {
@@ -69,15 +69,15 @@ public class LoginActivity extends AppCompatActivity {
                     if (response.isSuccessful()) {
                         LoginActivity.this.onResponse(response.body());
                     } else {
-                        errorText.setText("Виникла помилка, перевірьте правильність введених даних" + "(" + response.code() + ")");
+                        errorText.setText("Виникла помилка, перевірте правильність введених даних" + "(" + response.code() + ")");
                     }
-                    progressDoalog.dismiss();
+                    progressDialog.dismiss();
                 }
 
                 @Override
                 public void onFailure(Call<JWToken> call, Throwable t) {
                     errorText.setText("Виникли проблеми з мережею, перевірьте підключення до інтернету.");
-                    progressDoalog.dismiss();
+                    progressDialog.dismiss();
                 }
             });
 
