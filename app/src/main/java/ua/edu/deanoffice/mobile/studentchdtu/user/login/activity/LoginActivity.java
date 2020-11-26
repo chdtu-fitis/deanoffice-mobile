@@ -1,19 +1,14 @@
 package ua.edu.deanoffice.mobile.studentchdtu.user.login.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.TextInputEditText;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,7 +31,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         App.getInstance().setJwt(null);
 
-        Button button = findViewById(R.id.buttonLogin);
+        Button loginButton = findViewById(R.id.buttonLogin);
         EditText textLogin = findViewById(R.id.textFieldLogin);
         EditText textPassword = findViewById(R.id.textFieldPassword);
         TextView errorText = findViewById(R.id.errorText);
@@ -52,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
             textPassword.setSelection(textPassword.getText().length());
         });
 
-        button.setOnClickListener((view) -> {
+        loginButton.setOnClickListener((view) -> {
             String login = textLogin.getText().toString();
             String password = textPassword.getText().toString();
 

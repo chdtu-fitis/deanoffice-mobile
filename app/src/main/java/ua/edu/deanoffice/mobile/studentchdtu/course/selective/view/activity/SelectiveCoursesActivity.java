@@ -20,15 +20,13 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.ConfirmedSelectiveCourses;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.ExistingId;
-import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourse;
-import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCoursesStudentDegree;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.StudentDegreeSelectiveCoursesIds;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.service.SelectiveCourseRequests;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.activity.MainMenuActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.ChdtuAdapter;
@@ -74,7 +72,6 @@ public class SelectiveCoursesActivity extends AppCompatActivity {
             recyclerView.setLayoutManager(layoutManager);
 
             ChdtuAdapter adapter = new ChdtuAdapter(selectiveCourses, getSupportFragmentManager(), selectiveCoursesCounter, true);
-
             recyclerView.setAdapter(adapter);
 
             Button clearBtn = findViewById(R.id.clear_selectivecourses);
@@ -113,9 +110,9 @@ public class SelectiveCoursesActivity extends AppCompatActivity {
                         Log.d("Test", new Gson().toJson(confirmedSelectiveCourses));
 
                         App.getInstance().getClient().createRequest(SelectiveCourseRequests.class).confirmedSelectiveCourses(
-                                App.getInstance().getJwt().getToken(), confirmedSelectiveCourses).enqueue(new Callback<SelectiveCoursesStudentDegree>() {
+                                App.getInstance().getJwt().getToken(), confirmedSelectiveCourses).enqueue(new Callback<StudentDegreeSelectiveCoursesIds>() {
                             @Override
-                            public void onResponse(Call<SelectiveCoursesStudentDegree> call, Response<SelectiveCoursesStudentDegree> response) {
+                            public void onResponse(Call<StudentDegreeSelectiveCoursesIds> call, Response<StudentDegreeSelectiveCoursesIds> response) {
                                 try{
                                     Log.d("Test", ""+response.errorBody().string());
                                 }catch (IOException e){
@@ -142,7 +139,7 @@ public class SelectiveCoursesActivity extends AppCompatActivity {
                             }
 
                             @Override
-                            public void onFailure(Call<SelectiveCoursesStudentDegree> call, Throwable t) {
+                            public void onFailure(Call<StudentDegreeSelectiveCoursesIds> call, Throwable t) {
                                 t.printStackTrace();
                                 error("Помилка під час підключення до серверу, спробуйте пізніше.");
                             }

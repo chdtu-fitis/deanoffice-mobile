@@ -7,7 +7,6 @@ public class SelectiveCourse extends ModelBase {
     private Teacher teacher;
     private Degree degree;
     private Department department;
-    private String fieldsOfKnowledge;
     private String trainingCycle;
     private String description;
     private int studyYear;
@@ -61,14 +60,6 @@ public class SelectiveCourse extends ModelBase {
         this.department = department;
     }
 
-    public String getFieldsOfKnowledge() {
-        return fieldsOfKnowledge;
-    }
-
-    public void setFieldsOfKnowledge(String fieldsOfKnowledge) {
-        this.fieldsOfKnowledge = fieldsOfKnowledge;
-    }
-
     public String getTrainingCycle() {
         return trainingCycle;
     }
@@ -84,6 +75,4 @@ public class SelectiveCourse extends ModelBase {
     public void setDescription(String description) {
         this.description = description;
     }
-
-
 }

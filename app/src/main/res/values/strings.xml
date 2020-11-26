@@ -6,4 +6,8 @@
     <string name="title_activity_main_menu">MainMenuActivity</string>
 
     <string name="error_login">Неправильно введений логін або пароль</string>
+
+    <string name="open_drawer">Відкрити меню</string>
+    <string name="close_drawer">Закрити меню</string>
+
 </resources>
