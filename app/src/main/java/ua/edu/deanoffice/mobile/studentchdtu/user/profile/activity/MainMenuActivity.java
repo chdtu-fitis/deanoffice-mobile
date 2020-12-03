@@ -89,10 +89,12 @@ public class MainMenuActivity extends AppCompatActivity {
                     case R.id.nav_selectivecourses:
                         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                                 new SelectiveCoursesFragment()).commit();
+                        drawer.closeDrawers();
                         break;
                     case R.id.nav_info:
                         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                                 new StudentInformationFragment(App.getInstance().getCurrentStudent())).commit();
+                        drawer.closeDrawers();
                         break;
                     case R.id.nav_exitFrom:
                         Intent intent = new Intent(MainMenuActivity.this, LoginActivity.class);

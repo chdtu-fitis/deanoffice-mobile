@@ -90,16 +90,17 @@ public class ChdtuAdapter extends RecyclerView.Adapter<ChdtuAdapter.ViewHolder> 
             maxCoursesFirstSemester = 3;
             maxCoursesSecondSemester = 3;
             maxProfCoursesFirstSemester = maxProfCoursesSecondSemester = 2;
-            maxProfCoursesFirstSemester = maxGeneralCoursesSecondSemester = 1;
+            maxGeneralCoursesFirstSemester = maxGeneralCoursesSecondSemester = 1;
         } else {
             maxCoursesFirstSemester = 3;
             maxCoursesSecondSemester = 2;
             maxProfCoursesFirstSemester = maxProfCoursesSecondSemester = 100;
-            maxProfCoursesFirstSemester = maxGeneralCoursesSecondSemester = 100;
+            maxGeneralCoursesFirstSemester = maxGeneralCoursesSecondSemester = 100;
         }
-
-        selectiveCoursesCounter.setText(maxCoursesFirstSemester + " в 1 семестрі (" + 0 + "/" + maxCoursesFirstSemester + ")" +
-                "," + maxCoursesSecondSemester + " в 2 семестрі(" + 0 + "/" + maxCoursesSecondSemester + ")");
+        if(selectiveCoursesCounter != null) {
+            selectiveCoursesCounter.setText(maxCoursesFirstSemester + " в 1 семестрі (" + 0 + "/" + maxCoursesFirstSemester + ")" +
+                    ", " + maxCoursesSecondSemester + " в 2 семестрі(" + 0 + "/" + maxCoursesSecondSemester + ")");
+        }
     }
 
     @NonNull
@@ -174,16 +175,33 @@ public class ChdtuAdapter extends RecyclerView.Adapter<ChdtuAdapter.ViewHolder> 
             for (int i = 0; i < selectiveCourses.getSelectiveCoursesFirstSemester().size(); i++) {
                 if (selectiveCourses.getSelectiveCoursesFirstSemester().get(i).selected) {
                     SelectiveCourse course = selectiveCourses.getSelectiveCoursesFirstSemester().get(i);
-                    if (course.getTrainingCycle().equals("GENERAL")) {
-                        genCount++;
-                    } else {
+                    if (isProfCourse(course)) {
                         profCount++;
+                    } else {
+                        genCount++;
                     }
 
                     selectedCourseFirstSemester.add(course);
                 }
-                if (selectedCourseFirstSemester.size() >= maxCoursesFirstSemester
-                        || (genCount >= maxGeneralCoursesFirstSemester || profCount >= maxProfCoursesFirstSemester)) {
+                if(profCount >= maxProfCoursesFirstSemester) {
+                    for (SelectiveCourseFragment frag : selectiveCourseFragmentsFirstSemester) {
+                        if(isProfCourse(frag.getSelectiveCourse())){
+                            if (!frag.isChecked()) {
+                                frag.setCheckBoxInteractive(false);
+                            }
+                        }
+                    }
+                }
+                if(genCount >= maxGeneralCoursesFirstSemester) {
+                    for (SelectiveCourseFragment frag : selectiveCourseFragmentsFirstSemester) {
+                        if(!isProfCourse(frag.getSelectiveCourse())){
+                            if (!frag.isChecked()) {
+                                frag.setCheckBoxInteractive(false);
+                            }
+                        }
+                    }
+                }
+                if (selectedCourseFirstSemester.size() >= maxCoursesFirstSemester) {
                     for (SelectiveCourseFragment frag : selectiveCourseFragmentsFirstSemester) {
                         if (!frag.isChecked()) {
                             frag.setCheckBoxInteractive(false);
@@ -198,16 +216,33 @@ public class ChdtuAdapter extends RecyclerView.Adapter<ChdtuAdapter.ViewHolder> 
             for (int i = 0; i < selectiveCourses.getSelectiveCoursesSecondSemester().size(); i++) {
                 if (selectiveCourses.getSelectiveCoursesSecondSemester().get(i).selected) {
                     SelectiveCourse course = selectiveCourses.getSelectiveCoursesSecondSemester().get(i);
-                    if (course.getTrainingCycle().equals("GENERAL")) {
-                        genCount++;
-                    } else {
+                    if (isProfCourse(course)) {
                         profCount++;
+                    } else {
+                        genCount++;
                     }
 
                     selectiveCourseSecondSemester.add(course);
                 }
-                if (selectiveCourseSecondSemester.size() >= maxCoursesSecondSemester
-                        || (genCount >= maxGeneralCoursesSecondSemester || profCount >= maxProfCoursesSecondSemester)) {
+                if(profCount >= maxProfCoursesSecondSemester) {
+                    for (SelectiveCourseFragment frag : selectiveCourseFragmentsSecondSemester) {
+                        if(isProfCourse(frag.getSelectiveCourse())){
+                            if (!frag.isChecked()) {
+                                frag.setCheckBoxInteractive(false);
+                            }
+                        }
+                    }
+                }
+                if(genCount >= maxGeneralCoursesSecondSemester) {
+                    for (SelectiveCourseFragment frag : selectiveCourseFragmentsSecondSemester) {
+                        if(!isProfCourse(frag.getSelectiveCourse())){
+                            if (!frag.isChecked()) {
+                                frag.setCheckBoxInteractive(false);
+                            }
+                        }
+                    }
+                }
+                if (selectiveCourseSecondSemester.size() >= maxCoursesSecondSemester) {
                     for (SelectiveCourseFragment frag : selectiveCourseFragmentsSecondSemester) {
                         if (!frag.isChecked()) {
                             frag.setCheckBoxInteractive(false);
@@ -219,6 +254,10 @@ public class ChdtuAdapter extends RecyclerView.Adapter<ChdtuAdapter.ViewHolder> 
             selectiveCoursesCounter.setText(maxCoursesFirstSemester + " в 1 семестрі (" + getSelectedCourseFirstSemester().size() + "/" + maxCoursesFirstSemester + ")" +
                     "," + maxCoursesSecondSemester + " в 2 семестрі(" + getSelectiveCourseSecondSemester().size() + "/" + maxCoursesSecondSemester + ")");
         }
+    }
+
+    public boolean isProfCourse(SelectiveCourse course) {
+        return (course.getTrainingCycle().equals("GENERAL")) ? false : true;
     }
 
     public List<SelectiveCourse> getSelectedCourseFirstSemester() {
