@@ -59,7 +59,11 @@ public class SelectiveCourseFragment extends Fragment {
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
         checkBox = view.findViewById(R.id.selectivecheckbox);
         imageInfo = view.findViewById(R.id.selectivecourseinfo);
-        ((TextView) view.findViewById(R.id.selectivecoursename)).setText(selectiveCourse.getCourse().getCourseName().getName());
+
+        if(selectiveCourse.getTeacher() != null) {
+            ((TextView) view.findViewById(R.id.teacherName)).setText(selectiveCourse.getTeacher().getSurname() + " " + selectiveCourse.getTeacher().getName() + " " + selectiveCourse.getTeacher().getPatronimic());
+        }
+
         checkBox.setChecked(selectiveCourse.selected);
 
         imageInfo.setOnClickListener((viewClick) -> {

@@ -124,7 +124,7 @@
                     android:layout_width="99dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:text="Спеціалізація:"
+                    android:text="Освітня програма:"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toStartOf="@+id/specializationNameTextView"
                     app:layout_constraintHorizontal_bias="0.5"
