@@ -25,6 +25,10 @@ public class SelectiveCourseFragment extends Fragment {
     private boolean interactive;
     private View.OnClickListener listener;
 
+    public SelectiveCourse getSelectiveCourse() {
+        return selectiveCourse;
+    }
+
     public void setCheckBoxInteractive(boolean interactive) {
         checkBox.setClickable(interactive);
         btnCheckBox.setClickable(interactive);
