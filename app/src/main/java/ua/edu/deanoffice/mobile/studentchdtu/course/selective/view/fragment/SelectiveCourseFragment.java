@@ -4,9 +4,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
@@ -23,6 +25,7 @@ public class SelectiveCourseFragment extends Fragment {
     private ImageView imageInfo;
     private Button btnCheckBox;
     private boolean interactive;
+    private boolean showTrainingCycle;
     private View.OnClickListener listener;
 
     public SelectiveCourse getSelectiveCourse() {
@@ -43,11 +46,12 @@ public class SelectiveCourseFragment extends Fragment {
         selectiveCourse.selected = checked;
     }
 
-    public SelectiveCourseFragment(SelectiveCourse selectiveCourse, int layout, View.OnClickListener listener, boolean interactive) {
+    public SelectiveCourseFragment(SelectiveCourse selectiveCourse, int layout, View.OnClickListener listener, boolean interactive, boolean showTrainingCycle) {
         this.selectiveCourse = selectiveCourse;
         this.layout = layout;
         this.listener = listener;
         this.interactive = interactive;
+        this.showTrainingCycle = showTrainingCycle;
     }
 
     @Override
@@ -60,14 +64,20 @@ public class SelectiveCourseFragment extends Fragment {
         checkBox = view.findViewById(R.id.selectivecheckbox);
         imageInfo = view.findViewById(R.id.selectivecourseinfo);
 
-        if(selectiveCourse.getTrainingCycle().equals("GENERAL")){
-            ((TextView) view.findViewById(R.id.selectivecoursename)).setText(selectiveCourse.getCourse().getCourseName().getName() + " (Загальний рівень)");
-        } else {
-            ((TextView) view.findViewById(R.id.selectivecoursename)).setText(selectiveCourse.getCourse().getCourseName().getName() + " (Професійний рівень)");
+        if(showTrainingCycle) {
+            if(selectiveCourse.getTrainingCycle().equals("GENERAL")){
+                ((TextView) view.findViewById(R.id.selectivecoursename)).setText(selectiveCourse.getCourse().getCourseName().getName() + " (Загальний рівень)");
+            } else {
+                ((TextView) view.findViewById(R.id.selectivecoursename)).setText(selectiveCourse.getCourse().getCourseName().getName() + " (Професійний рівень)");
+            }
+        }else {
+            ((TextView) view.findViewById(R.id.selectivecoursename)).setText(selectiveCourse.getCourse().getCourseName().getName());
         }
 
         if(selectiveCourse.getTeacher() != null) {
             ((TextView) view.findViewById(R.id.teacherName)).setText(selectiveCourse.getTeacher().getSurname() + " " + selectiveCourse.getTeacher().getName() + " " + selectiveCourse.getTeacher().getPatronimic());
+        }else {
+            ((LinearLayout)view.findViewById(R.id.textlayout)).removeView(view.findViewById(R.id.teacherName));
         }
 
         checkBox.setChecked(selectiveCourse.selected);
