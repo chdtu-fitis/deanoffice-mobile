@@ -162,8 +162,8 @@ public class ChdtuAdapter extends RecyclerView.Adapter<ChdtuAdapter.ViewHolder> 
                     studentDegree.getMaxCoursesSecondSemester());
 
             if(selectiveCoursesCounter != null) {
-                selectiveCoursesCounter.setText(studentDegree.getMaxCoursesFirstSemester() + " в 1 семестрі (" + 0 + "/" + studentDegree.getMaxCoursesFirstSemester() + ")" +
-                        ", " + studentDegree.getMaxCoursesSecondSemester() + " в 2 семестрі(" + 0 + "/" + studentDegree.getMaxCoursesSecondSemester() + ")");
+                selectiveCoursesCounter.setText(studentDegree.getMaxCoursesFirstSemester() + " в 1 семестрі (" + selectedCourseFirstSemester.size() + "/" + studentDegree.getMaxCoursesFirstSemester() + ")" +
+                        ", " + studentDegree.getMaxCoursesSecondSemester() + " в 2 семестрі(" + selectedCourseSecondSemester.size() + "/" + studentDegree.getMaxCoursesSecondSemester() + ")");
             }
         }
     }
