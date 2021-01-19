@@ -142,7 +142,7 @@ public class SelectiveCoursesFragment extends Fragment {
 
             Button confirmBtn = view.findViewById(R.id.confirm_selectivecourses);
             confirmBtn.setOnClickListener((view) -> {
-                if (adapter.getSelectedCourseFirstSemester().size() == adapter.getMaxCoursesFirstSemester() && adapter.getSelectiveCourseSecondSemester().size() == adapter.getMaxCoursesSecondSemester()) {
+                if (adapter.getSelectedCourseFirstSemester().size() == adapter.getMaxCoursesFirstSemester() && adapter.getSelectedCourseSecondSemester().size() == adapter.getMaxCoursesSecondSemester()) {
                     selectiveCoursesCounter.setText("Підтвердіть обрані дисципліни");
                     confirmBtn.setText("Підтвердити");
                     clearBtn.setText("Скасувати");
@@ -155,7 +155,7 @@ public class SelectiveCoursesFragment extends Fragment {
 
                     SelectiveCourses selectiveCoursesFinal = new SelectiveCourses();
                     selectiveCoursesFinal.setSelectiveCoursesFirstSemester(adapter.getSelectedCourseFirstSemester());
-                    selectiveCoursesFinal.setSelectiveCoursesSecondSemester(adapter.getSelectiveCourseSecondSemester());
+                    selectiveCoursesFinal.setSelectiveCoursesSecondSemester(adapter.getSelectedCourseSecondSemester());
 
                     ChdtuAdapter adapterFinal = new ChdtuAdapter(selectiveCoursesFinal, getFragmentManager(), null, false);
                     recyclerView.setAdapter(adapterFinal);
