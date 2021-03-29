@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -121,10 +122,10 @@
 
                 <TextView
                     android:id="@+id/specializationTextView"
-                    android:layout_width="99dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="139dp"
+                    android:layout_height="18dp"
                     android:layout_marginStart="8dp"
-                    android:text="Спеціалізація:"
+                    android:text="Освітня програма:"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toStartOf="@+id/specializationNameTextView"
                     app:layout_constraintHorizontal_bias="0.5"
@@ -133,8 +134,8 @@
 
                 <TextView
                     android:id="@+id/specializationNameTextView"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="256dp"
+                    android:layout_height="16dp"
                     android:layout_marginEnd="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
@@ -148,8 +149,8 @@
 
                 <TextView
                     android:id="@+id/groupTextView"
-                    android:layout_width="99dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="74dp"
+                    android:layout_height="18dp"
                     android:layout_marginStart="8dp"
                     android:text="Група:"
                     android:textStyle="bold"
@@ -175,8 +176,8 @@
 
                 <TextView
                     android:id="@+id/tuitionFormTextView"
-                    android:layout_width="99dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="119dp"
+                    android:layout_height="35dp"
                     android:layout_marginStart="8dp"
                     android:text="Форма навчання:"
                     android:textStyle="bold"

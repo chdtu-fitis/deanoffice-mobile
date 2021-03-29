@@ -81,7 +81,7 @@ public class SelectiveCoursesActivity extends AppCompatActivity {
 
             Button confirmBtn = findViewById(R.id.confirm_selectivecourses);
             confirmBtn.setOnClickListener((view) -> {
-                if (adapter.getSelectedCourseFirstSemester().size() == 3 && adapter.getSelectiveCourseSecondSemester().size() == 2) {
+                if (adapter.getSelectiveCourseFirstSemester().size() == 3 && adapter.getSelectiveCourseSecondSemester().size() == 2) {
                     selectiveCoursesCounter.setText("Підтвердіть обрані дисципліни");
                     confirmBtn.setText("Підтвердити");
                     clearBtn.setText("Скасувати");
@@ -93,7 +93,7 @@ public class SelectiveCoursesActivity extends AppCompatActivity {
                     });
 
                     SelectiveCourses selectiveCoursesFinal = new SelectiveCourses();
-                    selectiveCoursesFinal.setSelectiveCoursesFirstSemester(adapter.getSelectedCourseFirstSemester());
+                    selectiveCoursesFinal.setSelectiveCoursesFirstSemester(adapter.getSelectiveCourseFirstSemester());
                     selectiveCoursesFinal.setSelectiveCoursesSecondSemester(adapter.getSelectiveCourseSecondSemester());
 
                     ChdtuAdapter adapterFinal = new ChdtuAdapter(selectiveCoursesFinal, getSupportFragmentManager(), null, false);
