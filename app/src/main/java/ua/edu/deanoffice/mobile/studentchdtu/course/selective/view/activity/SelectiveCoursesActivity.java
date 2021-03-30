@@ -95,7 +95,6 @@ public class SelectiveCoursesActivity extends AppCompatActivity {
                     SelectiveCourses selectiveCoursesFinal = new SelectiveCourses();
                     selectiveCoursesFinal.setSelectiveCoursesFirstSemester(adapter.getSelectedCourseFirstSemester());
                     selectiveCoursesFinal.setSelectiveCoursesSecondSemester(adapter.getSelectedCourseSecondSemester());
-
                     ChdtuAdapter adapterFinal = new ChdtuAdapter(selectiveCoursesFinal, getSupportFragmentManager(), null, false);
                     recyclerView.setAdapter(adapterFinal);
                     adapterFinal.disableCheckBoxes();

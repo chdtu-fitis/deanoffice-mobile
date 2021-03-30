@@ -154,8 +154,8 @@ public class SelectiveCoursesFragment extends Fragment {
                     });
 
                     SelectiveCourses selectiveCoursesFinal = new SelectiveCourses();
-                    selectiveCoursesFinal.setSelectiveCoursesFirstSemester(adapter.getSelectedCourseFirstSemester());
-                    selectiveCoursesFinal.setSelectiveCoursesSecondSemester(adapter.getSelectedCourseSecondSemester());
+                    selectiveCoursesFinal.setSelectiveCoursesFirstSemester(adapter.getSelectiveCourseFirstSemester());
+                    selectiveCoursesFinal.setSelectiveCoursesSecondSemester(adapter.getSelectiveCourseSecondSemester());
 
                     ChdtuAdapter adapterFinal = new ChdtuAdapter(selectiveCoursesFinal, getFragmentManager(), null, false);
                     recyclerView.setAdapter(adapterFinal);

@@ -41,7 +41,6 @@ public class ChdtuAdapter extends RecyclerView.Adapter<ChdtuAdapter.ViewHolder> 
     private List<SelectiveCourse> selectedCourseSecondSemester;
 
     private boolean interactive;
-
     private StudentDegree studentDegree;
 
     public int getMaxCoursesFirstSemester() {
@@ -62,6 +61,30 @@ public class ChdtuAdapter extends RecyclerView.Adapter<ChdtuAdapter.ViewHolder> 
         initMaxCourses(forMagister);
     }
 
+    public boolean hasGeneralAndProfessional() {
+        boolean hasGeneral = false;
+        boolean hasProfessional = false;
+        for(SelectiveCourse selectiveCourse : selectiveCourseFirstSemester) {
+            if(selectiveCourse.getTrainingCycle().equals("GENERAL")) {
+                hasGeneral = true;
+            }else{
+                hasProfessional = true;
+            }
+        }
+        boolean hasFirstSemester = hasGeneral && hasProfessional;
+
+        hasGeneral = false;
+        hasProfessional = false;
+        for(SelectiveCourse selectiveCourse : selectiveCourseSecondSemester) {
+            if(selectiveCourse.getTrainingCycle().equals("GENERAL")) {
+                hasGeneral = true;
+            }else{
+                hasProfessional = true;
+            }
+        }
+        return hasFirstSemester && (hasGeneral && hasProfessional);
+    }
+
     public void initAdapter(SelectiveCourses selectiveCourses, FragmentManager supportFragmentManager, TextView selectiveCoursesCounter, boolean disableCheckBoxes) {
         this.selectiveCourses = selectiveCourses;
         this.fragmentManager = supportFragmentManager;
@@ -71,8 +94,10 @@ public class ChdtuAdapter extends RecyclerView.Adapter<ChdtuAdapter.ViewHolder> 
 
         selectedCourseFirstSemester = new ArrayList<>(selectiveCourses.getSelectiveCoursesFirstSemester().size());
         selectedCourseSecondSemester = new ArrayList<>(selectiveCourses.getSelectiveCoursesSecondSemester().size());
+
         this.selectiveCoursesCounter = selectiveCoursesCounter;
         interactive = disableCheckBoxes;
+        showTrainingCycle = hasGeneralAndProfessional();
     }
 
     public void initMaxCourses(boolean master) {
@@ -112,7 +137,7 @@ public class ChdtuAdapter extends RecyclerView.Adapter<ChdtuAdapter.ViewHolder> 
             fragmentManager.beginTransaction().add(R.id.containterCourses, fragment1).commit();
 
             for (SelectiveCourse course : selectiveCourses.getSelectiveCoursesFirstSemester()) {
-                SelectiveCourseFragment fragment = new SelectiveCourseFragment(course, R.layout.fragment_selectivecourse, this, interactive);
+                SelectiveCourseFragment fragment = new SelectiveCourseFragment(course, R.layout.fragment_selectivecourse, this, interactive, showTrainingCycle);
                 selectiveCourseFragmentsFirstSemester.add(fragment);
                 fragmentManager.beginTransaction().add(R.id.containterCourses, fragment).commit();
             }
@@ -121,7 +146,7 @@ public class ChdtuAdapter extends RecyclerView.Adapter<ChdtuAdapter.ViewHolder> 
             fragmentManager.beginTransaction().add(R.id.containterCourses, fragment2).commit();
 
             for (SelectiveCourse course : selectiveCourses.getSelectiveCoursesSecondSemester()) {
-                SelectiveCourseFragment fragment = new SelectiveCourseFragment(course, R.layout.fragment_selectivecourse, this, interactive);
+                SelectiveCourseFragment fragment = new SelectiveCourseFragment(course, R.layout.fragment_selectivecourse, this, interactive, showTrainingCycle);
                 selectiveCourseFragmentsSecondSemester.add(fragment);
                 fragmentManager.beginTransaction().add(R.id.containterCourses, fragment).commit();
             }
