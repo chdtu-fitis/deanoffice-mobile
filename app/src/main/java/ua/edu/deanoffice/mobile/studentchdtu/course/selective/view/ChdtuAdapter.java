@@ -41,6 +41,7 @@ public class ChdtuAdapter extends RecyclerView.Adapter<ChdtuAdapter.ViewHolder> 
     private List<SelectiveCourse> selectedCourseSecondSemester;
 
     private boolean interactive;
+    private boolean showTrainingCycle;
     private StudentDegree studentDegree;
 
     public int getMaxCoursesFirstSemester() {
@@ -64,7 +65,7 @@ public class ChdtuAdapter extends RecyclerView.Adapter<ChdtuAdapter.ViewHolder> 
     public boolean hasGeneralAndProfessional() {
         boolean hasGeneral = false;
         boolean hasProfessional = false;
-        for(SelectiveCourse selectiveCourse : selectiveCourseFirstSemester) {
+        for(SelectiveCourse selectiveCourse : selectedCourseFirstSemester) {
             if(selectiveCourse.getTrainingCycle().equals("GENERAL")) {
                 hasGeneral = true;
             }else{
@@ -75,7 +76,7 @@ public class ChdtuAdapter extends RecyclerView.Adapter<ChdtuAdapter.ViewHolder> 
 
         hasGeneral = false;
         hasProfessional = false;
-        for(SelectiveCourse selectiveCourse : selectiveCourseSecondSemester) {
+        for(SelectiveCourse selectiveCourse : selectedCourseSecondSemester) {
             if(selectiveCourse.getTrainingCycle().equals("GENERAL")) {
                 hasGeneral = true;
             }else{
