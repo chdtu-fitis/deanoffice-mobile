@@ -1,113 +1,36 @@
 package ua.edu.deanoffice.mobile.studentchdtu.user.profile.activity;
 
-import android.app.ProgressDialog;
-import android.content.Intent;
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 
-import android.view.MenuItem;
-import android.widget.Button;
-import android.widget.TextView;
-
-import com.google.android.material.navigation.NavigationView;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
-import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.activity.SelectiveCoursesActivity;
-import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.SelectiveCoursesFragment;
-import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
-import ua.edu.deanoffice.mobile.studentchdtu.user.login.activity.LoginActivity;
-import ua.edu.deanoffice.mobile.studentchdtu.user.profile.fragment.StudentInformationFragment;
-import ua.edu.deanoffice.mobile.studentchdtu.user.profile.model.Student;
-import ua.edu.deanoffice.mobile.studentchdtu.user.profile.service.ProfileRequests;
+import ua.edu.deanoffice.mobile.studentchdtu.applications.BaseDrawerActivity;
 
-public class MainMenuActivity extends AppCompatActivity {
+public class MainMenuActivity extends BaseDrawerActivity {
 
-    Map<String, TextView> studentInformationViews = new HashMap<>();
-    private DrawerLayout drawer;
+//    Map<String, TextView> studentInformationViews = new HashMap<>();
+    private boolean isDoubleClickBackButton = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_menu);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(null);
-        drawer = findViewById(R.id.drawer_layout);
+        //Load xml for activity
+        @SuppressLint("InflateParams")
+        View contentView = inflater.inflate(R.layout.activity_main_menu, mainContentBlock, false);
+        mainContentBlock.addView(contentView,1);
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.open_drawer, R.string.close_drawer);
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        getSupportActionBar().setTitle(getRString(R.string.action_bar_title_main_menu));
 
-        final ProgressDialog progressDialog;
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Завантаження");
-        progressDialog.setProgressStyle(R.style.ProgressBar);
-        progressDialog.show();
-
-        App.getInstance().getClient().createRequest(ProfileRequests.class)
-                .requestStudentInfo(App.getInstance().getJwt().getToken()).enqueue(new Callback<Student>() {
-            @Override
-            public void onResponse(Call<Student> call, Response<Student> response) {
-                if (response.isSuccessful()) {
-                    Student student = response.body();
-                    if (student.isValid()) {
-                        App.getInstance().setCurrentStudent(student);
-                        ((TextView)navigationView.getHeaderView(0).findViewById(R.id.student_name)).setText(student.getSurname() + " " + student.getName() + " " + student.getPatronimic());
-                    } else {
-                        Intent intent = new Intent(MainMenuActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                }
-                progressDialog.dismiss();
-            }
-
-            @Override
-            public void onFailure(Call<Student> call, Throwable t) {
-                progressDialog.dismiss();
-                Intent intent = new Intent(MainMenuActivity.this, LoginActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
-                    case R.id.nav_selectivecourses:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                new SelectiveCoursesFragment()).commit();
-                        drawer.closeDrawers();
-                        break;
-                    case R.id.nav_info:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                                new StudentInformationFragment(App.getInstance().getCurrentStudent())).commit();
-                        drawer.closeDrawers();
-                        break;
-                    case R.id.nav_exitFrom:
-                        Intent intent = new Intent(MainMenuActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                        finish();
-                        break;
-                }
-                return true;
-            }
-        });
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-
+        //Load fragment
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                 new MainMenuFragment()).commit();
     }
@@ -115,9 +38,19 @@ public class MainMenuActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
+            //Close drawer menu
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            //Double click for exit
+            if(isDoubleClickBackButton){
+                super.onBackPressed();
+            }else {
+                Toast.makeText(this, getRString(R.string.info_double_back), Toast.LENGTH_SHORT).show();
+                isDoubleClickBackButton = true;
+                new Handler().postDelayed(()->{
+                    isDoubleClickBackButton = false;
+                }, 500);
+            }
         }
     }
 }

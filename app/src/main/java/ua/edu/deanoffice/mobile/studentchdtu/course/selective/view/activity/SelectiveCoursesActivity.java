@@ -5,14 +5,12 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.FrameLayout;
 
 import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.applications.BaseDrawerActivity;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.SelectiveCoursesFragment;
 
 public class SelectiveCoursesActivity extends BaseDrawerActivity {
-
-    private FrameLayout fragmentContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,13 +24,13 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         getSupportActionBar().setTitle(getRString(R.string.action_bar_title_selective_courses));
 
         //Init views
-        fragmentContainer = contentView.findViewById(R.id.fragment_container);
 
         //Get selective courses
         //Get data time, it is  second round or first
         //Show selective courses to fragment
 
-
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                new SelectiveCoursesFragment()).commit();
 /*
         App.getInstance().getClient().createRequest(SelectiveCourseRequests.class)
                 .requestSelectiveCourses(App.getInstance().getJwt().getToken(),

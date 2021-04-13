@@ -21,8 +21,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
-import ua.edu.deanoffice.mobile.studentchdtu.TestDrawerActivity;
-import ua.edu.deanoffice.mobile.studentchdtu.TestDrawerActivity2;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.activity.SelectiveCoursesActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
 import ua.edu.deanoffice.mobile.studentchdtu.user.login.activity.LoginActivity;

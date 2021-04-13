@@ -14,12 +14,6 @@
         android:theme="@style/CHDTU.AcitivityBackground"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".TestDrawerActivity2"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".TestDrawerActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".user.profile.activity.MainMenuActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".applications.activity.ChooseApplicationActivity" />
