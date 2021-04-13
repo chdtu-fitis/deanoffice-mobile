@@ -1,53 +1,39 @@
 package ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.activity;
 
-import android.content.Intent;
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
+import android.widget.FrameLayout;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.Gson;
-
-import java.io.IOException;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
-import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.ConfirmedSelectiveCourses;
-import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.ExistingId;
-import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.StudentDegreeSelectiveCoursesIds;
-import ua.edu.deanoffice.mobile.studentchdtu.course.selective.service.SelectiveCourseRequests;
-import ua.edu.deanoffice.mobile.studentchdtu.user.profile.activity.MainMenuActivity;
-import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.ChdtuAdapter;
-import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
-import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourses;
+import ua.edu.deanoffice.mobile.studentchdtu.applications.BaseDrawerActivity;
 
-public class SelectiveCoursesActivity extends AppCompatActivity {
+public class SelectiveCoursesActivity extends BaseDrawerActivity {
 
-    private TextView selectiveCoursesCounter;
+    private FrameLayout fragmentContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_selective_courses_test);
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        this.getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
-        getSupportActionBar().setDisplayShowCustomEnabled(true);
-        getSupportActionBar().setCustomView(R.layout.actionbar_selectivecourses);
+        @SuppressLint("InflateParams")
+        View contentView = inflater.inflate(R.layout.activity_selective_courses, mainContentBlock, false);
+        mainContentBlock.addView(contentView,1);
 
-        selectiveCoursesCounter = findViewById(R.id.text_body);
+        getSupportActionBar().setTitle(getRString(R.string.action_bar_title_selective_courses));
 
+        //Init views
+        fragmentContainer = contentView.findViewById(R.id.fragment_container);
+
+        //Get selective courses
+        //Get data time, it is  second round or first
+        //Show selective courses to fragment
+
+
+/*
         App.getInstance().getClient().createRequest(SelectiveCourseRequests.class)
                 .requestSelectiveCourses(App.getInstance().getJwt().getToken(),
                         App.getInstance().getCurrentStudent().getDegrees()[0].getId()).enqueue(new Callback<SelectiveCourses>() {
@@ -63,8 +49,9 @@ public class SelectiveCoursesActivity extends AppCompatActivity {
 
             }
         });
+ */
     }
-
+/*
     public void onResponse(SelectiveCourses selectiveCourses) {
         runOnUiThread(() -> {
             RecyclerView recyclerView = findViewById(R.id.listview);
@@ -155,7 +142,7 @@ public class SelectiveCoursesActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Intent intent = new Intent(SelectiveCoursesActivity.this, MainMenuActivity.class);
+        Intent intent = new Intent(SelectiveCoursesActivity.this, MainMenuDrawerActivity.class);
         startActivity(intent);
         finish();
     }
@@ -174,5 +161,6 @@ public class SelectiveCoursesActivity extends AppCompatActivity {
             alertDialog.dismiss();
         });
     }
+ */
 }
 

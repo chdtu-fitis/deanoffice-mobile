@@ -14,8 +14,14 @@
         android:theme="@style/CHDTU.AcitivityBackground"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".TestDrawerActivity2"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".TestDrawerActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".user.profile.activity.MainMenuActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".applications.activity.ChooseApplicationActivity" />
         <activity android:name=".course.selective.view.activity.SelectiveCoursesConfirmed" />
         <activity
@@ -24,11 +30,15 @@
         <activity android:name=".applications.activity.DeducApplicationActivity" />
         <activity android:name=".applications.activity.RetakeApplicationActivity" />
         <activity android:name=".applications.activity.RenewApplicationActivity" />
-        <activity android:name=".course.selective.view.activity.SelectiveCoursesActivity" />
-        <activity android:name=".user.login.activity.LoginActivity"
+        <activity
+            android:name=".course.selective.view.activity.SelectiveCoursesActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".user.login.activity.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

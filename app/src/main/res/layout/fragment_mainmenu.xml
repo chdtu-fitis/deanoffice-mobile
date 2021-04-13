@@ -24,6 +24,7 @@
             android:background="@drawable/rect_shadow_white">
 
             <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/buttonSchedule"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
@@ -77,7 +78,7 @@
             android:background="@drawable/rect_shadow_white">
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_selecrivecourses"
+                android:id="@+id/buttonSelectiveCourses"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@android:color/transparent"
