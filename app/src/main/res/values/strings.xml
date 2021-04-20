@@ -5,19 +5,62 @@
     <string name="selected_item">Selected item:</string>
     <string name="title_activity_main_menu">MainMenuActivity</string>
 
-    <string name="error_login">Неправильно введений логін або пароль</string>
-
     <string name="open_drawer">Відкрити меню</string>
     <string name="close_drawer">Закрити меню</string>
 
+    //Errors
+    <string name="error_msg_title">Помилка</string>
+    <string name="error_connection_failed">Помилка під час підключення до серверу, спробуйте пізніше</string>
+    <string name="error_login">Неправильно введений логін або пароль</string>
+
+    //Worn
+    <string name="worn_select_courses">Оберіть дисципліни</string>
+
+    //Info
+    <string name="info_sel_courses">Оберіть дисципліни</string>
+    <string name="info_confirm_sel_courses">Підтвердіть обрані дисципліни</string>
+
+    //Buttons
+    <string name="button_confirm">Підтвердити</string>
+    <string name="button_cancel">Скасувати</string>
+    <string name="button_next">Далі</string>
+    <string name="button_uncheck_selection">Зняти виділення</string>
+    <string name="button_show_disqualified_courses">Дискваліфіковані предмети</string>
+    <string name="button_show_qualified_courses">Доступні предмети</string>
 
     //ActionBar titles
     <string name="action_bar_title_main_menu">Головне меню</string>
     <string name="action_bar_title_selective_courses">Реєстрація на вибіркові дисципліни</string>
 
-
     //Activities
     //MainMenuActivity
     <string name="info_double_back">Два рази, щоб вийти</string>
+
+    //Fragments
+    //SelectiveCourseFragment
+    <string name="label_disqualified_course">Дисципліну скасовано</string>
+
+    //DeadLineTimer
+    <string name="dlt_to_reg_finish">До завершення реєстрації </string>
+
+    <string name="dlt_f1_minutes">" хвилина"</string>
+    <string name="dlt_f2_minutes">" хвилини"</string>
+    <string name="dlt_f3_minutes">" хвилин"</string>
+
+    <string name="dlt_f1_hours">" година"</string>
+    <string name="dlt_f2_hours">" години"</string>
+    <string name="dlt_f3_hours">" годин"</string>
+
+    <string name="dlt_f1_days">" день"</string>
+    <string name="dlt_f2_days">" дні"</string>
+    <string name="dlt_f3_days">" днів"</string>
+
+    <string name="dlt_f1_weeks">" тижнь"</string>
+    <string name="dlt_f2_weeks">" тижні"</string>
+    <string name="dlt_f3_weeks">" тижнів"</string>
+
+    <string name="dlt_seconds">менше хвилини</string>
+
+    <string name="dlt_registration_finished">Реєстрація завершена</string>
 
 </resources>

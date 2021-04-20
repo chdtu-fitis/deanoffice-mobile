@@ -5,10 +5,14 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import androidx.appcompat.app.AlertDialog;
 
 import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.applications.BaseDrawerActivity;
-import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.SelectiveCoursesFragment;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.SelectiveCoursesSecondRoundFragment;
 
 public class SelectiveCoursesActivity extends BaseDrawerActivity {
 
@@ -19,7 +23,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
 
         @SuppressLint("InflateParams")
         View contentView = inflater.inflate(R.layout.activity_selective_courses, mainContentBlock, false);
-        mainContentBlock.addView(contentView,1);
+        mainContentBlock.addView(contentView, 1);
 
         getSupportActionBar().setTitle(getRString(R.string.action_bar_title_selective_courses));
 
@@ -30,24 +34,136 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         //Show selective courses to fragment
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                new SelectiveCoursesFragment()).commit();
-/*
-        App.getInstance().getClient().createRequest(SelectiveCourseRequests.class)
-                .requestSelectiveCourses(App.getInstance().getJwt().getToken(),
-                        App.getInstance().getCurrentStudent().getDegrees()[0].getId()).enqueue(new Callback<SelectiveCourses>() {
-            @Override
-            public void onResponse(Call<SelectiveCourses> call, Response<SelectiveCourses> response) {
-                if (response.isSuccessful()) {
-                    SelectiveCoursesActivity.this.onResponse(response.body());
-                }
-            }
+                new SelectiveCoursesSecondRoundFragment()).commit();
 
-            @Override
-            public void onFailure(Call<SelectiveCourses> call, Throwable t) {
+       // showLoadingProgress();
 
-            }
+//        App.getInstance()
+//                .getClient()
+//                .createRequest(SelectiveCourseRequests.class)
+//                .requestSelectiveCourses(
+//                        App.getInstance().getJwt().getToken(),
+//                        App.getInstance().getCurrentStudent().getDegrees()[0].getId()
+//                ).enqueue(new Callback<SelectiveCourses>() {
+//            @Override
+//            public void onResponse(@NotNull Call<SelectiveCourses> call, @NotNull Response<SelectiveCourses> response) {
+//                hideLoadingProgress();
+//                if (response.isSuccessful()) {
+//                    // SelectiveCoursesActivity.this.onResponse(response.body());
+//                }
+//                //Handling error response codes
+//            }
+//
+//            @Override
+//            public void onFailure(@NotNull Call<SelectiveCourses> call, @NotNull Throwable t) {
+//                hideLoadingProgress();
+//                //Handling errors
+//            }
+//        });
+    }
+
+//    private void onResponse(SelectiveCourses selectiveCourses) {
+//        RecyclerView recyclerView = findViewById(R.id.listview);
+//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+//        recyclerView.setLayoutManager(layoutManager);
+//
+//        ChdtuAdapter adapter = new ChdtuAdapter(selectiveCourses, getSupportFragmentManager(), selectiveCoursesCounter, true);
+//        recyclerView.setAdapter(adapter);
+//
+//        Button clearBtn = findViewById(R.id.clear_selectivecourses);
+//        clearBtn.setOnClickListener((view) -> {
+//            adapter.clearSelected();
+//        });
+//
+//        Button confirmBtn = findViewById(R.id.confirm_selectivecourses);
+//        confirmBtn.setOnClickListener((view) -> {
+//            onClickConfirmButton();
+//        });
+//    }
+//
+//    private void onClickConfirmButton(){
+//        if (adapter.getSelectedCourseFirstSemester().size() == 3 && adapter.getSelectedCourseSecondSemester().size() == 2) {
+//            selectiveCoursesCounter.setText(getRString(R.string.info_confirm_sel_courses));
+//            confirmBtn.setText(getRString(R.string.button_confirm));
+//            clearBtn.setText(getRString(R.string.button_cancel));
+//
+//            clearBtn.setOnClickListener((viewClear) -> {
+//                Intent intent = new Intent(SelectiveCoursesActivity.this, SelectiveCoursesActivity.class);
+//                startActivity(intent);
+//                finish();
+//            });
+//
+//            SelectiveCourses selectiveCoursesFinal = new SelectiveCourses();
+//            selectiveCoursesFinal.setSelectiveCoursesFirstSemester(adapter.getSelectedCourseFirstSemester());
+//            selectiveCoursesFinal.setSelectiveCoursesSecondSemester(adapter.getSelectedCourseSecondSemester());
+//            ChdtuAdapter adapterFinal = new ChdtuAdapter(selectiveCoursesFinal, getSupportFragmentManager(), null, false);
+//            recyclerView.setAdapter(adapterFinal);
+//            adapterFinal.disableCheckBoxes();
+//
+//            confirmBtn.setOnClickListener((viewConfirm) -> {
+//                ConfirmedSelectiveCourses confirmedSelectiveCourses = new ConfirmedSelectiveCourses();
+//                confirmedSelectiveCourses.setSelectiveCourses(selectiveCoursesFinal.getSelectiveCoursesIds());
+//                ExistingId existingId = new ExistingId(App.getInstance().getCurrentStudent().getDegrees()[0].getId());
+//                confirmedSelectiveCourses.setStudentDegreeId(existingId);
+//
+//                App.getInstance()
+//                        .getClient()
+//                        .createRequest(SelectiveCourseRequests.class)
+//                        .confirmedSelectiveCourses(
+//                                App.getInstance().getJwt().getToken(),
+//                                confirmedSelectiveCourses)
+//                        .enqueue(new Callback<StudentDegreeSelectiveCoursesIds>() {
+//                            @Override
+//                            public void onResponse(@NotNull Call<StudentDegreeSelectiveCoursesIds> call, @NotNull Response<StudentDegreeSelectiveCoursesIds> response) {
+//                                if (response.isSuccessful()) {
+//                                    boolean confirmed = true;
+//
+//                                    for (int i = 0; i < confirmedSelectiveCourses.getSelectiveCourses().size(); i++) {
+//                                        if (!confirmedSelectiveCourses.getSelectiveCourses().contains(response.body().getSelectiveCourses().get(i).getId())) {
+//                                            confirmed = false;
+//                                        }
+//                                    }
+//                                    if (confirmed) {
+//                                        Intent intent = new Intent(SelectiveCoursesActivity.this, SelectiveCoursesConfirmed.class);
+//                                        intent.putExtra("courses", new Gson().toJson(selectiveCoursesFinal));
+//                                        startActivity(intent);
+//                                        finish();
+//                                    }
+//                                }
+//                            }
+//
+//                            @Override
+//                            public void onFailure(@NotNull Call<StudentDegreeSelectiveCoursesIds> call, @NotNull Throwable t) {
+//                                t.printStackTrace();
+//                                showError(getRString(R.string.error_connection_failed));
+//                            }
+//                        });
+//            });
+//        } else {
+//            Snackbar.make(findViewById(android.R.id.content), getRString(R.string.info_sel_courses), Snackbar.LENGTH_LONG)
+//                    .setAction("No action", null).show();
+//        }
+//    }
+
+    private void showError(String msg) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        ViewGroup viewGroup = findViewById(android.R.id.content);
+        View dialogView = LayoutInflater.from(this)
+                .inflate(R.layout.dialog_selectivecourse_info, viewGroup, false);
+
+        TextView titleText = dialogView.findViewById(R.id.selectiveCourseName);
+        TextView bodyText = dialogView.findViewById(R.id.selectiveCourseDescription);
+
+        titleText.setText(getRString(R.string.error_msg_title));
+        bodyText.setText(msg);
+        builder.setView(dialogView);
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+        dialogView.findViewById(R.id.buttonOk).setOnClickListener((viewOk) -> {
+            alertDialog.dismiss();
         });
- */
     }
 /*
     public void onResponse(SelectiveCourses selectiveCourses) {
@@ -136,13 +252,6 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
                 }
             });
         });
-    }
-
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent(SelectiveCoursesActivity.this, MainMenuDrawerActivity.class);
-        startActivity(intent);
-        finish();
     }
 
     public void error(String text) {

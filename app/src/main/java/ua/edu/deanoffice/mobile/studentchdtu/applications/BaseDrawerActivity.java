@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,7 +56,7 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
                 R.string.close_drawer);
         NavigationView navigationView = findViewById(R.id.nav_view);
 
-        showLoadingDialog();
+        showLoadingProgress();
 
         App.getInstance().getClient().createRequest(ProfileRequests.class)
                 .requestStudentInfo(App.getInstance().getJwt().getToken()).enqueue(new Callback<Student>() {
@@ -74,12 +75,12 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
                         finish();
                     }
                 }
-                hideLoadingDialog();
+                hideLoadingProgress();
             }
 
             @Override
             public void onFailure(@NonNull Call<Student> call, @NonNull Throwable t) {
-                hideLoadingDialog();
+                hideLoadingProgress();
                 Intent intent = new Intent(BaseDrawerActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
@@ -115,7 +116,7 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
         toggle.syncState();
     }
 
-    protected void showLoadingDialog() {
+    public void showLoadingProgress() {
         if (progressDialog == null) {
             progressDialog = new ProgressDialog(this);
             progressDialog.setMessage("Завантаження");
@@ -124,7 +125,7 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
         }
     }
 
-    protected void hideLoadingDialog() {
+    public void hideLoadingProgress() {
         if (progressDialog != null) {
             progressDialog.dismiss();
             progressDialog = null;

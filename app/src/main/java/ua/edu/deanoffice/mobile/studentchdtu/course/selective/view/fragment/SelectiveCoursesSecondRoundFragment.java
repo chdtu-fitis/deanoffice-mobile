@@ -1,21 +1,20 @@
 package ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -31,17 +30,17 @@ import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCou
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.StudentDegreeSelectiveCoursesIds;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.service.SelectiveCourseRequests;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.ChdtuAdapter;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.SelectiveCoursesAdapter;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.activity.SelectiveCoursesActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
 
 public class SelectiveCoursesSecondRoundFragment extends Fragment {
     private static final String LOG_TAG = "SelectiveCoursesSecondRoundFragment";
-    private final ProgressDialog progressDialog;
 
     private TextView textSelectiveCoursesCounter;
 
     public SelectiveCoursesSecondRoundFragment() {
-        progressDialog = new ProgressDialog(getContext());
+
     }
 
     @Override
@@ -49,8 +48,6 @@ public class SelectiveCoursesSecondRoundFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_selective_courses_second_round, container, false);
 
-        String title = getRString(R.string.title_fr_selective_courses);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(title);
         textSelectiveCoursesCounter = view.findViewById(R.id.text_body);
 
         return view;
@@ -58,13 +55,13 @@ public class SelectiveCoursesSecondRoundFragment extends Fragment {
 
     @Override
     public void onViewCreated(@NonNull final View view, final Bundle savedInstanceState) {
-        progressLoading();
-
         //Load data
         loadAvailableSelectiveCourses();
     }
 
     public void loadAvailableSelectiveCourses() {
+        showLoadingProgress();
+
         App.getInstance()
                 .getClient()
                 .createRequest(SelectiveCourseRequests.class)
@@ -74,20 +71,31 @@ public class SelectiveCoursesSecondRoundFragment extends Fragment {
                 .enqueue(new Callback<SelectiveCourses>() {
                     @Override
                     public void onResponse(@NonNull Call<SelectiveCourses> call, @NonNull Response<SelectiveCourses> response) {
+                        hideLoadingProgress();
+
                         if (response.isSuccessful()) {
                             if (getActivity() != null)
                                 getActivity().runOnUiThread(() -> {
                                     fillSelectiveCoursesList(response.body());
                                 });
                         }
-                        progressDialog.dismiss();
                     }
 
                     @Override
                     public void onFailure(@NonNull Call<SelectiveCourses> call, @NonNull Throwable t) {
-                        progressDialog.dismiss();
+                        hideLoadingProgress();
                     }
                 });
+    }
+
+    private void disableButton(View button) {
+        button.setAlpha(0.5f);
+        button.setEnabled(false);
+    }
+
+    private void enableButton(View button) {
+        button.setAlpha(1f);
+        button.setEnabled(true);
     }
 
     private void fillSelectiveCoursesList(SelectiveCourses selectiveCourses) {
@@ -98,18 +106,40 @@ public class SelectiveCoursesSecondRoundFragment extends Fragment {
 
         boolean isMagister = App.getInstance().getCurrentStudent().getDegrees()[0].getSpecialization().getDegree().getId() == 3;
 
-        ChdtuAdapter adapter = new ChdtuAdapter(selectiveCourses, getFragmentManager(), textSelectiveCoursesCounter, true, isMagister);
+        Button clearButton = getView().findViewById(R.id.clear_selectivecourses);
+        Button confirmButton = getView().findViewById(R.id.confirm_selectivecourses);
+
+        SelectiveCoursesAdapter adapter = new SelectiveCoursesAdapter(selectiveCourses, getFragmentManager(), textSelectiveCoursesCounter, true, isMagister);
+        adapter.setSelectListener(new SelectiveCoursesAdapter.SelectListener() {
+            @Override
+            public void onOneSelected() {
+                enableButton(clearButton);
+            }
+
+            @Override
+            public void onAllSelected() {
+                enableButton(confirmButton);
+            }
+
+            @Override
+            public void onLastDeselected() {
+                disableButton(clearButton);
+            }
+
+            @Override
+            public void onNotAllSelected() {
+                disableButton(confirmButton);
+            }
+        });
         recyclerView.setAdapter(adapter);
 
-        Button clearButton = getView().findViewById(R.id.clear_selectivecourses);
         clearButton.setOnClickListener((button) -> adapter.clearSelected());
-
-        Button confirmButton = getView().findViewById(R.id.confirm_selectivecourses);
         confirmButton.setOnClickListener((view) -> {
+
             if (adapter.getSelectedCourseFirstSemester().size() == adapter.getMaxCoursesFirstSemester() &&
                     adapter.getSelectedCourseSecondSemester().size() == adapter.getMaxCoursesSecondSemester()) {
 
-                textSelectiveCoursesCounter.setText(getRString(R.string.label_confirm_courses));
+                textSelectiveCoursesCounter.setText(getRString(R.string.info_confirm_sel_courses));
                 confirmButton.setText(getRString(R.string.button_confirm));
                 clearButton.setText(getRString(R.string.button_cancel));
 
@@ -138,7 +168,7 @@ public class SelectiveCoursesSecondRoundFragment extends Fragment {
     }
 
     private void saveUserChose(SelectiveCourses selectiveCourses) {
-        progressLoading();
+        showLoadingProgress();
 
         ConfirmedSelectiveCourses confirmedSelectiveCourses = new ConfirmedSelectiveCourses();
         confirmedSelectiveCourses.setSelectiveCourses(selectiveCourses.getSelectiveCoursesIds());
@@ -169,24 +199,16 @@ public class SelectiveCoursesSecondRoundFragment extends Fragment {
                         e.printStackTrace();
                     }
                 }
-                progressDialog.dismiss();
+                hideLoadingProgress();
             }
 
             @Override
             public void onFailure(@NonNull Call<StudentDegreeSelectiveCoursesIds> call, @NonNull Throwable t) {
-                progressDialog.dismiss();
+                hideLoadingProgress();
                 t.printStackTrace();
-                showError(getRString(R.string.error_msg_server_connection));
+                showError(getRString(R.string.error_connection_failed));
             }
         });
-    }
-
-    private void progressLoading() {
-        if (progressDialog != null) {
-            progressDialog.setMessage(getRString(R.string.info_loading));
-            progressDialog.setProgressStyle(R.style.ProgressBar);
-            progressDialog.show();
-        }
     }
 
     private String getRString(int stringResource) {
@@ -216,6 +238,20 @@ public class SelectiveCoursesSecondRoundFragment extends Fragment {
             dialogView.findViewById(R.id.buttonOk).setOnClickListener((viewOk) -> {
                 alertDialog.dismiss();
             });
+        }
+    }
+
+    private void showLoadingProgress() {
+        FragmentActivity activity = getActivity();
+        if (activity != null) {
+            ((SelectiveCoursesActivity) activity).showLoadingProgress();
+        }
+    }
+
+    private void hideLoadingProgress() {
+        FragmentActivity activity = getActivity();
+        if (activity != null) {
+            ((SelectiveCoursesActivity) activity).hideLoadingProgress();
         }
     }
 }

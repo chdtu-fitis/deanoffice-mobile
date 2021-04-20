@@ -22,19 +22,19 @@
             android:textColor="@color/gray"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/text_head2"
+            app:layout_constraintBottom_toTopOf="@+id/textLeftTimeToEnd"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/text_head2"
+            android:id="@+id/textLeftTimeToEnd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:gravity="center"
-            android:text="До закінчення реєстрації лишилось 10 хвилин"
+            android:text="До кінця залишилось ще трохи"
             android:textAlignment="center"
             android:textColor="@color/gray"
             android:textSize="14sp"
@@ -60,7 +60,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_head2" />
+            app:layout_constraintTop_toBottomOf="@+id/textLeftTimeToEnd" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/listview"
@@ -93,7 +93,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginEnd="50sp"
+                android:alpha="0.5"
                 android:background="@drawable/round_rect_shape"
+                android:enabled="false"
                 android:text="@string/button_uncheck_selection"
                 android:textColor="@color/white" />
 
@@ -102,6 +104,7 @@
                 android:layout_width="160sp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:alpha="0.5"
                 android:background="@drawable/round_rect_shape"
                 android:enabled="false"
                 android:text="@string/button_next"
