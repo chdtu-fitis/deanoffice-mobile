@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,6 +25,7 @@ import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.activity.SelectiveCoursesActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
 import ua.edu.deanoffice.mobile.studentchdtu.user.login.activity.LoginActivity;
+import ua.edu.deanoffice.mobile.studentchdtu.user.profile.activity.MainOptionsActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.model.Student;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.service.ProfileRequests;
 
@@ -33,6 +35,8 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
     protected Toolbar toolbar;
     protected ViewGroup mainContentBlock;
     protected ProgressDialog progressDialog = null;
+
+    private static int selectedMenuItemId = -1;
 
     @SuppressLint("NonConstantResourceId")
     @Override
@@ -54,6 +58,10 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
                 R.string.open_drawer,
                 R.string.close_drawer);
         NavigationView navigationView = findViewById(R.id.nav_view);
+
+        if(selectedMenuItemId != -1){
+           navigationView.setCheckedItem(selectedMenuItemId);
+        }
 
         showLoadingDialog();
 
@@ -86,10 +94,18 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
         });
 
         navigationView.setNavigationItemSelectedListener(item -> {
-            switch (item.getItemId()) {
+            if(selectedMenuItemId == item.getItemId()) return false;
+
+            selectedMenuItemId = item.getItemId();
+
+            switch (selectedMenuItemId) {
                 case R.id.nav_selectivecourses:
                     Intent selectiveCoursesActivity = new Intent(this, SelectiveCoursesActivity.class);
                     startActivity(selectiveCoursesActivity);
+                    break;
+                case R.id.nav_options:
+                    Intent mainOptionsActivity = new Intent(this, MainOptionsActivity.class);
+                    startActivity(mainOptionsActivity);
                     break;
                 case R.id.nav_exitFrom:
                     Intent intent = new Intent(this, LoginActivity.class);
@@ -113,6 +129,10 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
         });
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+    }
+
+    public static void setSelectedMenuItemId(int selectedMenuItemId) {
+        BaseDrawerActivity.selectedMenuItemId = selectedMenuItemId;
     }
 
     protected void showLoadingDialog() {

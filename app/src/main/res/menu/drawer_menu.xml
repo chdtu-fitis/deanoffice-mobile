@@ -4,7 +4,6 @@
     tools:showIn="navigation_view">
 
     <group android:checkableBehavior="single">
-
         <item
             android:id="@+id/nav_info"
             android:icon="@drawable/ic_info"
@@ -21,7 +20,15 @@
             android:id="@+id/nav_applications"
             android:icon="@drawable/ic_applications"
             android:title="Заяви" />
+    </group>
 
+    <group
+        android:id="@+id/options"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_options"
+            android:icon="@drawable/ic_options"
+            android:title="Налаштування" />
     </group>
 
     <group
