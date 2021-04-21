@@ -23,6 +23,8 @@
 
 
     //MainOptionsActivity
-
+    //Options
+    <string name="options_group_notifications">Нагадування</string>
+    <string name="option_enable_notif_on_reg_selective_courses">Запис на вибіркові предмети</string>
 
 </resources>
