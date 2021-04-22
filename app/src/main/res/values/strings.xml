@@ -10,19 +10,13 @@
     <string name="open_drawer">Відкрити меню</string>
     <string name="close_drawer">Закрити меню</string>
 
-
     //ActionBar titles
     <string name="action_bar_title_main_menu">Головне меню</string>
     <string name="action_bar_title_selective_courses">Реєстрація на вибіркові дисципліни</string>
     <string name="action_bar_title_main_options">Налаштування</string>
 
-
     //Activities
     //MainMenuActivity
     <string name="info_double_back">Два рази, щоб вийти</string>
-
-
-    //MainOptionsActivity
-
 
 </resources>
