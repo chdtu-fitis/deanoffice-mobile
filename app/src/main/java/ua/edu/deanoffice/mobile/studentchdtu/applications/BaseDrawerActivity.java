@@ -1,6 +1,7 @@
 package ua.edu.deanoffice.mobile.studentchdtu.applications;
 
 import android.annotation.SuppressLint;
+import android.app.ActivityManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -35,6 +36,7 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
     protected Toolbar toolbar;
     protected ViewGroup mainContentBlock;
     protected ProgressDialog progressDialog = null;
+    private NavigationView navigationView;
 
     private static int selectedMenuItemId = -1;
 
@@ -57,11 +59,7 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
                 toolbar,
                 R.string.open_drawer,
                 R.string.close_drawer);
-        NavigationView navigationView = findViewById(R.id.nav_view);
-
-        if(selectedMenuItemId != -1){
-           navigationView.setCheckedItem(selectedMenuItemId);
-        }
+        navigationView = findViewById(R.id.nav_view);
 
         showLoadingDialog();
 
@@ -94,7 +92,7 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
         });
 
         navigationView.setNavigationItemSelectedListener(item -> {
-            if(selectedMenuItemId == item.getItemId()) return false;
+            if (selectedMenuItemId == item.getItemId()) return false;
 
             selectedMenuItemId = item.getItemId();
 
@@ -156,7 +154,21 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
+            selectedMenuItemId = -1;
             super.onBackPressed();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (selectedMenuItemId != -1) {
+            navigationView.setCheckedItem(selectedMenuItemId);
+        } else {
+            int size = navigationView.getMenu().size();
+            for (int i = 0; i < size; i++) {
+                navigationView.getMenu().getItem(i).setChecked(false);
+            }
         }
     }
 
