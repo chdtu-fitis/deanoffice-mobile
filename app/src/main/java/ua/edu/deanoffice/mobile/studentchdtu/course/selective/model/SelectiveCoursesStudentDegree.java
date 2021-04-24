@@ -5,6 +5,7 @@ import java.util.List;
 public class SelectiveCoursesStudentDegree {
     private ExistingId studentDegree;
     private List<SelectiveCourse> selectiveCourses;
+    private SelectiveCoursesSelectionTimeParameters selectiveCoursesSelectionTimeParameters;
 
     public SelectiveCoursesStudentDegree() { }
 
@@ -22,5 +23,13 @@ public class SelectiveCoursesStudentDegree {
 
     public void setSelectiveCourses(List<SelectiveCourse> selectiveCourses) {
         this.selectiveCourses = selectiveCourses;
+    }
+
+    public SelectiveCoursesSelectionTimeParameters getSelectiveCoursesSelectionTimeParameters() {
+        return selectiveCoursesSelectionTimeParameters;
+    }
+
+    public void setSelectiveCoursesSelectionTimeParameters(SelectiveCoursesSelectionTimeParameters selectiveCoursesSelectionTimeParameters) {
+        this.selectiveCoursesSelectionTimeParameters = selectiveCoursesSelectionTimeParameters;
     }
 }
