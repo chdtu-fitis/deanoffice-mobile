@@ -6,9 +6,17 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.applications.BaseDrawerActivity;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourses;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.service.SelectiveCourseRequests;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.SelectiveCoursesFragment;
+import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
 
 public class SelectiveCoursesActivity extends BaseDrawerActivity {
 
@@ -19,35 +27,37 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
 
         @SuppressLint("InflateParams")
         View contentView = inflater.inflate(R.layout.activity_selective_courses, mainContentBlock, false);
-        mainContentBlock.addView(contentView,1);
+        mainContentBlock.addView(contentView, 1);
 
         getSupportActionBar().setTitle(getRString(R.string.action_bar_title_selective_courses));
 
         //Init views
 
-        //Get selective courses
-        //Get data time, it is  second round or first
-        //Show selective courses to fragment
+        //Get selective courses and data time
+        //To define, what is the period now
+        //Transfer courses and show appropriate selective courses fragment
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                 new SelectiveCoursesFragment()).commit();
-/*
-        App.getInstance().getClient().createRequest(SelectiveCourseRequests.class)
-                .requestSelectiveCourses(App.getInstance().getJwt().getToken(),
-                        App.getInstance().getCurrentStudent().getDegrees()[0].getId()).enqueue(new Callback<SelectiveCourses>() {
-            @Override
-            public void onResponse(Call<SelectiveCourses> call, Response<SelectiveCourses> response) {
-                if (response.isSuccessful()) {
-                    SelectiveCoursesActivity.this.onResponse(response.body());
-                }
-            }
 
-            @Override
-            public void onFailure(Call<SelectiveCourses> call, Throwable t) {
+        String jwtToken = App.getInstance().getJwt().getToken();
+        int degreesId = App.getInstance().getCurrentStudent().getDegrees()[0].getId();
+        App.getInstance().getClient()
+                .createRequest(SelectiveCourseRequests.class)
+                .requestSelectiveCourses(jwtToken, degreesId)
+                .enqueue(new Callback<SelectiveCourses>() {
+                    @Override
+                    public void onResponse(@NonNull Call<SelectiveCourses> call, @NonNull Response<SelectiveCourses> response) {
+                        if (response.isSuccessful()) {
+                            // SelectiveCoursesActivity.this.onResponse(response.body());
+                        }
+                    }
 
-            }
-        });
- */
+                    @Override
+                    public void onFailure(@NonNull Call<SelectiveCourses> call, @NonNull Throwable t) {
+
+                    }
+                });
     }
 /*
     public void onResponse(SelectiveCourses selectiveCourses) {
