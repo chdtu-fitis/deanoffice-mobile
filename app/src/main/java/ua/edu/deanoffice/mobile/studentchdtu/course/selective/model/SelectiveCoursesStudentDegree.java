@@ -10,5 +10,5 @@ import lombok.Setter;
 public class SelectiveCoursesStudentDegree {
     private ExistingId studentDegree;
     private List<SelectiveCourse> selectiveCourses;
-    private SelectiveCoursesProcessData selectiveCoursesProcessData;
+    private SelectiveCoursesSelectionTimeParameters selectiveCoursesSelectionTimeParameters;
 }

@@ -1,10 +1,10 @@
 package ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -20,19 +20,24 @@ import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCou
 public class SelectiveCourseFragment extends Fragment {
 
     private final int layout;
-    private SelectiveCourse selectiveCourse;
+    private final SelectiveCourse selectiveCourse;
     private CheckBox checkBox;
     private ImageView imageInfo;
     private Button btnCheckBox;
-    private boolean interactive;
-    private boolean showTrainingCycle;
-    private View.OnClickListener listener;
+    private final boolean interactive;
+    private boolean selectedFromFirstRound = false;
+    private final boolean showTrainingCycle;
+    private final View.OnClickListener listener;
+    private TextView disqualifiedLabel;
 
     public SelectiveCourse getSelectiveCourse() {
         return selectiveCourse;
     }
 
     public void setCheckBoxInteractive(boolean interactive) {
+        if(selectedFromFirstRound){
+            interactive = false;
+        }
         checkBox.setClickable(interactive);
         btnCheckBox.setClickable(interactive);
     }
@@ -42,6 +47,7 @@ public class SelectiveCourseFragment extends Fragment {
     }
 
     public void setChecked(boolean checked) {
+        if(selectedFromFirstRound) return;
         checkBox.setChecked(checked);
         selectiveCourse.selected = checked;
     }
@@ -52,6 +58,10 @@ public class SelectiveCourseFragment extends Fragment {
         this.listener = listener;
         this.interactive = interactive;
         this.showTrainingCycle = showTrainingCycle;
+
+        if(selectiveCourse.selected){
+            selectedFromFirstRound = true;
+        }
     }
 
     @Override
@@ -63,21 +73,28 @@ public class SelectiveCourseFragment extends Fragment {
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
         checkBox = view.findViewById(R.id.selectivecheckbox);
         imageInfo = view.findViewById(R.id.selectivecourseinfo);
+        disqualifiedLabel = view.findViewById(R.id.labelDisqulifiedCourse);
 
-        if(showTrainingCycle) {
-            if(selectiveCourse.getTrainingCycle().equals("GENERAL")){
+        //Make disqualified
+        if (!selectiveCourse.isAvailable()) {
+            disqualifiedLabel.setVisibility(View.VISIBLE);
+            view.setBackgroundColor(getResources().getColor(R.color.disqualified_course_fond, null));
+        }
+
+        if (showTrainingCycle) {
+            if (selectiveCourse.getTrainingCycle().equals("GENERAL")) {
                 ((TextView) view.findViewById(R.id.selectivecoursename)).setText(selectiveCourse.getCourse().getCourseName().getName() + " (Загальний рівень)");
             } else {
                 ((TextView) view.findViewById(R.id.selectivecoursename)).setText(selectiveCourse.getCourse().getCourseName().getName() + " (Професійний рівень)");
             }
-        }else {
+        } else {
             ((TextView) view.findViewById(R.id.selectivecoursename)).setText(selectiveCourse.getCourse().getCourseName().getName());
         }
 
-        if(selectiveCourse.getTeacher() != null) {
+        if (selectiveCourse.getTeacher() != null) {
             ((TextView) view.findViewById(R.id.teacherName)).setText(selectiveCourse.getTeacher().getSurname() + " " + selectiveCourse.getTeacher().getName() + " " + selectiveCourse.getTeacher().getPatronimic());
-        }else {
-            ((LinearLayout)view.findViewById(R.id.textlayout)).removeView(view.findViewById(R.id.teacherName));
+        } else {
+            ((LinearLayout) view.findViewById(R.id.textlayout)).removeView(view.findViewById(R.id.teacherName));
         }
 
         checkBox.setChecked(selectiveCourse.selected);
@@ -93,7 +110,7 @@ public class SelectiveCourseFragment extends Fragment {
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
 
-            ((Button) dialogView.findViewById(R.id.buttonOk)).setOnClickListener((viewOk) -> {
+            dialogView.findViewById(R.id.buttonOk).setOnClickListener((viewOk) -> {
                 alertDialog.dismiss();
             });
         });

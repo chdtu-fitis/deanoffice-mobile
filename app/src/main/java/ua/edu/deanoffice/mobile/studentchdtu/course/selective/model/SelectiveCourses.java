@@ -13,7 +13,7 @@ public class SelectiveCourses extends ValidModel {
 
     private List<SelectiveCourse> selectiveCoursesFirstSemester;
     private List<SelectiveCourse> selectiveCoursesSecondSemester;
-    private SelectiveCoursesProcessData selectiveCoursesProcessData;
+    private SelectiveCoursesSelectionTimeParameters selectiveCoursesSelectionTimeParameters;
 
     public List<SelectiveCourse> getSelectiveCoursesSemester(int semester) {
         return semester == 1 ? getSelectiveCoursesFirstSemester() : getSelectiveCoursesSecondSemester();

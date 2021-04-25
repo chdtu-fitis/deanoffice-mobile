@@ -40,8 +40,12 @@
     //SelectiveCourseFragment
     <string name="label_disqualified_course">Дисципліну скасовано</string>
 
+    //SelectiveCoursesSecondRound
+    <string name="header_study_years">Вибір предметів на {study_year_begin}-{study_year_end} н. р.</string>
+
+
     //DeadLineTimer
-    <string name="dlt_to_reg_finish">До завершення реєстрації </string>
+    <string name="dlt_to_reg_finish">До завершення реєстрації {left_time}</string>
 
     <string name="dlt_f1_minutes">" хвилина"</string>
     <string name="dlt_f2_minutes">" хвилини"</string>

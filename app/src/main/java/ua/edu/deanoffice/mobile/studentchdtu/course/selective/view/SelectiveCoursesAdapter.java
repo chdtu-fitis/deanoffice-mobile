@@ -1,5 +1,6 @@
 package ua.edu.deanoffice.mobile.studentchdtu.course.selective.view;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +31,6 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         }
     }
 
-    @Setter
     private SelectListener selectListener = null;
     private SelectedStates selectedStates;
 
@@ -58,8 +58,7 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
     }
 
     public SelectiveCoursesAdapter(SelectiveCourses selectiveCourses, FragmentManager supportFragmentManager, TextView selectiveCoursesCounter, boolean disableCheckBoxes) {
-        initAdapter(selectiveCourses, supportFragmentManager, selectiveCoursesCounter, disableCheckBoxes);
-        initMaxCourses(false);
+        this(selectiveCourses, supportFragmentManager, selectiveCoursesCounter, disableCheckBoxes, false);
     }
 
     public SelectiveCoursesAdapter(SelectiveCourses selectiveCourses, FragmentManager supportFragmentManager, TextView selectiveCoursesCounter, boolean disableCheckBoxes, boolean forMagister) {
@@ -102,6 +101,18 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         selectedCourseFirstSemester = new ArrayList<>(selectiveCourses.getSelectiveCoursesFirstSemester().size());
         selectedCourseSecondSemester = new ArrayList<>(selectiveCourses.getSelectiveCoursesSecondSemester().size());
 
+        for (SelectiveCourse course : selectiveCourses.getSelectiveCoursesFirstSemester()) {
+            if (course.selected && course.isAvailable()) {
+                selectedCourseFirstSemester.add(course);
+            }
+        }
+
+        for (SelectiveCourse course : selectiveCourses.getSelectiveCoursesSecondSemester()) {
+            if (course.selected && course.isAvailable()) {
+                selectedCourseSecondSemester.add(course);
+            }
+        }
+
         this.selectiveCoursesCounter = selectiveCoursesCounter;
         interactive = disableCheckBoxes;
         showTrainingCycle = hasGeneralAndProfessional();
@@ -116,9 +127,8 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
 
         if (selectiveCoursesCounter != null) {
             selectiveCoursesCounter.setText(studentDegree.getMaxCoursesFirstSemester() +
-                    " в 1 семестрі (" + 0 + "/" + studentDegree.getMaxCoursesFirstSemester() + ")" +
-                    ", " + studentDegree.getMaxCoursesSecondSemester() +
-                    " в 2 семестрі(" + 0 + "/" + studentDegree.getMaxCoursesSecondSemester() + ")");
+                    " в 1 семестрі (" + selectedCourseFirstSemester.size() + "/" + studentDegree.getMaxCoursesFirstSemester() + ")" + ", " + studentDegree.getMaxCoursesSecondSemester() +
+                    " в 2 семестрі(" + selectedCourseSecondSemester.size() + "/" + studentDegree.getMaxCoursesSecondSemester() + ")");
         }
     }
 
@@ -198,39 +208,42 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
                         " в 1 семестрі (" + selectedCourseFirstSemester.size() + "/" + studentDegree.getMaxCoursesFirstSemester() + ")" + ", " + studentDegree.getMaxCoursesSecondSemester() +
                         " в 2 семестрі(" + selectedCourseSecondSemester.size() + "/" + studentDegree.getMaxCoursesSecondSemester() + ")");
             }
+            onSelectedCoursesCountChanged();
+        }
+    }
 
-            if (selectListener != null) {
-                if (selectedCourseFirstSemester.size() > 0 || selectedCourseSecondSemester.size() > 0) {
-                    if (!selectedStates.hasOneSelected) {
-                        selectedStates.hasOneSelected = true;
-                        selectListener.onOneSelected();
-                    }
-                    if (!selectedStates.hasAllSelected) {
-                        if (hasAllSelected()) {
-                            selectedStates.hasAllSelected = true;
-                            selectListener.onAllSelected();
-                        }
-                    } else {
-                        if (!hasAllSelected()) {
-                            selectedStates.hasAllSelected = false;
-                            selectListener.onNotAllSelected();
-                        }
+    private void onSelectedCoursesCountChanged(){
+        if (selectListener != null) {
+            if (selectedCourseFirstSemester.size() > 0 || selectedCourseSecondSemester.size() > 0) {
+                if (!selectedStates.hasOneSelected) {
+                    selectedStates.hasOneSelected = true;
+                    selectListener.onOneSelected();
+                }
+                if (!selectedStates.hasAllSelected) {
+                    if (hasAllSelected()) {
+                        selectedStates.hasAllSelected = true;
+                        selectListener.onAllSelected();
                     }
                 } else {
-                    if (selectedStates.hasOneSelected) {
-                        selectedStates.hasOneSelected = false;
-                        selectListener.onLastDeselected();
-                    }
-                    if (selectedStates.hasAllSelected) {
+                    if (!hasAllSelected()) {
                         selectedStates.hasAllSelected = false;
                         selectListener.onNotAllSelected();
                     }
+                }
+            } else {
+                if (selectedStates.hasOneSelected) {
+                    selectedStates.hasOneSelected = false;
+                    selectListener.onLastDeselected();
+                }
+                if (selectedStates.hasAllSelected) {
+                    selectedStates.hasAllSelected = false;
+                    selectListener.onNotAllSelected();
                 }
             }
         }
     }
 
-    public boolean hasAllSelected() {
+    private boolean hasAllSelected() {
         return selectedCourseFirstSemester.size() >= studentDegree.getMaxCoursesFirstSemester() &&
                 selectedCourseSecondSemester.size() >= studentDegree.getMaxCoursesSecondSemester();
     }
@@ -254,8 +267,8 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         int profCount = 0;
         int genCount = 0;
         for (int i = 0; i < selectiveCoursesSemester.size(); i++) {
-            if (selectiveCoursesSemester.get(i).selected) {
-                SelectiveCourse course = selectiveCoursesSemester.get(i);
+            SelectiveCourse course = selectiveCoursesSemester.get(i);
+            if (course.selected && course.isAvailable()) {
                 if (isProfCourse(course)) {
                     profCount++;
                 } else {
@@ -303,6 +316,11 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         onClick(null);
     }
 
+    public void setSelectListener(SelectListener selectListener) {
+        this.selectListener = selectListener;
+        onSelectedCoursesCountChanged();
+    }
+
     public interface SelectListener {
         void onOneSelected();
 
@@ -313,7 +331,7 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         void onNotAllSelected();
     }
 
-    class SelectedStates {
+    private static class SelectedStates {
         public boolean hasOneSelected = false;
         public boolean hasAllSelected = false;
     }
