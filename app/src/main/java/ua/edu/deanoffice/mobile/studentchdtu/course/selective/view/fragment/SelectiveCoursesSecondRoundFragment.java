@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,9 +39,16 @@ public class SelectiveCoursesSecondRoundFragment extends Fragment {
     private static final String LOG_TAG = "SelectiveCoursesSecondRoundFragment";
 
     private TextView textSelectiveCoursesCounter;
+    private final List<SelectiveCourses> availableSelectiveCourses, selectedSelectiveCourses;
 
     public SelectiveCoursesSecondRoundFragment() {
+        this(null, null);
+    }
 
+    public SelectiveCoursesSecondRoundFragment(List<SelectiveCourses> availableSelectiveCourses,
+                                               List<SelectiveCourses> selectedSelectiveCourses) {
+        this.availableSelectiveCourses = availableSelectiveCourses;
+        this.selectedSelectiveCourses = selectedSelectiveCourses;
     }
 
     @Override
