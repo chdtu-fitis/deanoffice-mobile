@@ -10,14 +10,31 @@
     <string name="open_drawer">Відкрити меню</string>
     <string name="close_drawer">Закрити меню</string>
 
-
     //ActionBar titles
     <string name="action_bar_title_main_menu">Головне меню</string>
     <string name="action_bar_title_selective_courses">Реєстрація на вибіркові дисципліни</string>
-
+    <string name="action_bar_title_main_options">Налаштування</string>
 
     //Activities
     //MainMenuActivity
     <string name="info_double_back">Два рази, щоб вийти</string>
+
+    //MainOptionsActivity
+    //Options
+    <string name="options_group_notifications">Нагадування</string>
+    <string name="option_enable_notif_on_reg_selective_courses">Запис на вибіркові предмети</string>
+
+    //SelectiveCoursesActivity
+    <string name="info_between_first_and_second_round">
+        Перший тур запису на вибіркові дисципліни вже завершився.
+        \nВи матимете змогу обрати дисципліни у другому турі
+    </string>
+    <string name="info_after_second_round">Другий тур запису на вибіркові дисципліни вже завершився</string>
+    <string name="info_before_first_round">Перший тур запису на вибіркові дисципліни ще не почався</string>
+    <string name="info_left_before_next_round">До початку туру залишилось {left_time}</string>
+
+    //Fragments
+    //SelectiveCoursesFragment
+    <string name="label_disqualified_course">Дисципліну скасовано</string>
 
 </resources>
