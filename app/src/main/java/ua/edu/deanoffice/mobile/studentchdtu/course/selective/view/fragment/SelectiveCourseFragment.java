@@ -1,6 +1,7 @@
 package ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ public class SelectiveCourseFragment extends Fragment {
     private boolean interactive;
     private boolean showTrainingCycle;
     private View.OnClickListener listener;
+    private TextView disqualifiedLabel;
 
     public SelectiveCourse getSelectiveCourse() {
         return selectiveCourse;
@@ -63,21 +65,28 @@ public class SelectiveCourseFragment extends Fragment {
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
         checkBox = view.findViewById(R.id.selectivecheckbox);
         imageInfo = view.findViewById(R.id.selectivecourseinfo);
+        disqualifiedLabel = view.findViewById(R.id.labelDisqulifiedCourse);
 
-        if(showTrainingCycle) {
-            if(selectiveCourse.getTrainingCycle().equals("GENERAL")){
+        //Make disqualified
+        if (!selectiveCourse.isAvailable()) {
+            disqualifiedLabel.setVisibility(View.VISIBLE);
+            view.setBackgroundColor(getResources().getColor(R.color.disqualified_course_fond, null));
+        }
+
+        if (showTrainingCycle) {
+            if (selectiveCourse.getTrainingCycle().equals("GENERAL")) {
                 ((TextView) view.findViewById(R.id.selectivecoursename)).setText(selectiveCourse.getCourse().getCourseName().getName() + " (Загальний рівень)");
             } else {
                 ((TextView) view.findViewById(R.id.selectivecoursename)).setText(selectiveCourse.getCourse().getCourseName().getName() + " (Професійний рівень)");
             }
-        }else {
+        } else {
             ((TextView) view.findViewById(R.id.selectivecoursename)).setText(selectiveCourse.getCourse().getCourseName().getName());
         }
 
-        if(selectiveCourse.getTeacher() != null) {
+        if (selectiveCourse.getTeacher() != null) {
             ((TextView) view.findViewById(R.id.teacherName)).setText(selectiveCourse.getTeacher().getSurname() + " " + selectiveCourse.getTeacher().getName() + " " + selectiveCourse.getTeacher().getPatronimic());
-        }else {
-            ((LinearLayout)view.findViewById(R.id.textlayout)).removeView(view.findViewById(R.id.teacherName));
+        } else {
+            ((LinearLayout) view.findViewById(R.id.textlayout)).removeView(view.findViewById(R.id.teacherName));
         }
 
         checkBox.setChecked(selectiveCourse.selected);

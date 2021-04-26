@@ -9,6 +9,7 @@ public class SelectiveCourses extends ValidModel {
 
     private List<SelectiveCourse> selectiveCoursesFirstSemester;
     private List<SelectiveCourse> selectiveCoursesSecondSemester;
+    private SelectiveCoursesSelectionTimeParameters selectiveCoursesSelectionTimeParameters;
 
     public List<SelectiveCourse> getSelectiveCoursesFirstSemester() {
         return selectiveCoursesFirstSemester;
@@ -42,4 +43,11 @@ public class SelectiveCourses extends ValidModel {
         return selectiveCoursesIds;
     }
 
+    public SelectiveCoursesSelectionTimeParameters getSelectiveCoursesSelectionTimeParameters() {
+        return selectiveCoursesSelectionTimeParameters;
+    }
+
+    public void setSelectiveCoursesSelectionTimeParameters(SelectiveCoursesSelectionTimeParameters selectiveCoursesSelectionTimeParameters) {
+        this.selectiveCoursesSelectionTimeParameters = selectiveCoursesSelectionTimeParameters;
+    }
 }
