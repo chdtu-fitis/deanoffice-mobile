@@ -147,7 +147,8 @@ public class SelectiveCoursesSecondRoundFragment extends Fragment {
                 .createRequest(SelectiveCourseRequests.class)
                 .requestSelectiveCourses(
                         App.getInstance().getJwt().getToken(),
-                        App.getInstance().getCurrentStudent().getDegrees()[0].getId())
+                        App.getInstance().getCurrentStudent().getDegrees()[0].getId(),
+                        true)
                 .enqueue(new Callback<SelectiveCourses>() {
                     @Override
                     public void onResponse(@NonNull Call<SelectiveCourses> call, @NonNull Response<SelectiveCourses> response) {

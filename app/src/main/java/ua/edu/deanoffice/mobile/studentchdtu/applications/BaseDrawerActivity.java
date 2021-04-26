@@ -133,7 +133,7 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
         BaseDrawerActivity.selectedMenuItemId = selectedMenuItemId;
     }
 
-    protected void showLoadingProgress() {
+    public void showLoadingProgress() {
         if (progressDialog == null) {
             progressDialog = new ProgressDialog(this);
             progressDialog.setMessage("Завантаження");
