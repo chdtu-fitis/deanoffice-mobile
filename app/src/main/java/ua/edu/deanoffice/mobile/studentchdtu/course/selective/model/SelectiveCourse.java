@@ -1,5 +1,9 @@
 package ua.edu.deanoffice.mobile.studentchdtu.course.selective.model;
 
+import java.text.Collator;
+import java.util.Comparator;
+import java.util.Locale;
+
 public class SelectiveCourse extends ModelBase {
 
     private boolean available;
@@ -10,6 +14,24 @@ public class SelectiveCourse extends ModelBase {
     private String trainingCycle;
     private String description;
     private int studyYear;
+    private int studentsCount;
+
+    public int getStudentsCount() {
+        return studentsCount;
+    }
+
+    public void setStudentsCount(int studentCount) {
+        this.studentsCount = studentCount;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
     public boolean selected;
 
     public boolean isAvailable() {
@@ -75,4 +97,31 @@ public class SelectiveCourse extends ModelBase {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public static Comparator<SelectiveCourse> ByFacultyName = new Comparator<SelectiveCourse>() {
+        @Override
+        public int compare(SelectiveCourse one, SelectiveCourse two) {
+            String facultyName1 = one.getDepartment().getFaculty().getAbbr();
+            String facultyName2 = two.getDepartment().getFaculty().getAbbr();
+            Collator uaCollator = Collator.getInstance(new Locale("uk", "UA"));
+            return uaCollator.compare(facultyName1, facultyName2);
+        }
+    };
+
+    public static Comparator<SelectiveCourse> ByCourseName = new Comparator<SelectiveCourse>() {
+        @Override
+        public int compare(SelectiveCourse one, SelectiveCourse two) {
+            String courseName1 = one.getCourse().getCourseName().getName();
+            String courseName2 = two.getCourse().getCourseName().getName();
+            Collator uaCollator = Collator.getInstance(new Locale("uk", "UA"));
+            return uaCollator.compare(courseName1, courseName2);
+        }
+    };
+
+    public static Comparator<SelectiveCourse> ByStudentCount = new Comparator<SelectiveCourse>() {
+        @Override
+        public int compare(SelectiveCourse one, SelectiveCourse two) {
+            return two.getStudentsCount() - one.getStudentsCount();
+        }
+    };
 }

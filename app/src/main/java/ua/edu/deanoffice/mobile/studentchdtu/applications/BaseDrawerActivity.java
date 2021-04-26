@@ -1,6 +1,7 @@
 package ua.edu.deanoffice.mobile.studentchdtu.applications;
 
 import android.annotation.SuppressLint;
+import android.app.ActivityManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.activity.SelectiveCoursesActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
 import ua.edu.deanoffice.mobile.studentchdtu.user.login.activity.LoginActivity;
+import ua.edu.deanoffice.mobile.studentchdtu.user.profile.activity.MainOptionsActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.model.Student;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.service.ProfileRequests;
 
@@ -34,6 +36,9 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
     protected Toolbar toolbar;
     protected ViewGroup mainContentBlock;
     protected ProgressDialog progressDialog = null;
+    private NavigationView navigationView;
+
+    private static int selectedMenuItemId = -1;
 
     @SuppressLint("NonConstantResourceId")
     @Override
@@ -54,7 +59,7 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
                 toolbar,
                 R.string.open_drawer,
                 R.string.close_drawer);
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
 
         showLoadingProgress();
 
@@ -87,10 +92,18 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
         });
 
         navigationView.setNavigationItemSelectedListener(item -> {
-            switch (item.getItemId()) {
+            if (selectedMenuItemId == item.getItemId()) return false;
+
+            selectedMenuItemId = item.getItemId();
+
+            switch (selectedMenuItemId) {
                 case R.id.nav_selectivecourses:
                     Intent selectiveCoursesActivity = new Intent(this, SelectiveCoursesActivity.class);
                     startActivity(selectiveCoursesActivity);
+                    break;
+                case R.id.nav_options:
+                    Intent mainOptionsActivity = new Intent(this, MainOptionsActivity.class);
+                    startActivity(mainOptionsActivity);
                     break;
                 case R.id.nav_exitFrom:
                     Intent intent = new Intent(this, LoginActivity.class);
@@ -116,7 +129,11 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
         toggle.syncState();
     }
 
-    public void showLoadingProgress() {
+    public static void setSelectedMenuItemId(int selectedMenuItemId) {
+        BaseDrawerActivity.selectedMenuItemId = selectedMenuItemId;
+    }
+
+    protected void showLoadingProgress() {
         if (progressDialog == null) {
             progressDialog = new ProgressDialog(this);
             progressDialog.setMessage("Завантаження");
@@ -137,7 +154,21 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
+            selectedMenuItemId = -1;
             super.onBackPressed();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (selectedMenuItemId != -1) {
+            navigationView.setCheckedItem(selectedMenuItemId);
+        } else {
+            int size = navigationView.getMenu().size();
+            for (int i = 0; i < size; i++) {
+                navigationView.getMenu().getItem(i).setChecked(false);
+            }
         }
     }
 

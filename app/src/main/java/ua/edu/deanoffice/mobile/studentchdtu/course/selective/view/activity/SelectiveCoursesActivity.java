@@ -6,13 +6,32 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.applications.BaseDrawerActivity;
-import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.SelectiveCoursesSecondRoundFragment;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourse;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourses;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCoursesSelectionTimeParameters;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCoursesStudentDegree;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.enums.CourseSelectionPeriod;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.service.SelectiveCourseRequests;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.InformationFragment;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.SelectiveCoursesConfirmedFragment;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.SelectiveCoursesFragment;
+import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
 
 public class SelectiveCoursesActivity extends BaseDrawerActivity {
 
@@ -27,231 +46,127 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
 
         getSupportActionBar().setTitle(getRString(R.string.action_bar_title_selective_courses));
 
-        //Init views
-
-        //Get selective courses
-        //Get data time, it is  second round or first
-        //Show selective courses to fragment
-
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                new SelectiveCoursesSecondRoundFragment()).commit();
-
-       // showLoadingProgress();
-
-//        App.getInstance()
-//                .getClient()
-//                .createRequest(SelectiveCourseRequests.class)
-//                .requestSelectiveCourses(
-//                        App.getInstance().getJwt().getToken(),
-//                        App.getInstance().getCurrentStudent().getDegrees()[0].getId()
-//                ).enqueue(new Callback<SelectiveCourses>() {
-//            @Override
-//            public void onResponse(@NotNull Call<SelectiveCourses> call, @NotNull Response<SelectiveCourses> response) {
-//                hideLoadingProgress();
-//                if (response.isSuccessful()) {
-//                    // SelectiveCoursesActivity.this.onResponse(response.body());
-//                }
-//                //Handling error response codes
-//            }
-//
-//            @Override
-//            public void onFailure(@NotNull Call<SelectiveCourses> call, @NotNull Throwable t) {
-//                hideLoadingProgress();
-//                //Handling errors
-//            }
-//        });
+        loadStudentSelectedCourses();
     }
 
-//    private void onResponse(SelectiveCourses selectiveCourses) {
-//        RecyclerView recyclerView = findViewById(R.id.listview);
-//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-//        recyclerView.setLayoutManager(layoutManager);
-//
-//        ChdtuAdapter adapter = new ChdtuAdapter(selectiveCourses, getSupportFragmentManager(), selectiveCoursesCounter, true);
-//        recyclerView.setAdapter(adapter);
-//
-//        Button clearBtn = findViewById(R.id.clear_selectivecourses);
-//        clearBtn.setOnClickListener((view) -> {
-//            adapter.clearSelected();
-//        });
-//
-//        Button confirmBtn = findViewById(R.id.confirm_selectivecourses);
-//        confirmBtn.setOnClickListener((view) -> {
-//            onClickConfirmButton();
-//        });
-//    }
-//
-//    private void onClickConfirmButton(){
-//        if (adapter.getSelectedCourseFirstSemester().size() == 3 && adapter.getSelectedCourseSecondSemester().size() == 2) {
-//            selectiveCoursesCounter.setText(getRString(R.string.info_confirm_sel_courses));
-//            confirmBtn.setText(getRString(R.string.button_confirm));
-//            clearBtn.setText(getRString(R.string.button_cancel));
-//
-//            clearBtn.setOnClickListener((viewClear) -> {
-//                Intent intent = new Intent(SelectiveCoursesActivity.this, SelectiveCoursesActivity.class);
-//                startActivity(intent);
-//                finish();
-//            });
-//
-//            SelectiveCourses selectiveCoursesFinal = new SelectiveCourses();
-//            selectiveCoursesFinal.setSelectiveCoursesFirstSemester(adapter.getSelectedCourseFirstSemester());
-//            selectiveCoursesFinal.setSelectiveCoursesSecondSemester(adapter.getSelectedCourseSecondSemester());
-//            ChdtuAdapter adapterFinal = new ChdtuAdapter(selectiveCoursesFinal, getSupportFragmentManager(), null, false);
-//            recyclerView.setAdapter(adapterFinal);
-//            adapterFinal.disableCheckBoxes();
-//
-//            confirmBtn.setOnClickListener((viewConfirm) -> {
-//                ConfirmedSelectiveCourses confirmedSelectiveCourses = new ConfirmedSelectiveCourses();
-//                confirmedSelectiveCourses.setSelectiveCourses(selectiveCoursesFinal.getSelectiveCoursesIds());
-//                ExistingId existingId = new ExistingId(App.getInstance().getCurrentStudent().getDegrees()[0].getId());
-//                confirmedSelectiveCourses.setStudentDegreeId(existingId);
-//
-//                App.getInstance()
-//                        .getClient()
-//                        .createRequest(SelectiveCourseRequests.class)
-//                        .confirmedSelectiveCourses(
-//                                App.getInstance().getJwt().getToken(),
-//                                confirmedSelectiveCourses)
-//                        .enqueue(new Callback<StudentDegreeSelectiveCoursesIds>() {
-//                            @Override
-//                            public void onResponse(@NotNull Call<StudentDegreeSelectiveCoursesIds> call, @NotNull Response<StudentDegreeSelectiveCoursesIds> response) {
-//                                if (response.isSuccessful()) {
-//                                    boolean confirmed = true;
-//
-//                                    for (int i = 0; i < confirmedSelectiveCourses.getSelectiveCourses().size(); i++) {
-//                                        if (!confirmedSelectiveCourses.getSelectiveCourses().contains(response.body().getSelectiveCourses().get(i).getId())) {
-//                                            confirmed = false;
-//                                        }
-//                                    }
-//                                    if (confirmed) {
-//                                        Intent intent = new Intent(SelectiveCoursesActivity.this, SelectiveCoursesConfirmed.class);
-//                                        intent.putExtra("courses", new Gson().toJson(selectiveCoursesFinal));
-//                                        startActivity(intent);
-//                                        finish();
-//                                    }
-//                                }
-//                            }
-//
-//                            @Override
-//                            public void onFailure(@NotNull Call<StudentDegreeSelectiveCoursesIds> call, @NotNull Throwable t) {
-//                                t.printStackTrace();
-//                                showError(getRString(R.string.error_connection_failed));
-//                            }
-//                        });
-//            });
-//        } else {
-//            Snackbar.make(findViewById(android.R.id.content), getRString(R.string.info_sel_courses), Snackbar.LENGTH_LONG)
-//                    .setAction("No action", null).show();
-//        }
-//    }
+    private void loadStudentSelectedCourses() {
+        showLoadingProgress();
 
-    private void showError(String msg) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        ViewGroup viewGroup = findViewById(android.R.id.content);
-        View dialogView = LayoutInflater.from(this)
-                .inflate(R.layout.dialog_selectivecourse_info, viewGroup, false);
+        String jwtToken = App.getInstance().getJwt().getToken();
+        int degreesId = App.getInstance().getCurrentStudent().getDegrees()[0].getId();
+        App.getInstance().getClient()
+                .createRequest(SelectiveCourseRequests.class)
+                .studentDegree(jwtToken, degreesId)
+                .enqueue(new Callback<SelectiveCoursesStudentDegree>() {
+                    @Override
+                    public void onResponse(@NonNull Call<SelectiveCoursesStudentDegree> call, @NonNull Response<SelectiveCoursesStudentDegree> response) {
+                        hideLoadingProgress();
 
-        TextView titleText = dialogView.findViewById(R.id.selectiveCourseName);
-        TextView bodyText = dialogView.findViewById(R.id.selectiveCourseDescription);
+                        if (response.isSuccessful()) {
+                            SelectiveCoursesStudentDegree selectiveCoursesStudentDegree = response.body();
+                            List<SelectiveCourse> selectiveCourseList = selectiveCoursesStudentDegree.getSelectiveCourses();
+                            if (selectiveCourseList != null) {
+                                List<SelectiveCourse> selectiveCoursesFirst = new ArrayList<>();
+                                List<SelectiveCourse> selectiveCoursesSecond = new ArrayList<>();
 
-        titleText.setText(getRString(R.string.error_msg_title));
-        bodyText.setText(msg);
-        builder.setView(dialogView);
+                                for (SelectiveCourse course : selectiveCourseList) {
+                                    course.selected = true;
+                                    if (course.getCourse().getSemester() % 2 != 0) {
+                                        selectiveCoursesFirst.add(course);
+                                    } else {
+                                        selectiveCoursesSecond.add(course);
+                                    }
+                                }
 
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
+                                SelectiveCourses selectiveCourses = new SelectiveCourses();
+                                selectiveCourses.setSelectiveCoursesFirstSemester(selectiveCoursesFirst);
+                                selectiveCourses.setSelectiveCoursesSecondSemester(selectiveCoursesSecond);
+                                SelectiveCoursesSelectionTimeParameters timeParameters = selectiveCoursesStudentDegree.getSelectiveCoursesSelectionTimeParameters();
+                                selectiveCourses.setSelectiveCoursesSelectionTimeParameters(timeParameters);
 
-        dialogView.findViewById(R.id.buttonOk).setOnClickListener((viewOk) -> {
-            alertDialog.dismiss();
-        });
+                                selectAndShowFragment(selectiveCourses, true);
+                            } else {
+                                loadAvailableSelectiveCourses();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<SelectiveCoursesStudentDegree> call, @NonNull Throwable t) {
+                        hideLoadingProgress();
+                        error("Помилка під час підключення до серверу, спробуйте пізніше.");
+                    }
+                });
     }
-/*
-    public void onResponse(SelectiveCourses selectiveCourses) {
-        runOnUiThread(() -> {
-            RecyclerView recyclerView = findViewById(R.id.listview);
-            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-            recyclerView.setLayoutManager(layoutManager);
 
-            ChdtuAdapter adapter = new ChdtuAdapter(selectiveCourses, getSupportFragmentManager(), selectiveCoursesCounter, true);
-            recyclerView.setAdapter(adapter);
+    private void loadAvailableSelectiveCourses() {
+        showLoadingProgress();
 
-            Button clearBtn = findViewById(R.id.clear_selectivecourses);
-            clearBtn.setOnClickListener((view) -> {
-                adapter.clearSelected();
-            });
+        String jwtToken = App.getInstance().getJwt().getToken();
+        int degreesId = App.getInstance().getCurrentStudent().getDegrees()[0].getId();
+        App.getInstance().getClient()
+                .createRequest(SelectiveCourseRequests.class)
+                .requestSelectiveCourses(jwtToken, degreesId, true)
+                .enqueue(new Callback<SelectiveCourses>() {
+                    @Override
+                    public void onResponse(@NonNull Call<SelectiveCourses> call, @NonNull Response<SelectiveCourses> response) {
+                        hideLoadingProgress();
+                        if (response.isSuccessful()) {
+                            selectAndShowFragment(response.body(), false);
+                        }
+                    }
 
-            Button confirmBtn = findViewById(R.id.confirm_selectivecourses);
-            confirmBtn.setOnClickListener((view) -> {
-                if (adapter.getSelectedCourseFirstSemester().size() == 3 && adapter.getSelectedCourseSecondSemester().size() == 2) {
-                    selectiveCoursesCounter.setText("Підтвердіть обрані дисципліни");
-                    confirmBtn.setText("Підтвердити");
-                    clearBtn.setText("Скасувати");
+                    @Override
+                    public void onFailure(@NonNull Call<SelectiveCourses> call, @NonNull Throwable t) {
+                        hideLoadingProgress();
+                    }
+                });
+    }
 
-                    clearBtn.setOnClickListener((viewClear) -> {
-                        Intent intent = new Intent(SelectiveCoursesActivity.this, SelectiveCoursesActivity.class);
-                        startActivity(intent);
-                        finish();
-                    });
+    //One point to enter to fragment
+    private void selectAndShowFragment(SelectiveCourses selectiveCourses, boolean didStudentChoseCourses) {
+        CourseSelectionPeriod period = selectiveCourses
+                .getSelectiveCoursesSelectionTimeParameters()
+                .getCourseSelectionPeriod();
 
-                    SelectiveCourses selectiveCoursesFinal = new SelectiveCourses();
-                    selectiveCoursesFinal.setSelectiveCoursesFirstSemester(adapter.getSelectedCourseFirstSemester());
-                    selectiveCoursesFinal.setSelectiveCoursesSecondSemester(adapter.getSelectedCourseSecondSemester());
-                    ChdtuAdapter adapterFinal = new ChdtuAdapter(selectiveCoursesFinal, getSupportFragmentManager(), null, false);
-                    recyclerView.setAdapter(adapterFinal);
-                    adapterFinal.disableCheckBoxes();
+        //TODO: Need to get selectiveCourses for first and second semester and send to SelectiveCoursesFragments (First Round or Second Round);
 
-                    confirmBtn.setOnClickListener((viewConfirm) -> {
-                        ConfirmedSelectiveCourses confirmedSelectiveCourses = new ConfirmedSelectiveCourses();
-                        confirmedSelectiveCourses.setSelectiveCourses(selectiveCoursesFinal.getSelectiveCoursesIds());
-                        ExistingId existingId = new ExistingId(App.getInstance().getCurrentStudent().getDegrees()[0].getId());
-                        confirmedSelectiveCourses.setStudentDegreeId(existingId);
+        Fragment fragment;
+        if (didStudentChoseCourses) {
+            fragment = new SelectiveCoursesConfirmedFragment(selectiveCourses);
+        } else {
+            String timeBeforeNextRound = "\n" + getRString(R.string.info_left_before_next_round);
+            timeBeforeNextRound = timeBeforeNextRound.replace("{left_time}", "ще трохи"); //TODO: Need Class Handler for Time (from millisecond to string "left before")
 
-                        Log.d("Test", new Gson().toJson(confirmedSelectiveCourses));
+            String infoMessage;
+            switch (period) {
+                case BEFORE_FIRST_ROUND:
+                    infoMessage = getRString(R.string.info_before_first_round) + timeBeforeNextRound;
+                    fragment = new InformationFragment(infoMessage);
+                    break;
+                case FIRST_ROUND:
+                    fragment = new SelectiveCoursesFragment();
+                    break;
+                case BETWEEN_FIRST_AND_SECOND_ROUND:
+                    infoMessage = getRString(R.string.info_between_first_and_second_round) + timeBeforeNextRound;
+                    fragment = new InformationFragment(infoMessage);
+                    break;
+                case SECOND_ROUND:
+                    fragment = new SelectiveCoursesFragment(); //TODO: Need SelectiveCoursesFragmentSecondRound
+                    break;
+                case AFTER_SECOND_ROUND:
+                default:
+                    infoMessage = getRString(R.string.info_after_second_round) + timeBeforeNextRound;
+                    fragment = new InformationFragment(infoMessage);
+            }
+        }
 
-                        App.getInstance().getClient().createRequest(SelectiveCourseRequests.class).confirmedSelectiveCourses(
-                                App.getInstance().getJwt().getToken(), confirmedSelectiveCourses).enqueue(new Callback<StudentDegreeSelectiveCoursesIds>() {
-                            @Override
-                            public void onResponse(Call<StudentDegreeSelectiveCoursesIds> call, Response<StudentDegreeSelectiveCoursesIds> response) {
-                                try{
-                                    Log.d("Test", ""+response.errorBody().string());
-                                }catch (IOException e){
-                                    e.printStackTrace();
-                                }
-
-                                if(response.isSuccessful()){
-                                    Log.d("Test", new Gson().toJson(response.body()));
-                                    boolean confirmed = true;
-
-                                    for(int i = 0; i < confirmedSelectiveCourses.getSelectiveCourses().size(); i++) {
-                                        if(!confirmedSelectiveCourses.getSelectiveCourses().contains(response.body().getSelectiveCourses().get(i).getId())) {
-                                            confirmed = false;
-                                        }
-                                    }
-
-                                    if(confirmed){
-                                        Intent intent = new Intent(SelectiveCoursesActivity.this, SelectiveCoursesConfirmed.class);
-                                        intent.putExtra("courses", new Gson().toJson(selectiveCoursesFinal));
-                                        startActivity(intent);
-                                        finish();
-                                    }
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<StudentDegreeSelectiveCoursesIds> call, Throwable t) {
-                                t.printStackTrace();
-                                error("Помилка під час підключення до серверу, спробуйте пізніше.");
-                            }
-                        });
-
-                    });
-
-                } else {
-                    Snackbar.make(findViewById(android.R.id.content), "Оберіть дисципліни", Snackbar.LENGTH_LONG)
-                            .setAction("No action", null).show();
-                }
-            });
-        });
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        if (fragmentManager != null) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, fragment)
+                    .commit();
+        }
     }
 
     public void error(String text) {
@@ -268,6 +183,5 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
             alertDialog.dismiss();
         });
     }
- */
 }
 

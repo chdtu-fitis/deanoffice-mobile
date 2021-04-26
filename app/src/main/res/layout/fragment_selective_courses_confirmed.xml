@@ -36,6 +36,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_head" />
 
+        <Switch
+            android:id="@+id/switchExtendedView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:gravity="right"
+            android:text="Розширений перегляд: "
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_body" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/listview1"
             android:layout_marginTop="20sp"

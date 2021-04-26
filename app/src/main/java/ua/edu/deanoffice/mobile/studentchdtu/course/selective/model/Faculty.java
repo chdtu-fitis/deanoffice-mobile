@@ -1,11 +1,8 @@
 package ua.edu.deanoffice.mobile.studentchdtu.course.selective.model;
 
-public class Department {
-
+public class Faculty {
     private int id;
     private String name;
-    private Faculty faculty;
-    private boolean active;
     private String abbr;
 
     public int getId() {
@@ -22,22 +19,6 @@ public class Department {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public Faculty getFaculty() {
-        return faculty;
-    }
-
-    public void setFaculty(Faculty faculty) {
-        this.faculty = faculty;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
     }
 
     public String getAbbr() {
