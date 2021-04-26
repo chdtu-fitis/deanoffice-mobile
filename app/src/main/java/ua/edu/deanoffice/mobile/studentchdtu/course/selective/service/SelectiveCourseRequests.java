@@ -14,7 +14,7 @@ import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.StudentDegre
 public interface SelectiveCourseRequests {
 
     @GET("selective-courses")
-    Call<SelectiveCourses> requestSelectiveCourses(@Header("Authorization") String token, @Query("studentDegreeId") int id);
+    Call<SelectiveCourses> requestSelectiveCourses(@Header("Authorization") String token, @Query("studentDegreeId") int id, @Query("studentsCount") boolean studentCount);
 
     @GET("selective-courses/student-degree")
     Call<SelectiveCoursesStudentDegree> studentDegree(@Header("Authorization") String token, @Query("studentDegreeId") int id);

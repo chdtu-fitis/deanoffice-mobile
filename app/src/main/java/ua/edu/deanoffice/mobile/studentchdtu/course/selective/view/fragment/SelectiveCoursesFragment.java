@@ -1,12 +1,13 @@
 package ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -20,6 +21,8 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import retrofit2.Call;
@@ -34,13 +37,18 @@ import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCou
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.StudentDegreeSelectiveCoursesIds;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.service.SelectiveCourseRequests;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.ChdtuAdapter;
-import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.activity.SelectiveCoursesActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
 
 public class SelectiveCoursesFragment extends Fragment {
 
     private View view;
     private TextView selectiveCoursesCounter;
+    private ChdtuAdapter currentAdapter;
+    private Switch btnExtendedView;
+    private RecyclerView recyclerView;
+    private boolean isMasterDegree;
+    private TextView sortLabel;
+    private View sortPanel;
 
     @Nullable
     @Override
@@ -53,6 +61,20 @@ public class SelectiveCoursesFragment extends Fragment {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Реєстрація на вибіркові дисципліни");
         this.view = view;
         selectiveCoursesCounter = view.findViewById(R.id.text_body);
+
+        btnExtendedView = view.findViewById(R.id.switchExtendedView);
+        btnExtendedView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    currentAdapter.setExtendedView();
+                    setSortPanelVisible(View.VISIBLE);
+                } else {
+                    currentAdapter.setShortView();
+                    setSortPanelVisible(View.GONE);
+                }
+            }
+        });
 
         final ProgressDialog progressDoalog;
         progressDoalog = new ProgressDialog(getContext());
@@ -108,7 +130,8 @@ public class SelectiveCoursesFragment extends Fragment {
         progressDialog.show();
         App.getInstance().getClient().createRequest(SelectiveCourseRequests.class)
                 .requestSelectiveCourses(App.getInstance().getJwt().getToken(),
-                        App.getInstance().getCurrentStudent().getDegrees()[0].getId()).enqueue(new Callback<SelectiveCourses>() {
+                        App.getInstance().getCurrentStudent().getDegrees()[0].getId(),
+                        true).enqueue(new Callback<SelectiveCourses>() {
             @Override
             public void onResponse(Call<SelectiveCourses> call, Response<SelectiveCourses> response) {
                 if (response.isSuccessful()) {
@@ -126,36 +149,61 @@ public class SelectiveCoursesFragment extends Fragment {
 
     public void onResponse(SelectiveCourses selectiveCourses) {
         getActivity().runOnUiThread(() -> {
-            RecyclerView recyclerView = view.findViewById(R.id.listview);
+            recyclerView = view.findViewById(R.id.listview);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
             recyclerView.setLayoutManager(layoutManager);
 
-            boolean isMagister = App.getInstance().getCurrentStudent().getDegrees()[0].getSpecialization().getDegree().getId() == 3;
+            isMasterDegree = App.getInstance().getCurrentStudent().getDegrees()[0].getSpecialization().getDegree().getId() == 3;
 
-            ChdtuAdapter adapter = new ChdtuAdapter(selectiveCourses, getFragmentManager(), selectiveCoursesCounter, true, isMagister);
-            recyclerView.setAdapter(adapter);
+            currentAdapter = new ChdtuAdapter(selectiveCourses, getFragmentManager(), selectiveCoursesCounter, true, isMasterDegree);
+            recyclerView.setAdapter(currentAdapter);
+
+            TextView btnSortByFaculty = (TextView) view.findViewById(R.id.sortByFaculty);
+
+            btnSortByFaculty.setOnClickListener(v -> {
+                sort(SelectiveCourse.ByFacultyName, selectiveCourses);
+                setSortLabel("Факультетом");
+            });
+
+            TextView btnSortByName = (TextView) view.findViewById(R.id.sortByCourse);
+
+            btnSortByName.setOnClickListener(v -> {
+                sort(SelectiveCourse.ByCourseName, selectiveCourses);
+                setSortLabel("Назвою");
+            });
+
+            TextView btnSortByStudentCount = view.findViewById(R.id.sortByStudentCount);
+
+            btnSortByStudentCount.setOnClickListener(v -> {
+                sort(SelectiveCourse.ByStudentCount, selectiveCourses);
+                setSortLabel("К-стю записаних студентів");
+            });
 
             Button clearBtn = view.findViewById(R.id.clear_selectivecourses);
             clearBtn.setOnClickListener((view) -> {
-                adapter.clearSelected();
+                currentAdapter.clearSelected();
             });
+
+            sortLabel = view.findViewById(R.id.sortLabel);
+            sortPanel = view.findViewById(R.id.sortPanel);
 
             Button confirmBtn = view.findViewById(R.id.confirm_selectivecourses);
             confirmBtn.setOnClickListener((view) -> {
-                if (adapter.getSelectedCourseFirstSemester().size() == adapter.getMaxCoursesFirstSemester() && adapter.getSelectedCourseSecondSemester().size() == adapter.getMaxCoursesSecondSemester()) {
+                if (currentAdapter.getSelectedCourseFirstSemester().size() == currentAdapter.getMaxCoursesFirstSemester() && currentAdapter.getSelectedCourseSecondSemester().size() == currentAdapter.getMaxCoursesSecondSemester()) {
                     selectiveCoursesCounter.setText("Підтвердіть обрані дисципліни");
+                    btnExtendedView.setVisibility(View.GONE);
+                    setSortPanelVisible(View.GONE);
                     confirmBtn.setText("Підтвердити");
                     clearBtn.setText("Скасувати");
 
                     clearBtn.setOnClickListener((viewClear) -> {
-                        Intent intent = new Intent(getContext(), SelectiveCoursesActivity.class);
-                        startActivity(intent);
-                        getActivity().finish();
+                        getFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                                new SelectiveCoursesFragment()).commit();
                     });
 
                     SelectiveCourses selectiveCoursesFinal = new SelectiveCourses();
-                    selectiveCoursesFinal.setSelectiveCoursesFirstSemester(adapter.getSelectedCourseFirstSemester());
-                    selectiveCoursesFinal.setSelectiveCoursesSecondSemester(adapter.getSelectedCourseSecondSemester());
+                    selectiveCoursesFinal.setSelectiveCoursesFirstSemester(currentAdapter.getSelectedCourseFirstSemester());
+                    selectiveCoursesFinal.setSelectiveCoursesSecondSemester(currentAdapter.getSelectedCourseSecondSemester());
 
                     ChdtuAdapter adapterFinal = new ChdtuAdapter(selectiveCoursesFinal, getFragmentManager(), null, false);
                     recyclerView.setAdapter(adapterFinal);
@@ -218,6 +266,27 @@ public class SelectiveCoursesFragment extends Fragment {
                 }
             });
         });
+    }
+
+    private void setSortLabel(String attribute) {
+        sortLabel.setText("Сортувати предмети за: " + attribute);
+    }
+
+    public void setSortPanelVisible(int visibility){
+        sortLabel.setVisibility(visibility);
+        sortPanel.setVisibility(visibility);
+    }
+
+    public void sort(Comparator<SelectiveCourse> comparator, SelectiveCourses selectiveCourses) {
+        Collections.sort(selectiveCourses.getSelectiveCoursesFirstSemester(), comparator);
+        Collections.sort(selectiveCourses.getSelectiveCoursesSecondSemester(), comparator);
+        updateRecyclerView(selectiveCourses);
+    }
+
+    public void updateRecyclerView(SelectiveCourses selectiveCourses) {
+        currentAdapter = new ChdtuAdapter(selectiveCourses, getFragmentManager(), selectiveCoursesCounter, true, isMasterDegree);
+        currentAdapter.onClick(null);
+        recyclerView.setAdapter(currentAdapter);
     }
 
     public void error(String text) {

@@ -5,7 +5,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -17,6 +16,7 @@ import androidx.fragment.app.Fragment;
 
 import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourse;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.Teacher;
 
 public class SelectiveCourseFragment extends Fragment {
 
@@ -28,6 +28,9 @@ public class SelectiveCourseFragment extends Fragment {
     private boolean interactive;
     private boolean showTrainingCycle;
     private View.OnClickListener listener;
+    private TextView textTeacherName;
+    private TextView textDepartmentName;
+    private TextView textStudentCount;
     private TextView disqualifiedLabel;
 
     public SelectiveCourse getSelectiveCourse() {
@@ -83,11 +86,22 @@ public class SelectiveCourseFragment extends Fragment {
             ((TextView) view.findViewById(R.id.selectivecoursename)).setText(selectiveCourse.getCourse().getCourseName().getName());
         }
 
-        if (selectiveCourse.getTeacher() != null) {
-            ((TextView) view.findViewById(R.id.teacherName)).setText(selectiveCourse.getTeacher().getSurname() + " " + selectiveCourse.getTeacher().getName() + " " + selectiveCourse.getTeacher().getPatronimic());
+        textTeacherName = (TextView) view.findViewById(R.id.teacherName);
+        if(selectiveCourse.getTeacher() != null) {
+            textTeacherName.setText(selectiveCourse.getTeacher().getSurname() + " " + selectiveCourse.getTeacher().getName() + " " + selectiveCourse.getTeacher().getPatronimic());
         } else {
-            ((LinearLayout) view.findViewById(R.id.textlayout)).removeView(view.findViewById(R.id.teacherName));
+            ((LinearLayout)view.findViewById(R.id.textlayout)).removeView(textTeacherName);
         }
+
+        textDepartmentName = (TextView) view.findViewById(R.id.departmentName);
+
+        if (selectiveCourse.getDepartment() != null) {
+            String facultyName = selectiveCourse.getDepartment().getFaculty().getAbbr();
+            textDepartmentName.setText(facultyName+", "+selectiveCourse.getDepartment().getName());
+        }
+
+        textStudentCount = (TextView) view.findViewById(R.id.studentCount);
+        textStudentCount.setText(Integer.toString(selectiveCourse.getStudentsCount()));
 
         checkBox.setChecked(selectiveCourse.selected);
 
@@ -97,6 +111,13 @@ public class SelectiveCourseFragment extends Fragment {
             View dialogView = LayoutInflater.from(viewClick.getContext()).inflate(R.layout.dialog_selectivecourse_info, viewGroup, false);
 
             ((TextView) dialogView.findViewById(R.id.selectiveCourseName)).setText(selectiveCourse.getCourse().getCourseName().getName());
+            ((TextView) dialogView.findViewById(R.id.selectiveCourseFaculty)).setText(selectiveCourse.getDepartment().getFaculty().getName());
+            ((TextView) dialogView.findViewById(R.id.selectiveCourseDepartment)).setText(selectiveCourse.getDepartment().getName());
+            ((TextView) dialogView.findViewById(R.id.selectiveCourseStudentCount)).setText("Кількість записаних студентів: "+selectiveCourse.getStudentsCount());
+            Teacher teacher = selectiveCourse.getTeacher();
+            String teacherFullName = teacher.getSurname() + " " + teacher.getName() + " " + teacher.getPatronimic();
+            ((TextView) dialogView.findViewById(R.id.selectiveCourseTeacher)).setText(teacherFullName +" ("+teacher.getPosition().getName()+")");
+
             ((TextView) dialogView.findViewById(R.id.selectiveCourseDescription)).setText(selectiveCourse.getDescription());
             builder.setView(dialogView);
             AlertDialog alertDialog = builder.create();
@@ -115,5 +136,17 @@ public class SelectiveCourseFragment extends Fragment {
         });
 
         setCheckBoxInteractive(interactive);
+    }
+
+    public void setShortView() {
+        textTeacherName.setVisibility(View.GONE);
+        textDepartmentName.setVisibility(View.GONE);
+        textStudentCount.setVisibility(View.GONE);
+    }
+
+    public void setExtendedView() {
+        textTeacherName.setVisibility(View.VISIBLE);
+        textDepartmentName.setVisibility(View.VISIBLE);
+        textStudentCount.setVisibility(View.VISIBLE);
     }
 }

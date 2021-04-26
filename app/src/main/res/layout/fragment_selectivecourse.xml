@@ -46,6 +46,16 @@
                 android:textSize="20sp" />
 
             <TextView
+                android:id="@+id/departmentName"
+                android:layout_width="326dp"
+                android:layout_height="wrap_content"
+                android:gravity="top"
+                android:textAlignment="gravity"
+                android:textColor="@color/gray"
+                android:textSize="15sp"
+                android:textStyle="italic" />
+
+            <TextView
                 android:id="@+id/teacherName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -65,6 +75,22 @@
                 android:visibility="gone" />
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/studentCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/badge_round"
+            android:gravity="center"
+            android:text="115"
+            android:textColor="#FFF"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.95"
+            app:layout_constraintVertical_bias="0.1"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <ImageView
             android:id="@+id/selectivecourseinfo"

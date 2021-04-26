@@ -13,10 +13,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ua.edu.deanoffice.mobile.studentchdtu.R;
-import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.SemesterFragment;
-import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.SelectiveCourseFragment;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourse;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourses;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.SelectiveCourseFragment;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.SemesterFragment;
 
 public class ChdtuAdapter extends RecyclerView.Adapter<ChdtuAdapter.ViewHolder> implements View.OnClickListener {
 
@@ -60,6 +60,27 @@ public class ChdtuAdapter extends RecyclerView.Adapter<ChdtuAdapter.ViewHolder> 
     public ChdtuAdapter(SelectiveCourses selectiveCourses, FragmentManager supportFragmentManager, TextView selectiveCoursesCounter, boolean disableCheckBoxes, boolean forMagister) {
         initAdapter(selectiveCourses, supportFragmentManager, selectiveCoursesCounter, disableCheckBoxes);
         initMaxCourses(forMagister);
+    }
+
+    public void setExtendedView() {
+
+        for (SelectiveCourseFragment fragment: selectiveCourseFragmentsFirstSemester) {
+            fragment.setExtendedView();
+        }
+
+        for (SelectiveCourseFragment fragment: selectiveCourseFragmentsSecondSemester) {
+            fragment.setExtendedView();
+        }
+    }
+
+    public void setShortView() {
+        for (SelectiveCourseFragment fragment: selectiveCourseFragmentsFirstSemester) {
+            fragment.setShortView();
+        }
+
+        for (SelectiveCourseFragment fragment: selectiveCourseFragmentsSecondSemester) {
+            fragment.setShortView();
+        }
     }
 
     public boolean hasGeneralAndProfessional() {
