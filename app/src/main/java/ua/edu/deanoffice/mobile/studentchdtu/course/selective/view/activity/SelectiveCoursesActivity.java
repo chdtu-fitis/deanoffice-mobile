@@ -106,7 +106,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         int degreesId = App.getInstance().getCurrentStudent().getDegrees()[0].getId();
         App.getInstance().getClient()
                 .createRequest(SelectiveCourseRequests.class)
-                .requestSelectiveCourses(jwtToken, degreesId)
+                .requestSelectiveCourses(jwtToken, degreesId, true)
                 .enqueue(new Callback<SelectiveCourses>() {
                     @Override
                     public void onResponse(@NonNull Call<SelectiveCourses> call, @NonNull Response<SelectiveCourses> response) {
