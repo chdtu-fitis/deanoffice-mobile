@@ -7,6 +7,7 @@
     <color name="white">#FFFFFF</color>
     <color name="gray">#333333</color>
     <color name="gray2">#4f4f4f</color>
+    <color name="light_gray">#757575</color>
     <color name="chdtu_value1">#88BCF2</color>
     <color name="chdtu_value2">#2D7ED3</color>
     <color name="act_background">#F1F7FE</color>

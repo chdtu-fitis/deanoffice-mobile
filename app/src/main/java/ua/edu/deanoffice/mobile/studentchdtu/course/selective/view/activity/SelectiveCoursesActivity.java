@@ -50,7 +50,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
     }
 
     private void loadStudentSelectedCourses() {
-        showLoadingDialog();
+        showLoadingProgress();
 
         String jwtToken = App.getInstance().getJwt().getToken();
         int degreesId = App.getInstance().getCurrentStudent().getDegrees()[0].getId();
@@ -60,7 +60,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
                 .enqueue(new Callback<SelectiveCoursesStudentDegree>() {
                     @Override
                     public void onResponse(@NonNull Call<SelectiveCoursesStudentDegree> call, @NonNull Response<SelectiveCoursesStudentDegree> response) {
-                        hideLoadingDialog();
+                        hideLoadingProgress();
 
                         if (response.isSuccessful()) {
                             SelectiveCoursesStudentDegree selectiveCoursesStudentDegree = response.body();
@@ -93,14 +93,14 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
 
                     @Override
                     public void onFailure(@NonNull Call<SelectiveCoursesStudentDegree> call, @NonNull Throwable t) {
-                        hideLoadingDialog();
+                        hideLoadingProgress();
                         error("Помилка під час підключення до серверу, спробуйте пізніше.");
                     }
                 });
     }
 
     private void loadAvailableSelectiveCourses() {
-        showLoadingDialog();
+        showLoadingProgress();
 
         String jwtToken = App.getInstance().getJwt().getToken();
         int degreesId = App.getInstance().getCurrentStudent().getDegrees()[0].getId();
@@ -110,7 +110,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
                 .enqueue(new Callback<SelectiveCourses>() {
                     @Override
                     public void onResponse(@NonNull Call<SelectiveCourses> call, @NonNull Response<SelectiveCourses> response) {
-                        hideLoadingDialog();
+                        hideLoadingProgress();
                         if (response.isSuccessful()) {
                             selectAndShowFragment(response.body(), false);
                         }
@@ -118,7 +118,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
 
                     @Override
                     public void onFailure(@NonNull Call<SelectiveCourses> call, @NonNull Throwable t) {
-                        hideLoadingDialog();
+                        hideLoadingProgress();
                     }
                 });
     }

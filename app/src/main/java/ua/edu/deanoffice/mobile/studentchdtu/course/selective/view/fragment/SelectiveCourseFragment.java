@@ -21,7 +21,7 @@ import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.Teacher;
 public class SelectiveCourseFragment extends Fragment {
 
     private final int layout;
-    private SelectiveCourse selectiveCourse;
+    private final SelectiveCourse selectiveCourse;
     private CheckBox checkBox;
     private ImageView imageInfo;
     private Button btnCheckBox;
@@ -32,12 +32,16 @@ public class SelectiveCourseFragment extends Fragment {
     private TextView textDepartmentName;
     private TextView textStudentCount;
     private TextView disqualifiedLabel;
+    private boolean selectedFromFirstRound = false;
 
     public SelectiveCourse getSelectiveCourse() {
         return selectiveCourse;
     }
 
     public void setCheckBoxInteractive(boolean interactive) {
+        if (selectedFromFirstRound) {
+            interactive = false;
+        }
         checkBox.setClickable(interactive);
         btnCheckBox.setClickable(interactive);
     }
@@ -47,6 +51,7 @@ public class SelectiveCourseFragment extends Fragment {
     }
 
     public void setChecked(boolean checked) {
+        if (selectedFromFirstRound) return;
         checkBox.setChecked(checked);
         selectiveCourse.selected = checked;
     }
@@ -57,6 +62,10 @@ public class SelectiveCourseFragment extends Fragment {
         this.listener = listener;
         this.interactive = interactive;
         this.showTrainingCycle = showTrainingCycle;
+
+        if (selectiveCourse.selected) {
+            selectedFromFirstRound = true;
+        }
     }
 
     @Override
@@ -87,17 +96,17 @@ public class SelectiveCourseFragment extends Fragment {
         }
 
         textTeacherName = (TextView) view.findViewById(R.id.teacherName);
-        if(selectiveCourse.getTeacher() != null) {
+        if (selectiveCourse.getTeacher() != null) {
             textTeacherName.setText(selectiveCourse.getTeacher().getSurname() + " " + selectiveCourse.getTeacher().getName() + " " + selectiveCourse.getTeacher().getPatronimic());
         } else {
-            ((LinearLayout)view.findViewById(R.id.textlayout)).removeView(textTeacherName);
+            ((LinearLayout) view.findViewById(R.id.textlayout)).removeView(textTeacherName);
         }
 
         textDepartmentName = (TextView) view.findViewById(R.id.departmentName);
 
         if (selectiveCourse.getDepartment() != null) {
             String facultyName = selectiveCourse.getDepartment().getFaculty().getAbbr();
-            textDepartmentName.setText(facultyName+", "+selectiveCourse.getDepartment().getName());
+            textDepartmentName.setText(facultyName + ", " + selectiveCourse.getDepartment().getName());
         }
 
         textStudentCount = (TextView) view.findViewById(R.id.studentCount);
@@ -113,17 +122,17 @@ public class SelectiveCourseFragment extends Fragment {
             ((TextView) dialogView.findViewById(R.id.selectiveCourseName)).setText(selectiveCourse.getCourse().getCourseName().getName());
             ((TextView) dialogView.findViewById(R.id.selectiveCourseFaculty)).setText(selectiveCourse.getDepartment().getFaculty().getName());
             ((TextView) dialogView.findViewById(R.id.selectiveCourseDepartment)).setText(selectiveCourse.getDepartment().getName());
-            ((TextView) dialogView.findViewById(R.id.selectiveCourseStudentCount)).setText("Кількість записаних студентів: "+selectiveCourse.getStudentsCount());
+            ((TextView) dialogView.findViewById(R.id.selectiveCourseStudentCount)).setText("Кількість записаних студентів: " + selectiveCourse.getStudentsCount());
             Teacher teacher = selectiveCourse.getTeacher();
             String teacherFullName = teacher.getSurname() + " " + teacher.getName() + " " + teacher.getPatronimic();
-            ((TextView) dialogView.findViewById(R.id.selectiveCourseTeacher)).setText(teacherFullName +" ("+teacher.getPosition().getName()+")");
+            ((TextView) dialogView.findViewById(R.id.selectiveCourseTeacher)).setText(teacherFullName + " (" + teacher.getPosition().getName() + ")");
 
             ((TextView) dialogView.findViewById(R.id.selectiveCourseDescription)).setText(selectiveCourse.getDescription());
             builder.setView(dialogView);
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
 
-            ((Button) dialogView.findViewById(R.id.buttonOk)).setOnClickListener((viewOk) -> {
+            dialogView.findViewById(R.id.buttonOk).setOnClickListener((viewOk) -> {
                 alertDialog.dismiss();
             });
         });

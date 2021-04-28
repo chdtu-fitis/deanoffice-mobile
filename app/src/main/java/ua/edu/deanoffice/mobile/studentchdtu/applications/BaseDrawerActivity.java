@@ -61,7 +61,7 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
                 R.string.close_drawer);
         navigationView = findViewById(R.id.nav_view);
 
-        showLoadingDialog();
+        showLoadingProgress();
 
         App.getInstance().getClient().createRequest(ProfileRequests.class)
                 .requestStudentInfo(App.getInstance().getJwt().getToken()).enqueue(new Callback<Student>() {
@@ -80,12 +80,12 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
                         finish();
                     }
                 }
-                hideLoadingDialog();
+                hideLoadingProgress();
             }
 
             @Override
             public void onFailure(@NonNull Call<Student> call, @NonNull Throwable t) {
-                hideLoadingDialog();
+                hideLoadingProgress();
                 Intent intent = new Intent(BaseDrawerActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
@@ -133,7 +133,7 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
         BaseDrawerActivity.selectedMenuItemId = selectedMenuItemId;
     }
 
-    protected void showLoadingDialog() {
+    public void showLoadingProgress() {
         if (progressDialog == null) {
             progressDialog = new ProgressDialog(this);
             progressDialog.setMessage("Завантаження");
@@ -142,7 +142,7 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
         }
     }
 
-    protected void hideLoadingDialog() {
+    public void hideLoadingProgress() {
         if (progressDialog != null) {
             progressDialog.dismiss();
             progressDialog = null;
