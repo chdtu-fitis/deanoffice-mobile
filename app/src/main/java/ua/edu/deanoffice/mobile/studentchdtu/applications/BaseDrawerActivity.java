@@ -6,12 +6,15 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -174,5 +177,26 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
 
     protected String getRString(int resource) {
         return getResources().getString(resource);
+    }
+
+    public void showError(String msg) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        ViewGroup viewGroup = findViewById(android.R.id.content);
+        View dialogView = LayoutInflater.from(this)
+                .inflate(R.layout.dialog_selectivecourse_info, viewGroup, false);
+
+        TextView titleText = dialogView.findViewById(R.id.selectiveCourseName);
+        TextView bodyText = dialogView.findViewById(R.id.selectiveCourseDescription);
+
+        titleText.setText(getRString(R.string.error_msg_title));
+        bodyText.setText(msg);
+        builder.setView(dialogView);
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+        dialogView.findViewById(R.id.buttonOk).setOnClickListener((viewOk) -> {
+            alertDialog.dismiss();
+        });
     }
 }

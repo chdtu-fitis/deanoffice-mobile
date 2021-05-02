@@ -9,10 +9,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,25 +22,20 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
-import ua.edu.deanoffice.mobile.studentchdtu.course.selective.DeadLineTimer;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.ConfirmedSelectiveCourses;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.ExistingId;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourse;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourses;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCoursesSelectionTimeParameters;
-import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCoursesStudentDegree;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.StudentDegreeSelectiveCoursesIds;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.service.SelectiveCourseRequests;
-import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.ChdtuAdapter;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.SelectiveCoursesAdapter;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.activity.SelectiveCoursesActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
 
-public class SelectiveCoursesSecondRoundFragment extends Fragment {
-    private static final String LOG_TAG = "SelectiveCoursesSecondRoundFragment";
-
+public class SelectiveCoursesSecondRoundFragment extends BaseSelectiveCoursesFragment {
     private TextView textSelectiveCoursesCounter;
-    private SelectiveCourses availableSelectiveCourses, selectedSelectiveCourses;
+    private final SelectiveCourses availableSelectiveCourses, selectedSelectiveCourses;
 
     public SelectiveCoursesSecondRoundFragment() {
         this(null, null);
@@ -56,22 +47,24 @@ public class SelectiveCoursesSecondRoundFragment extends Fragment {
         this.selectedSelectiveCourses = selectedSelectiveCourses;
     }
 
+    public SelectiveCoursesSecondRoundFragment(SelectiveCourses availableCourses) {
+        this(availableCourses, null);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_selective_courses_second_round, container, false);
-
         textSelectiveCoursesCounter = view.findViewById(R.id.text_body);
-
         return view;
     }
 
     @Override
     public void onViewCreated(@NonNull final View view, final Bundle savedInstanceState) {
-        //Load data
-        loadSelectedSelectiveCourses();
+        fillSelectiveCoursesList();
     }
 
+/*
     public void loadSelectedSelectiveCourses() {
         App.getInstance()
                 .getClient()
@@ -168,18 +161,20 @@ public class SelectiveCoursesSecondRoundFragment extends Fragment {
                     }
                 });
     }
+*/
 
-    private void fillSelectiveCoursesList(SelectiveCourses selectiveCourses) {
+    private void fillSelectiveCoursesList() {
         if (getView() == null) return;
+        SelectiveCourses showingSelectiveCourses = null;
 
-        availableSelectiveCourses = selectiveCourses;
-
-        SelectiveCourses showingSelectiveCourses = uniteAvailableAndSelectedCourses(availableSelectiveCourses, selectedSelectiveCourses);
-        SelectiveCoursesSelectionTimeParameters timeParameters = showingSelectiveCourses.getSelectiveCoursesSelectionTimeParameters();
-
-        long leftTimeToEnd = timeParameters.getTimeLeftUntilCurrentRoundEnd();
-        initDeadlineTimer(leftTimeToEnd);
-        initStudyYears(timeParameters.getStudyYear());
+        if (selectedSelectiveCourses == null) {
+            showingSelectiveCourses = availableSelectiveCourses;
+        } else if (availableSelectiveCourses != null) {
+            showingSelectiveCourses = uniteAvailableAndSelectedCourses(availableSelectiveCourses, selectedSelectiveCourses);
+        }
+        if (showingSelectiveCourses == null) {
+            return;
+        }
 
         RecyclerView recyclerView = getView().findViewById(R.id.listview);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
@@ -215,7 +210,7 @@ public class SelectiveCoursesSecondRoundFragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
         clearButton.setOnClickListener((button) -> adapter.clearSelected());
-        confirmButton.setOnClickListener((view) -> {
+        confirmButton.setOnClickListener((button) -> {
             if (adapter.getSelectedCourseFirstSemester().size() == adapter.getMaxCoursesFirstSemester() &&
                     adapter.getSelectedCourseSecondSemester().size() == adapter.getMaxCoursesSecondSemester()) {
 
@@ -223,7 +218,7 @@ public class SelectiveCoursesSecondRoundFragment extends Fragment {
                 confirmButton.setText(getRString(R.string.button_confirm));
                 clearButton.setText(getRString(R.string.button_cancel));
 
-                clearButton.setOnClickListener((button) -> {
+                clearButton.setOnClickListener((v) -> {
                     Intent intent = new Intent(getContext(), SelectiveCoursesActivity.class);
                     startActivity(intent);
                     getActivity().finish();
@@ -233,15 +228,13 @@ public class SelectiveCoursesSecondRoundFragment extends Fragment {
                 selectiveCoursesFinal.setSelectiveCoursesFirstSemester(adapter.getSelectedCourseFirstSemester());
                 selectiveCoursesFinal.setSelectiveCoursesSecondSemester(adapter.getSelectedCourseSecondSemester());
 
-                ChdtuAdapter adapterFinal = new ChdtuAdapter(selectiveCoursesFinal, getFragmentManager(), null, false);
+                SelectiveCoursesAdapter adapterFinal = new SelectiveCoursesAdapter(selectiveCoursesFinal, getFragmentManager());
                 recyclerView.setAdapter(adapterFinal);
                 adapterFinal.disableCheckBoxes();
 
-                confirmButton.setOnClickListener((viewConfirm) -> {
-                    saveUserChose(selectiveCoursesFinal);
-                });
+                confirmButton.setOnClickListener((viewConfirm) -> saveUserChose(selectiveCoursesFinal));
             } else {
-                Snackbar.make(view.findViewById(android.R.id.content), getRString(R.string.worn_select_courses), Snackbar.LENGTH_LONG)
+                Snackbar.make(button.findViewById(android.R.id.content), getRString(R.string.worn_select_courses), Snackbar.LENGTH_LONG)
                         .setAction("No action", null).show();
             }
         });
@@ -282,7 +275,7 @@ public class SelectiveCoursesSecondRoundFragment extends Fragment {
             boolean elementIncluded = false;
             for (SelectiveCourse availableCourse : availableSelectiveCourseList) {
                 if (selectedCourse.getId() == availableCourse.getId()) {
-                    availableCourse.selected = true;
+                    availableCourse.setSelected(true);
                     elementIncluded = true;
                     break;
                 }
@@ -293,16 +286,6 @@ public class SelectiveCoursesSecondRoundFragment extends Fragment {
         }
 
         return resultCoursesList;
-    }
-
-    private void disableButton(View button) {
-        button.setAlpha(0.5f);
-        button.setEnabled(false);
-    }
-
-    private void enableButton(View button) {
-        button.setAlpha(1f);
-        button.setEnabled(true);
     }
 
     private void saveUserChose(SelectiveCourses selectiveCourses) {
@@ -325,13 +308,13 @@ public class SelectiveCoursesSecondRoundFragment extends Fragment {
                 }
             }
             confirmedSelectiveCourses.setSelectiveCourses(newSelectedCourses);
-        }else{
+        } else {
             confirmedSelectiveCourses.setSelectiveCourses(selectiveCourses.getSelectiveCoursesIds());
         }
 
         int degreesId = App.getInstance().getCurrentStudent().getDegrees()[0].getId();
         ExistingId existingId = new ExistingId(degreesId);
-        confirmedSelectiveCourses.setStudentDegreeId(existingId);
+        confirmedSelectiveCourses.setStudentDegree(existingId);
 
         App.getInstance().getClient().createRequest(SelectiveCourseRequests.class).confirmedSelectiveCourses(
                 App.getInstance().getJwt().getToken(), confirmedSelectiveCourses).enqueue(new Callback<StudentDegreeSelectiveCoursesIds>() {
@@ -367,73 +350,5 @@ public class SelectiveCoursesSecondRoundFragment extends Fragment {
                 showError(getRString(R.string.error_connection_failed));
             }
         });
-    }
-
-    private void initDeadlineTimer(long time) {
-        View view = getView();
-        if (view != null) {
-            DeadLineTimer deadLineTimer = new DeadLineTimer(getContext());
-            String message = getRString(R.string.dlt_to_reg_finish);
-            message = message.replace("{left_time}", deadLineTimer.deadLine(time));
-
-            TextView textLeftTimeToEnd = getView().findViewById(R.id.textLeftTimeToEnd);
-            textLeftTimeToEnd.setText(message);
-        }
-    }
-
-    private void initStudyYears(int studyYear) {
-        View view = getView();
-        if (view != null) {
-            String message = getRString(R.string.header_study_years);
-            message = message.replace("{study_year_begin}", studyYear + "");
-            message = message.replace("{study_year_end}", (studyYear + 1) + "");
-
-            TextView textStudyYears = getView().findViewById(R.id.textStudyYear);
-            textStudyYears.setText(message);
-        }
-    }
-
-    private String getRString(int stringResource) {
-        if (getContext() != null) {
-            return getContext().getResources().getString(stringResource);
-        }
-        return "";
-    }
-
-    public void showError(String msg) {
-        if (getView() != null && getContext() != null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            ViewGroup viewGroup = getView().findViewById(android.R.id.content);
-            View dialogView = LayoutInflater.from(getContext())
-                    .inflate(R.layout.dialog_selectivecourse_info, viewGroup, false);
-
-            TextView titleText = dialogView.findViewById(R.id.selectiveCourseName);
-            TextView bodyText = dialogView.findViewById(R.id.selectiveCourseDescription);
-
-            titleText.setText(getRString(R.string.error_msg_title));
-            bodyText.setText(msg);
-            builder.setView(dialogView);
-
-            AlertDialog alertDialog = builder.create();
-            alertDialog.show();
-
-            dialogView.findViewById(R.id.buttonOk).setOnClickListener((viewOk) -> {
-                alertDialog.dismiss();
-            });
-        }
-    }
-
-    private void showLoadingProgress() {
-        FragmentActivity activity = getActivity();
-        if (activity != null) {
-            ((SelectiveCoursesActivity) activity).showLoadingProgress();
-        }
-    }
-
-    private void hideLoadingProgress() {
-        FragmentActivity activity = getActivity();
-        if (activity != null) {
-            ((SelectiveCoursesActivity) activity).hideLoadingProgress();
-        }
     }
 }

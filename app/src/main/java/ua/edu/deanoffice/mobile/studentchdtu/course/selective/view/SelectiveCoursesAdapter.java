@@ -57,8 +57,9 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         return studentDegree.getMaxCoursesSecondSemester();
     }
 
-    public SelectiveCoursesAdapter(SelectiveCourses selectiveCourses, FragmentManager supportFragmentManager, TextView selectiveCoursesCounter, boolean disableCheckBoxes) {
-        this(selectiveCourses, supportFragmentManager, selectiveCoursesCounter, disableCheckBoxes, false);
+    public SelectiveCoursesAdapter(SelectiveCourses selectiveCourses, FragmentManager supportFragmentManager) {
+        initAdapter(selectiveCourses, supportFragmentManager, selectiveCoursesCounter, false);
+        initMaxCourses(false);
     }
 
     public SelectiveCoursesAdapter(SelectiveCourses selectiveCourses, FragmentManager supportFragmentManager, TextView selectiveCoursesCounter, boolean disableCheckBoxes, boolean forMagister) {

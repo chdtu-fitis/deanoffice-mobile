@@ -1,14 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
     tools:context=".course.selective.view.activity.SelectiveCoursesActivity">
 
+    <LinearLayout
+        android:id="@+id/containerHeaders"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textStudyYears"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="Вибір предметів на 2021-2022 н. р."
+            android:textAlignment="center"
+            android:textColor="@color/gray"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textLeftTimeToEndRound"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="До кінця залишилось ще трохи"
+            android:textAlignment="center"
+            android:textColor="@color/gray"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textSelectedCoursesCounter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:text="2 в 1 семестрі (0/2) 3 в 2 семестрі (0/3)"
+            android:textAlignment="center"
+            android:textColor="@color/gray2"
+            android:textSize="19sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
     <FrameLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/containerHeaders" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
