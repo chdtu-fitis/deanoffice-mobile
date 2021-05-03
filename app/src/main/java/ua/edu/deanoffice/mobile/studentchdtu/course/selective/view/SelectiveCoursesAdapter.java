@@ -22,36 +22,6 @@ import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.Sele
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.SemesterFragment;
 
 public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCoursesAdapter.ViewHolder> implements SelectiveCourseFragment.OnClickListener {
-    @Override
-    public boolean onClick(Object obj) {
-        SelectiveCourseFragment fragment = (SelectiveCourseFragment) obj;
-
-        SelectiveCourse course = fragment.getSelectiveCourse();
-        int courseSemester = course.getCourse().getSemester();
-        boolean isSuccess;
-        if (courseSemester % 2 != 0) {
-            isSuccess = addOrRemoveToSelectedList(course, selectedCourseFirstSemester, selectedCoursesCounter.isFirstSemesterFull());
-        } else {
-            isSuccess = addOrRemoveToSelectedList(course, selectedCourseSecondSemester, selectedCoursesCounter.isSecondSemesterFull());
-        }
-
-        selectedCoursesCounter.setSelectedFirstSemester(selectedCourseFirstSemester.size());
-        selectedCoursesCounter.setSelectedSecondSemester(selectedCourseSecondSemester.size());
-
-        return isSuccess;
-    }
-
-    private boolean addOrRemoveToSelectedList(SelectiveCourse course, List<SelectiveCourse> list, boolean listIsFull) {
-        if (!course.isSelected()) {
-            if (!listIsFull) {
-                list.add(course);
-                return true;
-            }
-        } else {
-            return list.remove(course);
-        }
-        return false;
-    }
 
     // 1 - bak
     // 3 - magistr
@@ -75,15 +45,6 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
 
     private boolean interactive;
     private final boolean showTrainingCycle;
-/*    private StudentDegree studentDegree;
-
-    public int getMaxCoursesFirstSemester() {
-        return studentDegree.getMaxCoursesFirstSemester();
-    }
-
-    public int getMaxCoursesSecondSemester() {
-        return studentDegree.getMaxCoursesSecondSemester();
-    }*/
 
     public SelectiveCoursesAdapter(SelectiveCourses selectiveCourses, FragmentManager fragmentManager) {
         this(selectiveCourses, fragmentManager, null, false);
@@ -117,23 +78,6 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         showTrainingCycle = hasGeneralAndProfessional();
     }
 
-    /*
-        public SelectiveCoursesAdapter(SelectedCoursesCounter selectedCoursesCounter, SelectiveCourses selectiveCourses, FragmentManager supportFragmentManager) {
-            initAdapter(selectiveCourses, supportFragmentManager, selectedCoursesCounter, false);
-            initMaxCourses(false);
-        }
-
-
-        public SelectiveCoursesAdapter(SelectedCoursesCounter selectedCoursesCounter, FragmentManager supportFragmentManager) {
-            this(selectiveCourses, supportFragmentManager, selectedCoursesCounter, false);
-            initMaxCourses(false);
-        }
-
-        public SelectiveCoursesAdapter(FragmentManager supportFragmentManager, SelectedCoursesCounter selectedCoursesCounter, boolean disableCheckBoxes) {
-            initAdapter(selectiveCourses, supportFragmentManager, selectedCoursesCounter, disableCheckBoxes);
-            initMaxCourses(forMagister);
-        }
-    */
     public boolean hasGeneralAndProfessional() {
         boolean hasGeneral = false;
         boolean hasProfessional = false;
@@ -158,22 +102,6 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         return hasFirstSemester && (hasGeneral && hasProfessional);
     }
 
-/*
-    public void initMaxCourses(boolean master) {
-        if (master) {
-            studentDegree = StudentDegree.Master;
-        } else {
-            studentDegree = StudentDegree.Bachelor;
-        }
-
-        if (selectiveCoursesCounter != null) {
-            selectiveCoursesCounter.setText(studentDegree.getMaxCoursesFirstSemester() +
-                    " в 1 семестрі (" + selectedCourseFirstSemester.size() + "/" + studentDegree.getMaxCoursesFirstSemester() + ")" + ", " + studentDegree.getMaxCoursesSecondSemester() +
-                    " в 2 семестрі(" + selectedCourseSecondSemester.size() + "/" + studentDegree.getMaxCoursesSecondSemester() + ")");
-        }
-    }
-*/
-
     @NonNull
     @Override
     public SelectiveCoursesAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -183,10 +111,8 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         // create ViewHolder
         RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         itemLayoutView.setLayoutParams(lp);
-        ViewHolder viewHolder = new ViewHolder(itemLayoutView);
-        //itemLayoutView.setOnClickListener(this);
 
-        return viewHolder;
+        return new ViewHolder(itemLayoutView);
     }
 
     @Override
@@ -228,6 +154,37 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
             frag.setCheckBoxInteractive(false);
         }
         interactive = false;
+    }
+
+    @Override
+    public boolean onClick(Object obj) {
+        SelectiveCourseFragment fragment = (SelectiveCourseFragment) obj;
+
+        SelectiveCourse course = fragment.getSelectiveCourse();
+        int courseSemester = course.getCourse().getSemester();
+        boolean isSuccess;
+        if (courseSemester % 2 != 0) {
+            isSuccess = addOrRemoveToSelectedList(course, selectedCourseFirstSemester, selectedCoursesCounter.isFirstSemesterFull());
+        } else {
+            isSuccess = addOrRemoveToSelectedList(course, selectedCourseSecondSemester, selectedCoursesCounter.isSecondSemesterFull());
+        }
+
+        selectedCoursesCounter.setSelectedFirstSemester(selectedCourseFirstSemester.size());
+        selectedCoursesCounter.setSelectedSecondSemester(selectedCourseSecondSemester.size());
+
+        return isSuccess;
+    }
+
+    private boolean addOrRemoveToSelectedList(SelectiveCourse course, List<SelectiveCourse> list, boolean listIsFull) {
+        if (!course.isSelected()) {
+            if (!listIsFull) {
+                list.add(course);
+                return true;
+            }
+        } else {
+            return list.remove(course);
+        }
+        return false;
     }
 
   /*  @Override

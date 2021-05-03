@@ -3,22 +3,19 @@ package ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.activity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Getter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -33,6 +30,7 @@ import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCou
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.enums.CourseSelectionPeriod;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.service.SelectiveCourseRequests;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.StudentDegree;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.BaseSelectiveCoursesFragment;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.InformationFragment;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.SelectiveCoursesConfirmedFragment;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.SelectiveCoursesFragment;
@@ -40,10 +38,11 @@ import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.Sele
 import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
 
 public class SelectiveCoursesActivity extends BaseDrawerActivity {
-
-    private View containerHeaders;
+    private View containerHeaders, sortPanel;
     private SelectedCoursesCounter selectedCoursesCounter;
     private SelectiveCourses selectedCourses, availableCourses;
+    private TextView sortLabel;
+    private BaseSelectiveCoursesFragment currentSelectedFragment = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +54,49 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         mainContentBlock.addView(contentView, 1);
         containerHeaders = findViewById(R.id.containerHeaders);
         containerHeaders.setVisibility(View.GONE);
+
+        @SuppressLint("UseSwitchCompatOrMaterialCode")
+        Switch btnExtendedView = findViewById(R.id.switchExtendedView);
+        btnExtendedView.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (currentSelectedFragment != null) {
+                if (isChecked) {
+                    currentSelectedFragment.setExtendSelectiveCourseFragment(true);
+                    setSortPanelVisible(View.VISIBLE);
+                } else {
+                    currentSelectedFragment.setExtendSelectiveCourseFragment(false);
+                    setSortPanelVisible(View.GONE);
+                }
+            }
+        });
+
+        //Init Sorting Buttons
+        TextView btnSortByName = findViewById(R.id.sortByCourse);
+        TextView btnSortByFaculty = findViewById(R.id.sortByFaculty);
+        TextView btnSortByStudentCount = findViewById(R.id.sortByStudentCount);
+
+        btnSortByFaculty.setOnClickListener(v -> {
+            if (currentSelectedFragment != null) {
+                currentSelectedFragment.sort(SelectiveCourse.ByFacultyName);
+            }
+            setSortLabel(getRString(R.string.label_sort_by_faculty));
+        });
+
+        btnSortByName.setOnClickListener(v -> {
+            if (currentSelectedFragment != null) {
+                currentSelectedFragment.sort(SelectiveCourse.ByCourseName);
+            }
+            setSortLabel(getRString(R.string.label_sort_by_name));
+        });
+
+        btnSortByStudentCount.setOnClickListener(v -> {
+            if (currentSelectedFragment != null) {
+                currentSelectedFragment.sort(SelectiveCourse.ByStudentCount);
+            }
+            setSortLabel(getRString(R.string.label_sort_by_students_count));
+        });
+
+        sortLabel = findViewById(R.id.sortLabel);
+        sortPanel = findViewById(R.id.sortPanel);
 
         getSupportActionBar().setTitle(getRString(R.string.action_bar_title_selective_courses));
 
@@ -178,8 +220,14 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         }
 
         FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment activeStateFragment = activeState.getFragment();
+
+        if(activeState.isSelectionFragment){
+            currentSelectedFragment = (BaseSelectiveCoursesFragment) activeStateFragment;
+        }
+
         fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, activeState.getFragment())
+                .replace(R.id.fragment_container, activeStateFragment)
                 .commit();
     }
 
@@ -191,6 +239,8 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         protected long time;
         protected final boolean availableListIsNull, selectedListIsNull;
         protected final Context context;
+        @Getter
+        protected boolean isSelectionFragment = false;
 
         public ActiveState(Context context, long time, boolean availableListIsNull, boolean selectedListIsNull) {
             this.context = context;
@@ -226,6 +276,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
     class FirstRound extends ActiveState {
         public FirstRound(boolean availableListIsNull, boolean selectedListIsNull) {
             super(null, 0, availableListIsNull, selectedListIsNull);
+            isSelectionFragment = true;
         }
 
         @Override
@@ -275,6 +326,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
     class SecondRound extends ActiveState {
         public SecondRound(boolean availableListIsNull, boolean selectedListIsNull) {
             super(null, 0, availableListIsNull, selectedListIsNull);
+            isSelectionFragment = true;
         }
 
         @Override
@@ -355,6 +407,33 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
     /*
      *   StateMachine Classes End
      */
+
+    protected void setSortLabel(String attribute) {
+        String sortedBy = getRString(R.string.info_sorted_by_attribute);
+        sortedBy = sortedBy.replace("{attribute}", attribute);
+        sortLabel.setText(sortedBy);
+    }
+
+    protected void setSortPanelVisible(int visibility) {
+        sortLabel.setVisibility(visibility);
+        sortPanel.setVisibility(visibility);
+    }
+
+    public void showConfirmHeaders() {
+        View containerConfirmHeaders = findViewById(R.id.containerForConfirmHeaders);
+        View containerSelectionHeaders = findViewById(R.id.containerForSelectionHeaders);
+
+        containerConfirmHeaders.setVisibility(View.VISIBLE);
+        containerSelectionHeaders.setVisibility(View.GONE);
+    }
+
+    public void showSelectionHeaders() {
+        View containerConfirmHeaders = findViewById(R.id.containerForConfirmHeaders);
+        View containerSelectionHeaders = findViewById(R.id.containerForSelectionHeaders);
+
+        containerConfirmHeaders.setVisibility(View.GONE);
+        containerSelectionHeaders.setVisibility(View.VISIBLE);
+    }
 
     private void headerInit(SelectiveCoursesSelectionTimeParameters timeParams) {
         TextView studyYearsTV = findViewById(R.id.textStudyYears);

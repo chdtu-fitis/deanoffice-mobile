@@ -15,10 +15,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourses;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.ChdtuAdapter;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.SelectiveCoursesAdapter;
 
 public class SelectiveCoursesConfirmedFragment extends Fragment {
 
-    private SelectiveCourses selectiveCourses;
+    private final SelectiveCourses selectiveCourses;
 
     public SelectiveCoursesConfirmedFragment(SelectiveCourses selectiveCourses) {
         this.selectiveCourses = selectiveCourses;
@@ -37,7 +38,7 @@ public class SelectiveCoursesConfirmedFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        ChdtuAdapter adapter = new ChdtuAdapter(selectiveCourses, getFragmentManager(), null, true);
+        SelectiveCoursesAdapter adapter = new SelectiveCoursesAdapter(selectiveCourses, getFragmentManager(), null, true);
         recyclerView.setAdapter(adapter);
         adapter.disableCheckBoxes();
 

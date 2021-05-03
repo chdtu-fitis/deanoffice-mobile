@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourses;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.ChdtuAdapter;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.SelectiveCoursesAdapter;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.activity.MainMenuActivity;
 
 public class SelectiveCoursesConfirmed extends AppCompatActivity {
@@ -28,7 +29,7 @@ public class SelectiveCoursesConfirmed extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        ChdtuAdapter adapter = new ChdtuAdapter(selectiveCourses, getSupportFragmentManager(), null, true);
+        SelectiveCoursesAdapter adapter = new SelectiveCoursesAdapter(selectiveCourses, getSupportFragmentManager(), null, true);
         recyclerView.setAdapter(adapter);
         adapter.disableCheckBoxes();
         Button selectiveCoursesButton = findViewById(R.id.menu_selectivecourses);
