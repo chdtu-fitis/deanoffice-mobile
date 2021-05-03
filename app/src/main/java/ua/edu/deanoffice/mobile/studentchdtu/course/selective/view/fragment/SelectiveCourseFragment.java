@@ -20,7 +20,7 @@ import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCou
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.Teacher;
 
 public class SelectiveCourseFragment extends Fragment implements View.OnClickListener {
-    public interface OnClickListener{
+    public interface OnClickListener {
         boolean onClick(Object obj);
     }
 
@@ -30,10 +30,9 @@ public class SelectiveCourseFragment extends Fragment implements View.OnClickLis
     private CheckBox checkBox;
     private ImageView imageInfo;
     private Button btnCheckBox;
-    private final boolean interactive;
-    private final boolean showTrainingCycle;
+    private final boolean interactive, showTrainingCycle;
     private final OnClickListener listener;
-    private TextView textTeacherName, textDepartmentName, textStudentCount, disqualifiedLabel;
+    private TextView textTeacherName, textDepartmentName, textStudentCount;
     private boolean selectedFromFirstRound = false;
 
     public SelectiveCourseFragment(SelectiveCourse selectiveCourse, int layout, OnClickListener listener, boolean interactive, boolean showTrainingCycle) {
@@ -56,10 +55,6 @@ public class SelectiveCourseFragment extends Fragment implements View.OnClickLis
         btnCheckBox.setClickable(interactive);
     }
 
-    public boolean isChecked() {
-        return checkBox.isChecked();
-    }
-
     public void setChecked(boolean checked) {
         if (selectedFromFirstRound) return;
         checkBox.setChecked(checked);
@@ -75,7 +70,7 @@ public class SelectiveCourseFragment extends Fragment implements View.OnClickLis
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
         checkBox = view.findViewById(R.id.selectivecheckbox);
         imageInfo = view.findViewById(R.id.selectivecourseinfo);
-        disqualifiedLabel = view.findViewById(R.id.labelDisqulifiedCourse);
+        TextView disqualifiedLabel = view.findViewById(R.id.labelDisqulifiedCourse);
 
         //Make disqualified
         if (!selectiveCourse.isAvailable()) {
@@ -156,7 +151,7 @@ public class SelectiveCourseFragment extends Fragment implements View.OnClickLis
     @Override
     public void onClick(View view) {
         boolean isSuccess = listener.onClick(this);
-        if(isSuccess){
+        if (isSuccess) {
             checkBox.setChecked(!checkBox.isChecked());
             selectiveCourse.setSelected(checkBox.isChecked());
         }

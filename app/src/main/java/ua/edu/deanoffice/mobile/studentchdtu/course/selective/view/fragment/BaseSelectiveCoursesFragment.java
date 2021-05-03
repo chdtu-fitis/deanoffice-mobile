@@ -1,6 +1,7 @@
 package ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,37 +93,59 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
         SelectiveCoursesAdapter adapter = new SelectiveCoursesAdapter(showingSelectiveCourses, getFragmentManager(), selectedCoursesCounter, true);
         recyclerView.setAdapter(adapter);
 
-        clearButton.setOnClickListener((button) -> adapter.clearSelected());
-        confirmButton.setOnClickListener((button) -> {
-            if (selectedCoursesCounter.confirmIsAvailable()) {
-                showConfirmHeaders();
-                confirmButton.setText(getRString(R.string.button_confirm));
-                clearButton.setText(getRString(R.string.button_cancel));
+        clearButton.setOnClickListener((v) -> adapter.clearSelected());
+        confirmButton.setOnClickListener(this::onClickConfirmButton);
+    }
 
-                clearButton.setOnClickListener((v) -> {
-                    FragmentManager fragmentManager = getFragmentManager();
-                    if (fragmentManager != null) {
-                        SelectiveCoursesFragment selectiveCoursesFragment = new SelectiveCoursesFragment(selectedCoursesCounter, showingSelectiveCourses);
-                        fragmentManager.beginTransaction()
-                                .replace(R.id.fragment_container, selectiveCoursesFragment)
-                                .commit();
-                    }
-                });
+    protected void onClickButtonBackFromConfirmFragment(View button) {
+        //Change Headers
+        showSelectionHeaders();
 
+        //Rename Buttons
+        confirmButton.setText(getRString(R.string.button_next));
+        clearButton.setText(getRString(R.string.button_uncheck_selection));
+
+        SelectiveCoursesAdapter adapter = (SelectiveCoursesAdapter) recyclerView.getAdapter();
+        if (adapter != null) {
+            //Show hidden courses in list
+            adapter.showAllHiddenCourseFragments();
+
+            //Change ClearButton onClickListener
+            clearButton.setOnClickListener((v) -> adapter.clearSelected());
+
+            //Change ConfirmButton onClickListener
+            confirmButton.setOnClickListener(this::onClickConfirmButton);
+        }
+    }
+
+    protected void onClickConfirmButton(View button) {
+        if (selectedCoursesCounter.confirmIsAvailable()) {
+            //Change Headers
+            showConfirmHeaders();
+
+            //Rename Buttons
+            confirmButton.setText(getRString(R.string.button_confirm));
+            clearButton.setText(getRString(R.string.button_cancel));
+
+            //Change ClearButton onClickListener
+            clearButton.setOnClickListener(this::onClickButtonBackFromConfirmFragment);
+
+            SelectiveCoursesAdapter adapter = (SelectiveCoursesAdapter) recyclerView.getAdapter();
+            if (adapter != null) {
+                //Hide unchecked and disqualified courses in list
+                adapter.hideAllUncheckedCourseFragments();
+
+                //Change ConfirmButton onClickListener
                 SelectiveCourses selectiveCoursesFinal = new SelectiveCourses();
                 selectiveCoursesFinal.setSelectiveCoursesFirstSemester(adapter.getSelectedCourseFirstSemester());
                 selectiveCoursesFinal.setSelectiveCoursesSecondSemester(adapter.getSelectedCourseSecondSemester());
 
-                SelectiveCoursesAdapter adapterFinal = new SelectiveCoursesAdapter(selectiveCoursesFinal, getFragmentManager());
-                recyclerView.setAdapter(adapterFinal);
-                adapterFinal.disableCheckBoxes();
-
                 confirmButton.setOnClickListener((viewConfirm) -> saveUserChoice(selectiveCoursesFinal));
-            } else {
-                Snackbar.make(button.findViewById(android.R.id.content), getRString(R.string.worn_select_courses), Snackbar.LENGTH_LONG)
-                        .setAction("No action", null).show();
             }
-        });
+        } else {
+            Snackbar.make(button.findViewById(android.R.id.content), getRString(R.string.worn_select_courses), Snackbar.LENGTH_LONG)
+                    .setAction("No action", null).show();
+        }
     }
 
     protected void saveUserChoice(SelectiveCourses selectiveCourses) {
@@ -160,7 +183,7 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
                         } else {
                             try {
                                 ResponseBody errorBody = response.errorBody();
-                                if(errorBody != null) {
+                                if (errorBody != null) {
                                     showError(errorBody.string());
                                 }
                             } catch (IOException e) {
