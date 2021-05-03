@@ -22,6 +22,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.SelectedCoursesCounter;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.ConfirmedSelectiveCourses;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.ExistingId;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourse;
@@ -34,29 +35,25 @@ import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.activity.Sele
 import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
 
 public class SelectiveCoursesSecondRoundFragment extends BaseSelectiveCoursesFragment {
-    private TextView textSelectiveCoursesCounter;
     private final SelectiveCourses availableSelectiveCourses, selectedSelectiveCourses;
 
-    public SelectiveCoursesSecondRoundFragment() {
-        this(null, null);
-    }
-
-    public SelectiveCoursesSecondRoundFragment(SelectiveCourses availableSelectiveCourses,
+    public SelectiveCoursesSecondRoundFragment(SelectedCoursesCounter selectedCoursesCounter,
+                                               SelectiveCourses availableSelectiveCourses,
                                                SelectiveCourses selectedSelectiveCourses) {
+        super(selectedCoursesCounter);
         this.availableSelectiveCourses = availableSelectiveCourses;
         this.selectedSelectiveCourses = selectedSelectiveCourses;
     }
 
-    public SelectiveCoursesSecondRoundFragment(SelectiveCourses availableCourses) {
-        this(availableCourses, null);
+    public SelectiveCoursesSecondRoundFragment(SelectedCoursesCounter selectedCoursesCounter,
+                                               SelectiveCourses availableCourses) {
+        this(selectedCoursesCounter, availableCourses, null);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_selective_courses_second_round, container, false);
-        textSelectiveCoursesCounter = view.findViewById(R.id.text_body);
-        return view;
+        return inflater.inflate(R.layout.fragment_selective_courses_second_round, container, false);
     }
 
     @Override
@@ -180,13 +177,11 @@ public class SelectiveCoursesSecondRoundFragment extends BaseSelectiveCoursesFra
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        boolean isMagister = App.getInstance().getCurrentStudent().getDegrees()[0].getSpecialization().getDegree().getId() == 3;
-
         Button clearButton = getView().findViewById(R.id.clear_selectivecourses);
         Button confirmButton = getView().findViewById(R.id.confirm_selectivecourses);
 
-        SelectiveCoursesAdapter adapter = new SelectiveCoursesAdapter(showingSelectiveCourses, getFragmentManager(), textSelectiveCoursesCounter, true, isMagister);
-        adapter.setSelectListener(new SelectiveCoursesAdapter.SelectListener() {
+        SelectiveCoursesAdapter adapter = new SelectiveCoursesAdapter(showingSelectiveCourses, getFragmentManager(), selectedCoursesCounter, true);
+        selectedCoursesCounter.setSelectListener(new SelectedCoursesCounter.SelectListener() {
             @Override
             public void onOneSelected() {
                 enableButton(clearButton);
@@ -211,10 +206,9 @@ public class SelectiveCoursesSecondRoundFragment extends BaseSelectiveCoursesFra
 
         clearButton.setOnClickListener((button) -> adapter.clearSelected());
         confirmButton.setOnClickListener((button) -> {
-            if (adapter.getSelectedCourseFirstSemester().size() == adapter.getMaxCoursesFirstSemester() &&
-                    adapter.getSelectedCourseSecondSemester().size() == adapter.getMaxCoursesSecondSemester()) {
+            if (selectedCoursesCounter.confirmIsAvailable()) {
 
-                textSelectiveCoursesCounter.setText(getRString(R.string.info_confirm_sel_courses));
+//                textSelectiveCoursesCounter.setText(getRString(R.string.info_confirm_sel_courses)); TODO: add text view
                 confirmButton.setText(getRString(R.string.button_confirm));
                 clearButton.setText(getRString(R.string.button_cancel));
 
@@ -232,7 +226,7 @@ public class SelectiveCoursesSecondRoundFragment extends BaseSelectiveCoursesFra
                 recyclerView.setAdapter(adapterFinal);
                 adapterFinal.disableCheckBoxes();
 
-                confirmButton.setOnClickListener((viewConfirm) -> saveUserChose(selectiveCoursesFinal));
+                confirmButton.setOnClickListener((viewConfirm) -> saveUserChoice(selectiveCoursesFinal));
             } else {
                 Snackbar.make(button.findViewById(android.R.id.content), getRString(R.string.worn_select_courses), Snackbar.LENGTH_LONG)
                         .setAction("No action", null).show();
@@ -288,67 +282,68 @@ public class SelectiveCoursesSecondRoundFragment extends BaseSelectiveCoursesFra
         return resultCoursesList;
     }
 
-    private void saveUserChose(SelectiveCourses selectiveCourses) {
-        showLoadingProgress();
-
-        ConfirmedSelectiveCourses confirmedSelectiveCourses = new ConfirmedSelectiveCourses();
-
-        if (selectedSelectiveCourses != null) {
-            List<Integer> newSelectedCourses = new ArrayList<>();
-            for (Integer courseId : selectiveCourses.getSelectiveCoursesIds()) {
-                boolean elementIncluded = false;
-                for (Integer existingCourseId : selectedSelectiveCourses.getSelectiveCoursesIds()) {
-                    if (courseId.equals(existingCourseId)) {
-                        elementIncluded = true;
-                        break;
-                    }
-                }
-                if (!elementIncluded) {
-                    newSelectedCourses.add(courseId);
-                }
-            }
-            confirmedSelectiveCourses.setSelectiveCourses(newSelectedCourses);
-        } else {
-            confirmedSelectiveCourses.setSelectiveCourses(selectiveCourses.getSelectiveCoursesIds());
-        }
-
-        int degreesId = App.getInstance().getCurrentStudent().getDegrees()[0].getId();
-        ExistingId existingId = new ExistingId(degreesId);
-        confirmedSelectiveCourses.setStudentDegree(existingId);
-
-        App.getInstance().getClient().createRequest(SelectiveCourseRequests.class).confirmedSelectiveCourses(
-                App.getInstance().getJwt().getToken(), confirmedSelectiveCourses).enqueue(new Callback<StudentDegreeSelectiveCoursesIds>() {
-            @Override
-            public void onResponse(@NonNull Call<StudentDegreeSelectiveCoursesIds> call, @NonNull Response<StudentDegreeSelectiveCoursesIds> response) {
-                if (response.isSuccessful()) {
-                    boolean confirmed = true;
-
-                    for (int i = 0; i < confirmedSelectiveCourses.getSelectiveCourses().size(); i++) {
-                        if (!confirmedSelectiveCourses.getSelectiveCourses().contains(response.body().getSelectiveCourses().get(i).getId())) {
-                            confirmed = false;
-                        }
-                    }
-                    if (confirmed) {
-                        if (getFragmentManager() != null) {
-                            getFragmentManager().beginTransaction().replace(R.id.fragment_container, new SelectiveCoursesConfirmedFragment(selectiveCourses)).commit();
-                        }
-                    }
-                } else {
-                    try {
-                        showError(response.errorBody().string());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                hideLoadingProgress();
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<StudentDegreeSelectiveCoursesIds> call, @NonNull Throwable t) {
-                hideLoadingProgress();
-                t.printStackTrace();
-                showError(getRString(R.string.error_connection_failed));
-            }
-        });
-    }
+//    private void saveUserChoice(SelectiveCourses selectiveCourses) {
+//        showLoadingProgress();
+//
+//        ConfirmedSelectiveCourses confirmedSelectiveCourses = new ConfirmedSelectiveCourses();
+//
+//        if (selectedSelectiveCourses != null) {
+//            List<Integer> newSelectedCourses = new ArrayList<>();
+//            for (Integer courseId : selectiveCourses.getSelectiveCoursesIds()) {
+//                boolean elementIncluded = false;
+//                for (Integer existingCourseId : selectedSelectiveCourses.getSelectiveCoursesIds()) {
+//                    if (courseId.equals(existingCourseId)) {
+//                        elementIncluded = true;
+//                        break;
+//                    }
+//                }
+//                if (!elementIncluded) {
+//                    newSelectedCourses.add(courseId);
+//                }
+//            }
+//            confirmedSelectiveCourses.setSelectiveCourses(newSelectedCourses);
+//        } else {
+//            confirmedSelectiveCourses.setSelectiveCourses(selectiveCourses.getSelectiveCoursesIds());
+//        }
+//
+//        int degreesId = App.getInstance().getCurrentStudent().getDegrees()[0].getId();
+//        ExistingId existingId = new ExistingId(degreesId);
+//        confirmedSelectiveCourses.setStudentDegree(existingId);
+//
+//        App.getInstance().getClient().createRequest(SelectiveCourseRequests.class).confirmedSelectiveCourses(
+//                App.getInstance().getJwt().getToken(), confirmedSelectiveCourses).enqueue(new Callback<StudentDegreeSelectiveCoursesIds>() {
+//            @Override
+//            public void onResponse(@NonNull Call<StudentDegreeSelectiveCoursesIds> call, @NonNull Response<StudentDegreeSelectiveCoursesIds> response) {
+//                if (response.isSuccessful()) {
+//                    boolean confirmed = true;
+//
+//                    for (int i = 0; i < confirmedSelectiveCourses.getSelectiveCourses().size(); i++) {
+//                        if (!confirmedSelectiveCourses.getSelectiveCourses().contains(response.body().getSelectiveCourses().get(i).getId())) {
+//                            confirmed = false;
+//                            break;
+//                        }
+//                    }
+//                    if (confirmed) {
+//                        if (getFragmentManager() != null) {
+//                            getFragmentManager().beginTransaction().replace(R.id.fragment_container, new SelectiveCoursesConfirmedFragment(selectiveCourses)).commit();
+//                        }
+//                    }
+//                } else {
+//                    try {
+//                        showError(response.errorBody().string());
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//                hideLoadingProgress();
+//            }
+//
+//            @Override
+//            public void onFailure(@NonNull Call<StudentDegreeSelectiveCoursesIds> call, @NonNull Throwable t) {
+//                hideLoadingProgress();
+//                t.printStackTrace();
+//                showError(getRString(R.string.error_connection_failed));
+//            }
+//        });
+//    }
 }

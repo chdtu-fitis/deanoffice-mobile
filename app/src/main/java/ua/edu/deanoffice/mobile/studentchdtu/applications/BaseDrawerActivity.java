@@ -22,6 +22,11 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -183,10 +188,10 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         ViewGroup viewGroup = findViewById(android.R.id.content);
         View dialogView = LayoutInflater.from(this)
-                .inflate(R.layout.dialog_selectivecourse_info, viewGroup, false);
+                .inflate(R.layout.dialog_error_message, viewGroup, false);
 
-        TextView titleText = dialogView.findViewById(R.id.selectiveCourseName);
-        TextView bodyText = dialogView.findViewById(R.id.selectiveCourseDescription);
+        TextView titleText = dialogView.findViewById(R.id.errorHeadline);
+        TextView bodyText = dialogView.findViewById(R.id.errorBody);
 
         titleText.setText(getRString(R.string.error_msg_title));
         bodyText.setText(msg);
@@ -198,5 +203,44 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
         dialogView.findViewById(R.id.buttonOk).setOnClickListener((viewOk) -> {
             alertDialog.dismiss();
         });
+    }
+
+    public void showError(String msg, ErrorDialogListener action) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        ViewGroup viewGroup = findViewById(android.R.id.content);
+        View dialogView = LayoutInflater.from(this)
+                .inflate(R.layout.dialog_error_message, viewGroup, false);
+
+        TextView titleText = dialogView.findViewById(R.id.errorHeadline);
+        TextView bodyText = dialogView.findViewById(R.id.errorBody);
+
+        titleText.setText(getRString(R.string.error_msg_title));
+        bodyText.setText(msg);
+        builder.setView(dialogView);
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+        dialogView.findViewById(R.id.buttonOk).setOnClickListener((viewOk) -> {
+            alertDialog.dismiss();
+            action.onClickActionButton();
+        });
+    }
+
+    public String getServerErrorMessage(Response response){
+        String errorMessage = getRString(R.string.error_connection_failed);
+        if (response.errorBody() != null) {
+            try {
+                JSONObject object = new JSONObject(response.errorBody().string());
+                errorMessage = object.getString("message");
+            } catch (IOException | JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return errorMessage;
+    }
+
+    public interface ErrorDialogListener{
+        void onClickActionButton();
     }
 }

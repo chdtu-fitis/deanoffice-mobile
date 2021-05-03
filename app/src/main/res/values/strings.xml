@@ -59,6 +59,12 @@
     </string>
 
     //Fragments
+    //SelectiveCoursesFragment
+    <string name="label_sort_by_faculty">Факультетом</string>
+    <string name="label_sort_by_name">Назвою</string>
+    <string name="label_sort_by_students_count">К-стю записаних студентів</string>
+    <string name="info_sorted_by_attribute">Сортувати предмети за: {attribute}</string>
+
     //SelectiveCourseFragment
     <string name="label_disqualified_course">Дисципліну скасовано</string>
 

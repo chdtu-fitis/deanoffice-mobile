@@ -3,6 +3,7 @@ package ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.activity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -11,6 +12,10 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +32,7 @@ import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCou
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCoursesStudentDegree;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.enums.CourseSelectionPeriod;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.service.SelectiveCourseRequests;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.StudentDegree;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.InformationFragment;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.SelectiveCoursesConfirmedFragment;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.SelectiveCoursesFragment;
@@ -119,7 +125,11 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
                         hideLoadingProgress();
                         if (response.isSuccessful()) {
                             availableCourses = response.body();
+                        } else {
+                            showError(getServerErrorMessage(response), () -> finish());
+                            return;
                         }
+
                         selectAndShowFragment();
                     }
 
@@ -139,7 +149,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         period = availableCourses
                 .getSelectiveCoursesSelectionTimeParameters()
                 .getCourseSelectionPeriod();
-        timeParams = selectedCourses.getSelectiveCoursesSelectionTimeParameters();
+        timeParams = availableCourses.getSelectiveCoursesSelectionTimeParameters();
 
         ActiveState activeState;
         long timeLeftUntilCurrentRoundEnd = timeParams.getTimeLeftUntilCurrentRoundEnd();
@@ -168,16 +178,14 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         }
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        if (fragmentManager != null && activeState != null) {
-            fragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, activeState.getFragment())
-                    .commit();
-        }
+        fragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, activeState.getFragment())
+                .commit();
     }
 
     /*
-    *   StateMachine Classes
-    */
+     *   StateMachine Classes
+     */
 
     abstract static class ActiveState {
         protected long time;
@@ -228,7 +236,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
                     String infoMessage = getRString(R.string.info_failed_load_selective_courses);
                     fragment = new InformationFragment(infoMessage);
                 } else {
-                    fragment = new SelectiveCoursesFragment(); //TODO: add params available selective courses (availableCourses)
+                    fragment = new SelectiveCoursesFragment(selectedCoursesCounter, availableCourses);
                 }
             } else {
                 fragment = new SelectiveCoursesConfirmedFragment(selectedCourses);
@@ -276,14 +284,14 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
                 if (availableListIsNull) {
                     fragment = getInformationFragment();
                 } else {
-                    fragment = new SelectiveCoursesSecondRoundFragment(availableCourses);
+                    fragment = new SelectiveCoursesSecondRoundFragment(selectedCoursesCounter, availableCourses);
                 }
             } else {
                 if (existDisqualifiedCourse(selectedCourses)) {
                     if (availableListIsNull) {
                         fragment = getInformationFragment();
                     } else {
-                        fragment = new SelectiveCoursesSecondRoundFragment(availableCourses, selectedCourses);
+                        fragment = new SelectiveCoursesSecondRoundFragment(selectedCoursesCounter, availableCourses, selectedCourses);
                     }
                 } else {
                     fragment = new SelectiveCoursesConfirmedFragment(selectedCourses);
@@ -323,7 +331,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
 
     class AfterSecondRound extends ActiveState {
         public AfterSecondRound(boolean selectedListIsNull) {
-            super(null,0, true, selectedListIsNull);
+            super(null, 0, true, selectedListIsNull);
         }
 
         @Override
@@ -341,6 +349,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
             String infoMessage = getRString(R.string.info_after_second_round);
             return new InformationFragment(infoMessage);
         }
+
     }
 
     /*
@@ -366,7 +375,19 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
 
         leftTimeToEndRoundTV.setText(leftTimeToEndRoundString);
 
-        selectedCoursesCounter = new SelectedCoursesCounter(selectedCoursesCounterTV, 2, 3); //TODO: replace constant magic number to value from backend
+        //TODO: replace max counts from constants with max counters from backend
+        boolean isMagister = App.getInstance().getCurrentStudent().getDegrees()[0].getSpecialization().getDegree().getId() == 3;
+        StudentDegree studentDegree;
+        if (isMagister) {
+            studentDegree = StudentDegree.Master;
+        } else {
+            studentDegree = StudentDegree.Bachelor;
+        }
+
+//        int maxCoursesFirstSemester = studentDegree.getMaxCoursesFirstSemester();
+//        int maxCoursesSecondSemester = studentDegree.getMaxCoursesSecondSemester();
+//        selectedCoursesCounter = new SelectedCoursesCounter(selectedCoursesCounterTV, maxCoursesFirstSemester, maxCoursesSecondSemester);
+        selectedCoursesCounter = new SelectedCoursesCounter(selectedCoursesCounterTV, studentDegree);
         selectedCoursesCounter.init();
         containerHeaders.setVisibility(View.VISIBLE);
     }

@@ -14,28 +14,38 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import lombok.Getter;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourse;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.Teacher;
 
-public class SelectiveCourseFragment extends Fragment {
+public class SelectiveCourseFragment extends Fragment implements View.OnClickListener {
+    public interface OnClickListener{
+        boolean onClick(Object obj);
+    }
 
     private final int layout;
+    @Getter
     private final SelectiveCourse selectiveCourse;
     private CheckBox checkBox;
     private ImageView imageInfo;
     private Button btnCheckBox;
-    private boolean interactive;
-    private boolean showTrainingCycle;
-    private View.OnClickListener listener;
-    private TextView textTeacherName;
-    private TextView textDepartmentName;
-    private TextView textStudentCount;
-    private TextView disqualifiedLabel;
+    private final boolean interactive;
+    private final boolean showTrainingCycle;
+    private final OnClickListener listener;
+    private TextView textTeacherName, textDepartmentName, textStudentCount, disqualifiedLabel;
     private boolean selectedFromFirstRound = false;
 
-    public SelectiveCourse getSelectiveCourse() {
-        return selectiveCourse;
+    public SelectiveCourseFragment(SelectiveCourse selectiveCourse, int layout, OnClickListener listener, boolean interactive, boolean showTrainingCycle) {
+        this.selectiveCourse = selectiveCourse;
+        this.layout = layout;
+        this.listener = listener;
+        this.interactive = interactive;
+        this.showTrainingCycle = showTrainingCycle;
+
+        if (selectiveCourse.isSelected()) {
+            selectedFromFirstRound = true;
+        }
     }
 
     public void setCheckBoxInteractive(boolean interactive) {
@@ -53,19 +63,7 @@ public class SelectiveCourseFragment extends Fragment {
     public void setChecked(boolean checked) {
         if (selectedFromFirstRound) return;
         checkBox.setChecked(checked);
-        selectiveCourse.selected = checked;
-    }
-
-    public SelectiveCourseFragment(SelectiveCourse selectiveCourse, int layout, View.OnClickListener listener, boolean interactive, boolean showTrainingCycle) {
-        this.selectiveCourse = selectiveCourse;
-        this.layout = layout;
-        this.listener = listener;
-        this.interactive = interactive;
-        this.showTrainingCycle = showTrainingCycle;
-
-        if (selectiveCourse.selected) {
-            selectedFromFirstRound = true;
-        }
+        selectiveCourse.setSelected(checked);
     }
 
     @Override
@@ -112,7 +110,7 @@ public class SelectiveCourseFragment extends Fragment {
         textStudentCount = (TextView) view.findViewById(R.id.studentCount);
         textStudentCount.setText(Integer.toString(selectiveCourse.getStudentsCount()));
 
-        checkBox.setChecked(selectiveCourse.selected);
+        checkBox.setChecked(selectiveCourse.isSelected());
 
         imageInfo.setOnClickListener((viewClick) -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(viewClick.getContext());
@@ -138,11 +136,7 @@ public class SelectiveCourseFragment extends Fragment {
         });
 
         btnCheckBox = view.findViewById(R.id.buttonBox);
-        btnCheckBox.setOnClickListener((viewButton) -> {
-            checkBox.setChecked(!checkBox.isChecked());
-            selectiveCourse.selected = checkBox.isChecked();
-            listener.onClick(viewButton);
-        });
+        btnCheckBox.setOnClickListener(this);
 
         setCheckBoxInteractive(interactive);
     }
@@ -157,5 +151,14 @@ public class SelectiveCourseFragment extends Fragment {
         textTeacherName.setVisibility(View.VISIBLE);
         textDepartmentName.setVisibility(View.VISIBLE);
         textStudentCount.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onClick(View view) {
+        boolean isSuccess = listener.onClick(this);
+        if(isSuccess){
+            checkBox.setChecked(!checkBox.isChecked());
+            selectiveCourse.setSelected(checkBox.isChecked());
+        }
     }
 }

@@ -62,7 +62,7 @@ public class DeadLineTimer {
         } else if (seconds > 0) {
             result = context != null ? context.getResources().getString(R.string.dlt_seconds) : "";
         } else {
-            result = "";
+            result = "***";
         }
 
         return result;

@@ -1,50 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <TextView
-            android:id="@+id/text_head"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="10sp"
-            android:layout_marginEnd="8dp"
-            android:gravity="center"
-            android:text="Вибір предметів на 2020-2021 н. р."
-            android:textColor="@color/gray"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/text_body"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/text_body"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20sp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            android:gravity="center"
-            android:text="3 в 1 семестрі (0/3), 2 в 2 семестрі (0/2)"
-            android:textColor="@color/gray2"
-            android:textSize="19sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_head" />
 
         <Switch
             android:id="@+id/switchExtendedView"
@@ -54,7 +18,7 @@
             android:gravity="right"
             android:text="Розширений перегляд: "
             android:textSize="16sp"
-            app:layout_constraintTop_toBottomOf="@+id/text_body" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -168,7 +132,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginEnd="50sp"
+                android:alpha="0.5"
                 android:background="@drawable/round_rect_shape"
+                android:enabled="false"
                 android:text="Зняти виділення"
                 android:textColor="@color/white" />
 
@@ -177,7 +143,9 @@
                 android:layout_width="160sp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:alpha="0.5"
                 android:background="@drawable/round_rect_shape"
+                android:enabled="false"
                 android:text="Продовжити"
                 android:textColor="@color/white" />
 

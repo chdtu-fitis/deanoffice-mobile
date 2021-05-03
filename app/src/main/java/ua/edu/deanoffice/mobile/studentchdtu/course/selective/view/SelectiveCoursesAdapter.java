@@ -15,12 +15,43 @@ import java.util.List;
 
 import lombok.Setter;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.SelectedCoursesCounter;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourse;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourses;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.SelectiveCourseFragment;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.SemesterFragment;
 
-public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCoursesAdapter.ViewHolder> implements View.OnClickListener {
+public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCoursesAdapter.ViewHolder> implements SelectiveCourseFragment.OnClickListener {
+    @Override
+    public boolean onClick(Object obj) {
+        SelectiveCourseFragment fragment = (SelectiveCourseFragment) obj;
+
+        SelectiveCourse course = fragment.getSelectiveCourse();
+        int courseSemester = course.getCourse().getSemester();
+        boolean isSuccess;
+        if (courseSemester % 2 != 0) {
+            isSuccess = addOrRemoveToSelectedList(course, selectedCourseFirstSemester, selectedCoursesCounter.isFirstSemesterFull());
+        } else {
+            isSuccess = addOrRemoveToSelectedList(course, selectedCourseSecondSemester, selectedCoursesCounter.isSecondSemesterFull());
+        }
+
+        selectedCoursesCounter.setSelectedFirstSemester(selectedCourseFirstSemester.size());
+        selectedCoursesCounter.setSelectedSecondSemester(selectedCourseSecondSemester.size());
+
+        return isSuccess;
+    }
+
+    private boolean addOrRemoveToSelectedList(SelectiveCourse course, List<SelectiveCourse> list, boolean listIsFull) {
+        if (!course.isSelected()) {
+            if (!listIsFull) {
+                list.add(course);
+                return true;
+            }
+        } else {
+            return list.remove(course);
+        }
+        return false;
+    }
 
     // 1 - bak
     // 3 - magistr
@@ -31,23 +62,20 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         }
     }
 
-    private SelectListener selectListener = null;
-    private SelectedStates selectedStates;
+    private final SelectedCoursesCounter selectedCoursesCounter;
 
-    private TextView selectiveCoursesCounter;
+    private final SelectiveCourses selectiveCourses;
+    private final FragmentManager fragmentManager;
 
-    private SelectiveCourses selectiveCourses;
-    private FragmentManager fragmentManager;
+    private final List<SelectiveCourseFragment> selectiveCourseFragmentsFirstSemester;
+    private final List<SelectiveCourseFragment> selectiveCourseFragmentsSecondSemester;
 
-    private List<SelectiveCourseFragment> selectiveCourseFragmentsFirstSemester;
-    private List<SelectiveCourseFragment> selectiveCourseFragmentsSecondSemester;
-
-    private List<SelectiveCourse> selectedCourseFirstSemester;
-    private List<SelectiveCourse> selectedCourseSecondSemester;
+    private final List<SelectiveCourse> selectedCourseFirstSemester;
+    private final List<SelectiveCourse> selectedCourseSecondSemester;
 
     private boolean interactive;
-    private boolean showTrainingCycle;
-    private StudentDegree studentDegree;
+    private final boolean showTrainingCycle;
+/*    private StudentDegree studentDegree;
 
     public int getMaxCoursesFirstSemester() {
         return studentDegree.getMaxCoursesFirstSemester();
@@ -55,18 +83,57 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
 
     public int getMaxCoursesSecondSemester() {
         return studentDegree.getMaxCoursesSecondSemester();
+    }*/
+
+    public SelectiveCoursesAdapter(SelectiveCourses selectiveCourses, FragmentManager fragmentManager) {
+        this(selectiveCourses, fragmentManager, null, false);
     }
 
-    public SelectiveCoursesAdapter(SelectiveCourses selectiveCourses, FragmentManager supportFragmentManager) {
-        initAdapter(selectiveCourses, supportFragmentManager, selectiveCoursesCounter, false);
-        initMaxCourses(false);
+    public SelectiveCoursesAdapter(SelectiveCourses selectiveCourses, FragmentManager fragmentManager, SelectedCoursesCounter selectedCoursesCounter, boolean disableCheckboxes) {
+        this.selectiveCourses = selectiveCourses;
+        this.fragmentManager = fragmentManager;
+
+
+        selectiveCourseFragmentsFirstSemester = new ArrayList<>(selectiveCourses.getSelectiveCoursesFirstSemester().size());
+        selectiveCourseFragmentsSecondSemester = new ArrayList<>(selectiveCourses.getSelectiveCoursesSecondSemester().size());
+
+        selectedCourseFirstSemester = new ArrayList<>(selectiveCourses.getSelectiveCoursesFirstSemester().size());
+        selectedCourseSecondSemester = new ArrayList<>(selectiveCourses.getSelectiveCoursesSecondSemester().size());
+
+        for (SelectiveCourse course : selectiveCourses.getSelectiveCoursesFirstSemester()) {
+            if (course.isSelected() && course.isAvailable()) {
+                selectedCourseFirstSemester.add(course);
+            }
+        }
+
+        for (SelectiveCourse course : selectiveCourses.getSelectiveCoursesSecondSemester()) {
+            if (course.isSelected() && course.isAvailable()) {
+                selectedCourseSecondSemester.add(course);
+            }
+        }
+
+        this.selectedCoursesCounter = selectedCoursesCounter;
+        interactive = disableCheckboxes;
+        showTrainingCycle = hasGeneralAndProfessional();
     }
 
-    public SelectiveCoursesAdapter(SelectiveCourses selectiveCourses, FragmentManager supportFragmentManager, TextView selectiveCoursesCounter, boolean disableCheckBoxes, boolean forMagister) {
-        initAdapter(selectiveCourses, supportFragmentManager, selectiveCoursesCounter, disableCheckBoxes);
-        initMaxCourses(forMagister);
-    }
+    /*
+        public SelectiveCoursesAdapter(SelectedCoursesCounter selectedCoursesCounter, SelectiveCourses selectiveCourses, FragmentManager supportFragmentManager) {
+            initAdapter(selectiveCourses, supportFragmentManager, selectedCoursesCounter, false);
+            initMaxCourses(false);
+        }
 
+
+        public SelectiveCoursesAdapter(SelectedCoursesCounter selectedCoursesCounter, FragmentManager supportFragmentManager) {
+            this(selectiveCourses, supportFragmentManager, selectedCoursesCounter, false);
+            initMaxCourses(false);
+        }
+
+        public SelectiveCoursesAdapter(FragmentManager supportFragmentManager, SelectedCoursesCounter selectedCoursesCounter, boolean disableCheckBoxes) {
+            initAdapter(selectiveCourses, supportFragmentManager, selectedCoursesCounter, disableCheckBoxes);
+            initMaxCourses(forMagister);
+        }
+    */
     public boolean hasGeneralAndProfessional() {
         boolean hasGeneral = false;
         boolean hasProfessional = false;
@@ -91,34 +158,7 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         return hasFirstSemester && (hasGeneral && hasProfessional);
     }
 
-    public void initAdapter(SelectiveCourses selectiveCourses, FragmentManager supportFragmentManager, TextView selectiveCoursesCounter, boolean disableCheckBoxes) {
-        this.selectiveCourses = selectiveCourses;
-        this.fragmentManager = supportFragmentManager;
-        this.selectedStates = new SelectedStates();
-
-        selectiveCourseFragmentsFirstSemester = new ArrayList<>(selectiveCourses.getSelectiveCoursesFirstSemester().size());
-        selectiveCourseFragmentsSecondSemester = new ArrayList<>(selectiveCourses.getSelectiveCoursesSecondSemester().size());
-
-        selectedCourseFirstSemester = new ArrayList<>(selectiveCourses.getSelectiveCoursesFirstSemester().size());
-        selectedCourseSecondSemester = new ArrayList<>(selectiveCourses.getSelectiveCoursesSecondSemester().size());
-
-        for (SelectiveCourse course : selectiveCourses.getSelectiveCoursesFirstSemester()) {
-            if (course.selected && course.isAvailable()) {
-                selectedCourseFirstSemester.add(course);
-            }
-        }
-
-        for (SelectiveCourse course : selectiveCourses.getSelectiveCoursesSecondSemester()) {
-            if (course.selected && course.isAvailable()) {
-                selectedCourseSecondSemester.add(course);
-            }
-        }
-
-        this.selectiveCoursesCounter = selectiveCoursesCounter;
-        interactive = disableCheckBoxes;
-        showTrainingCycle = hasGeneralAndProfessional();
-    }
-
+/*
     public void initMaxCourses(boolean master) {
         if (master) {
             studentDegree = StudentDegree.Master;
@@ -132,6 +172,7 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
                     " в 2 семестрі(" + selectedCourseSecondSemester.size() + "/" + studentDegree.getMaxCoursesSecondSemester() + ")");
         }
     }
+*/
 
     @NonNull
     @Override
@@ -143,7 +184,7 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         itemLayoutView.setLayoutParams(lp);
         ViewHolder viewHolder = new ViewHolder(itemLayoutView);
-        itemLayoutView.setOnClickListener(this);
+        //itemLayoutView.setOnClickListener(this);
 
         return viewHolder;
     }
@@ -151,6 +192,9 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         if (position == 0) {
+            selectiveCourseFragmentsFirstSemester.clear();
+            selectiveCourseFragmentsSecondSemester.clear();
+
             SemesterFragment fragment1 = new SemesterFragment(1, R.layout.fragment_semester);
             fragmentManager.beginTransaction().add(R.id.containterCourses, fragment1).commit();
 
@@ -186,6 +230,40 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         interactive = false;
     }
 
+  /*  @Override
+    public void onClick(View v) {
+        Log.e("s", "Sda");
+        if (!interactive) return;
+
+        for (SelectiveCourseFragment frag : selectiveCourseFragmentsFirstSemester) {
+            frag.setCheckBoxInteractive(true);
+        }
+        for (SelectiveCourseFragment frag : selectiveCourseFragmentsSecondSemester) {
+            frag.setCheckBoxInteractive(true);
+        }
+
+        if (selectedCoursesCounter != null) {
+            StudentDegree studentDegree = selectedCoursesCounter.getStudentDegree();
+
+            selectedCourseFirstSemester = checkSelectiveCourses(
+                    selectiveCourses.getSelectiveCoursesFirstSemester(),
+                    selectiveCourseFragmentsFirstSemester,
+                    studentDegree.getMaxProfCoursesFirstSemester(),
+                    studentDegree.getMaxGenCoursesFirstSemester(),
+                    studentDegree.getMaxCoursesFirstSemester());
+
+            selectedCourseSecondSemester = checkSelectiveCourses(
+                    selectiveCourses.getSelectiveCoursesSecondSemester(),
+                    selectiveCourseFragmentsSecondSemester,
+                    studentDegree.getMaxProfCoursesSecondSemester(),
+                    studentDegree.getMaxGenCoursesSecondSemester(),
+                    studentDegree.getMaxCoursesSecondSemester());
+
+            selectedCoursesCounter.setSelectedFirstSemester(selectedCourseFirstSemester.size());
+            selectedCoursesCounter.setSelectedSecondSemester(selectedCourseSecondSemester.size());
+        }
+    }*/
+/*
     @Override
     public void onClick(View v) {
         if (interactive) {
@@ -196,90 +274,46 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
                 frag.setCheckBoxInteractive(true);
             }
 
-            selectedCourseFirstSemester = checkSelectiveCourses(selectiveCourses.getSelectiveCoursesFirstSemester(), selectiveCourseFragmentsFirstSemester,
-                    studentDegree.getMaxProfCoursesFirstSemester(), studentDegree.getMaxGenCoursesFirstSemester(),
-                    studentDegree.getMaxCoursesFirstSemester());
+            if(selectedCoursesCounter != null) {
+                StudentDegree studentDegree = selectedCoursesCounter.getStudentDegree();
 
-            selectedCourseSecondSemester = checkSelectiveCourses(selectiveCourses.getSelectiveCoursesSecondSemester(), selectiveCourseFragmentsSecondSemester,
-                    studentDegree.getMaxProfCoursesSecondSemester(), studentDegree.getMaxGenCoursesSecondSemester(),
-                    studentDegree.getMaxCoursesSecondSemester());
+                selectedCourseFirstSemester = checkSelectiveCourses(
+                        selectiveCourses.getSelectiveCoursesFirstSemester(),
+                        selectiveCourseFragmentsFirstSemester,
+                        studentDegree.getMaxProfCoursesFirstSemester(),
+                        studentDegree.getMaxGenCoursesFirstSemester(),
+                        studentDegree.getMaxCoursesFirstSemester());
 
-            if (selectiveCoursesCounter != null) {
-                selectiveCoursesCounter.setText(studentDegree.getMaxCoursesFirstSemester() +
-                        " в 1 семестрі (" + selectedCourseFirstSemester.size() + "/" + studentDegree.getMaxCoursesFirstSemester() + ")" + ", " + studentDegree.getMaxCoursesSecondSemester() +
-                        " в 2 семестрі(" + selectedCourseSecondSemester.size() + "/" + studentDegree.getMaxCoursesSecondSemester() + ")");
-            }
-            onSelectedCoursesCountChanged();
-        }
-    }
+                selectedCourseSecondSemester = checkSelectiveCourses(
+                        selectiveCourses.getSelectiveCoursesSecondSemester(),
+                        selectiveCourseFragmentsSecondSemester,
+                        studentDegree.getMaxProfCoursesSecondSemester(),
+                        studentDegree.getMaxGenCoursesSecondSemester(),
+                        studentDegree.getMaxCoursesSecondSemester());
 
-    private void onSelectedCoursesCountChanged(){
-        if (selectListener != null) {
-            if (selectedCourseFirstSemester.size() > 0 || selectedCourseSecondSemester.size() > 0) {
-                if (!selectedStates.hasOneSelected) {
-                    selectedStates.hasOneSelected = true;
-                    selectListener.onOneSelected();
-                }
-                if (!selectedStates.hasAllSelected) {
-                    if (hasAllSelected()) {
-                        selectedStates.hasAllSelected = true;
-                        selectListener.onAllSelected();
-                    }
-                } else {
-                    if (!hasAllSelected()) {
-                        selectedStates.hasAllSelected = false;
-                        selectListener.onNotAllSelected();
-                    }
-                }
-            } else {
-                if (selectedStates.hasOneSelected) {
-                    selectedStates.hasOneSelected = false;
-                    selectListener.onLastDeselected();
-                }
-                if (selectedStates.hasAllSelected) {
-                    selectedStates.hasAllSelected = false;
-                    selectListener.onNotAllSelected();
-                }
+                selectedCoursesCounter.setSelectedFirstSemester(selectedCourseFirstSemester.size());
+                selectedCoursesCounter.setSelectedSecondSemester(selectedCourseSecondSemester.size());
             }
         }
-    }
-
-    private boolean hasAllSelected() {
-        return selectedCourseFirstSemester.size() >= studentDegree.getMaxCoursesFirstSemester() &&
-                selectedCourseSecondSemester.size() >= studentDegree.getMaxCoursesSecondSemester();
-    }
-
-    public boolean isProfCourse(SelectiveCourse course) {
-        return !course.getTrainingCycle().equals("GENERAL");
-    }
-
-    public List<SelectiveCourse> getSelectedCourseFirstSemester() {
-        return selectedCourseFirstSemester;
-    }
-
-    public List<SelectiveCourse> getSelectedCourseSecondSemester() {
-        return selectedCourseSecondSemester;
-    }
-
-    public List<SelectiveCourse> checkSelectiveCourses(List<SelectiveCourse> selectiveCoursesSemester, List<SelectiveCourseFragment> selectiveCoursesFragment,
+    }*/
+/*
+    public List<SelectiveCourse> checkSelectiveCourses(List<SelectiveCourse> selectiveCourseList, List<SelectiveCourseFragment> selectiveCourseFragments,
                                                        int maxProfCourses, int maxGenCourse, int maxSemCourses) {
-
         List<SelectiveCourse> selectedCourses = new ArrayList<>();
         int profCount = 0;
         int genCount = 0;
-        for (int i = 0; i < selectiveCoursesSemester.size(); i++) {
-            SelectiveCourse course = selectiveCoursesSemester.get(i);
-            if (course.selected && course.isAvailable()) {
+        for (int i = 0; i < selectiveCourseList.size(); i++) {
+            SelectiveCourse course = selectiveCourseList.get(i);
+            if (course.isSelected() && course.isAvailable()) {
                 if (isProfCourse(course)) {
                     profCount++;
                 } else {
                     genCount++;
                 }
-
                 selectedCourses.add(course);
             }
             if (profCount >= maxProfCourses) {
-                for (SelectiveCourseFragment frag : selectiveCoursesFragment) {
+                for (SelectiveCourseFragment frag : selectiveCourseFragments) {
                     if (isProfCourse(frag.getSelectiveCourse())) {
                         if (!frag.isChecked()) {
                             frag.setCheckBoxInteractive(false);
@@ -288,7 +322,7 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
                 }
             }
             if (genCount >= maxGenCourse) {
-                for (SelectiveCourseFragment frag : selectiveCoursesFragment) {
+                for (SelectiveCourseFragment frag : selectiveCourseFragments) {
                     if (!isProfCourse(frag.getSelectiveCourse())) {
                         if (!frag.isChecked()) {
                             frag.setCheckBoxInteractive(false);
@@ -297,7 +331,7 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
                 }
             }
             if (selectedCourses.size() >= maxSemCourses) {
-                for (SelectiveCourseFragment frag : selectiveCoursesFragment) {
+                for (SelectiveCourseFragment frag : selectiveCourseFragments) {
                     if (!frag.isChecked()) {
                         frag.setCheckBoxInteractive(false);
                     }
@@ -305,35 +339,52 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
             }
         }
         return selectedCourses;
+    }*/
+/*
+    public boolean isProfCourse(SelectiveCourse course) {
+        return !course.getTrainingCycle().equals("GENERAL");
+    }
+*/
+    public List<SelectiveCourse> getSelectedCourseFirstSemester() {
+        return selectedCourseFirstSemester;
+    }
+
+    public List<SelectiveCourse> getSelectedCourseSecondSemester() {
+        return selectedCourseSecondSemester;
     }
 
     public void clearSelected() {
+
         for (SelectiveCourseFragment courseFragment : selectiveCourseFragmentsFirstSemester) {
             courseFragment.setChecked(false);
         }
         for (SelectiveCourseFragment courseFragment : selectiveCourseFragmentsSecondSemester) {
             courseFragment.setChecked(false);
         }
-        onClick(null);
+
+        selectedCourseFirstSemester.clear();
+        selectedCourseSecondSemester.clear();
+
+        selectedCoursesCounter.setSelectedFirstSemester(selectedCourseFirstSemester.size());
+        selectedCoursesCounter.setSelectedSecondSemester(selectedCourseSecondSemester.size());
+        //onClick(null);
     }
 
-    public void setSelectListener(SelectListener selectListener) {
-        this.selectListener = selectListener;
-        onSelectedCoursesCountChanged();
+    public void setExtendedView() {
+        for (SelectiveCourseFragment fragment : selectiveCourseFragmentsFirstSemester) {
+            fragment.setExtendedView();
+        }
+        for (SelectiveCourseFragment fragment : selectiveCourseFragmentsSecondSemester) {
+            fragment.setExtendedView();
+        }
     }
 
-    public interface SelectListener {
-        void onOneSelected();
-
-        void onAllSelected();
-
-        void onLastDeselected();
-
-        void onNotAllSelected();
-    }
-
-    private static class SelectedStates {
-        public boolean hasOneSelected = false;
-        public boolean hasAllSelected = false;
+    public void setShortView() {
+        for (SelectiveCourseFragment fragment : selectiveCourseFragmentsFirstSemester) {
+            fragment.setShortView();
+        }
+        for (SelectiveCourseFragment fragment : selectiveCourseFragmentsSecondSemester) {
+            fragment.setShortView();
+        }
     }
 }

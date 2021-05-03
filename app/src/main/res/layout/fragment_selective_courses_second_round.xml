@@ -11,68 +11,16 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/textStudyYear"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="center"
-            android:text="Вибір предметів на 2021-2022 н. р."
-            android:textAlignment="center"
-            android:textColor="@color/gray"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/textLeftTimeToEnd"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/textLeftTimeToEnd"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:gravity="center"
-            android:text="До кінця залишилось ще трохи"
-            android:textAlignment="center"
-            android:textColor="@color/gray"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/text_body"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textStudyYear" />
-
-        <TextView
-            android:id="@+id/text_body"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:gravity="start"
-            android:text="2 в 1 семестрі (0/2) 3 в 2 семестрі (0/3)"
-            android:textAlignment="center"
-            android:textColor="@color/gray2"
-            android:textSize="19sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/listview"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textLeftTimeToEnd" />
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/listview"
             android:layout_width="match_parent"
-            android:layout_height="0sp"
-            android:layout_marginTop="10sp"
+            android:layout_height="0dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@+id/linearLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_body" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
             android:id="@+id/linearLayout"
