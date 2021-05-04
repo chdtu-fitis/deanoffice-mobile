@@ -32,48 +32,48 @@ public class SelectedCoursesCounter {
     }
 
     public void incrementFirstSemester() {
-        if(selectedFirstSemester >= maxCoursesFirstSemester) return;
+        if (selectedFirstSemester >= maxCoursesFirstSemester) return;
         selectedFirstSemester++;
         update();
     }
 
     public void incrementSecondSemester() {
-        if(selectedSecondSemester >= maxCoursesSecondSemester) return;
+        if (selectedSecondSemester >= maxCoursesSecondSemester) return;
         selectedSecondSemester++;
         update();
     }
 
     public void decrementFirstSemester() {
-        if(selectedFirstSemester <= 0) return;
+        if (selectedFirstSemester <= 0) return;
         selectedFirstSemester--;
         update();
     }
 
     public void decrementSecondSemester() {
-        if(selectedSecondSemester <= 0) return;
+        if (selectedSecondSemester <= 0) return;
         selectedSecondSemester--;
         update();
     }
 
-    public void setSelectedFirstSemester(int value){
-        if(value < 0 || value > maxCoursesFirstSemester) return;
+    public void setSelectedFirstSemester(int value) {
+        if (value < 0 || value > maxCoursesFirstSemester) return;
 
         selectedFirstSemester = value;
         update();
     }
 
-    public void setSelectedSecondSemester(int value){
-        if(value < 0 || value > maxCoursesSecondSemester) return;
+    public void setSelectedSecondSemester(int value) {
+        if (value < 0 || value > maxCoursesSecondSemester) return;
 
         selectedSecondSemester = value;
         update();
     }
 
-    public boolean isFirstSemesterFull(){
+    public boolean isFirstSemesterFull() {
         return selectedFirstSemester == maxCoursesFirstSemester;
     }
 
-    public boolean isSecondSemesterFull(){
+    public boolean isSecondSemesterFull() {
         return selectedSecondSemester == maxCoursesSecondSemester;
     }
 

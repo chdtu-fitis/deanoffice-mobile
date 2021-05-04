@@ -20,7 +20,35 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
-            android:id="@+id/containerForConfirmHeaders"
+            android:id="@+id/containerSuccessRegHeaders"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="@string/header_success_registered"
+                android:textAlignment="center"
+                android:textColor="@color/gray"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/header_success_registered2"
+                android:textAlignment="center"
+                android:textColor="@color/gray"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/containerConfirmHeaders"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
@@ -34,15 +62,14 @@
                 android:text="@string/info_confirm_sel_courses"
                 android:textAlignment="center"
                 android:textColor="@color/gray"
-                android:textSize="24sp"
+                android:textSize="22sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/containerForSelectionHeaders"
+            android:id="@+id/containerSelectionInfoHeaders"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center_horizontal"
             android:orientation="vertical">
 
             <TextView
@@ -80,19 +107,28 @@
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="10dp" />
+        </LinearLayout>
 
-            <Switch
-                android:id="@+id/switchExtendedView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:gravity="right"
-                android:text="Розширений перегляд: "
-                android:textSize="16sp"
-                app:layout_constraintTop_toTopOf="parent" />
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
+
+        <Switch
+            android:id="@+id/switchExtendedView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:gravity="right"
+            android:text="Розширений перегляд: "
+            android:textSize="16sp"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/containerSelectionSortHeaders"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/sortLabel"

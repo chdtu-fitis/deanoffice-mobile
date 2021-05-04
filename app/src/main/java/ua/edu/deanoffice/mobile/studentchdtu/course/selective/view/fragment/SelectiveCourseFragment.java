@@ -36,7 +36,7 @@ public class SelectiveCourseFragment extends Fragment implements View.OnClickLis
     private TextView textTeacherName, textDepartmentName, textStudentCount;
     private boolean selectedFromFirstRound = false;
     @Setter
-    private boolean interactive = false;
+    private boolean interactive = true;
 
     public SelectiveCourseFragment(SelectiveCourse selectiveCourse, int layout, OnClickListener listener, boolean showTrainingCycle) {
         this.selectiveCourse = selectiveCourse;

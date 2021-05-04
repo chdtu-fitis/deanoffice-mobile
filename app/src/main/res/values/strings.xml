@@ -51,6 +51,8 @@
         Другий тур запису на вибіркові дисципліни вже завершився. Ви не обрали дисципліни або серед обраних у першому турі маєте дискваліфіковані,
         тому вас буде зареєстровано на доступні дисципліни автоматично
     </string>
+    <string name="header_success_registered">ЗАРЕЄСТРОВАНО</string>
+    <string name="header_success_registered2">Ваші предмети зареєстровано\nПерейдіть у меню для вибору інших дій</string>
     <string name="header_study_years">Вибір предметів на {study_year_begin}-{study_year_end} н. р.</string>
     <string name="header_left_time_to_end_round">До завершення реєстрації {left_time}</string>
     <string name="header_selected_courses_counter">

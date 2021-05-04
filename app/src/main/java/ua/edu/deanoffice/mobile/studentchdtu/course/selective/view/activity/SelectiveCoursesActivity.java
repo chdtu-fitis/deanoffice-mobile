@@ -38,7 +38,14 @@ import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.Sele
 import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
 
 public class SelectiveCoursesActivity extends BaseDrawerActivity {
-    private View containerHeaders, sortPanel;
+    public enum Headers {
+        SELECTION,
+        CONFIRM,
+        REGISTERED,
+        HIDE
+    }
+
+    private View sortPanel;
     private SelectedCoursesCounter selectedCoursesCounter;
     private SelectiveCourses selectedCourses, availableCourses;
     private TextView sortLabel;
@@ -52,8 +59,6 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         @SuppressLint("InflateParams")
         View contentView = inflater.inflate(R.layout.activity_selective_courses, mainContentBlock, false);
         mainContentBlock.addView(contentView, 1);
-        containerHeaders = findViewById(R.id.containerHeaders);
-        containerHeaders.setVisibility(View.GONE);
 
         @SuppressLint("UseSwitchCompatOrMaterialCode")
         Switch btnExtendedView = findViewById(R.id.switchExtendedView);
@@ -99,6 +104,8 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         sortPanel = findViewById(R.id.sortPanel);
 
         getSupportActionBar().setTitle(getRString(R.string.action_bar_title_selective_courses));
+
+        setUpHeaders(Headers.HIDE);
 
         loadStudentSelectedCourses();
     }
@@ -222,7 +229,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment activeStateFragment = activeState.getFragment();
 
-        if(activeState.isSelectionFragment){
+        if (activeState.isSelectionFragment) {
             currentSelectedFragment = (BaseSelectiveCoursesFragment) activeStateFragment;
         }
 
@@ -288,9 +295,11 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
                     fragment = new InformationFragment(infoMessage);
                 } else {
                     fragment = new SelectiveCoursesFragment(selectedCoursesCounter, availableCourses);
+                    setUpHeaders(Headers.SELECTION);
                 }
             } else {
                 fragment = new SelectiveCoursesConfirmedFragment(selectedCourses);
+                setUpHeaders(Headers.REGISTERED);
             }
             return fragment;
         }
@@ -308,6 +317,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
                 fragment = getInformationFragment();
             } else {
                 fragment = new SelectiveCoursesConfirmedFragment(selectedCourses);
+                setUpHeaders(Headers.REGISTERED);
             }
             return fragment;
         }
@@ -337,6 +347,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
                     fragment = getInformationFragment();
                 } else {
                     fragment = new SelectiveCoursesSecondRoundFragment(selectedCoursesCounter, availableCourses);
+                    setUpHeaders(Headers.SELECTION);
                 }
             } else {
                 if (existDisqualifiedCourse(selectedCourses)) {
@@ -344,9 +355,11 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
                         fragment = getInformationFragment();
                     } else {
                         fragment = new SelectiveCoursesSecondRoundFragment(selectedCoursesCounter, availableCourses, selectedCourses);
+                        setUpHeaders(Headers.SELECTION);
                     }
                 } else {
                     fragment = new SelectiveCoursesConfirmedFragment(selectedCourses);
+                    setUpHeaders(Headers.REGISTERED);
                 }
             }
             return fragment;
@@ -393,6 +406,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
                 fragment = getInformationFragment();
             } else {
                 fragment = new SelectiveCoursesConfirmedFragment(selectedCourses);
+                setUpHeaders(Headers.REGISTERED);
             }
             return fragment;
         }
@@ -419,20 +433,47 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         sortPanel.setVisibility(visibility);
     }
 
-    public void showConfirmHeaders() {
-        View containerConfirmHeaders = findViewById(R.id.containerForConfirmHeaders);
-        View containerSelectionHeaders = findViewById(R.id.containerForSelectionHeaders);
+    public void setUpHeaders(Headers headers) {
+        View containerConfirmHeaders = findViewById(R.id.containerConfirmHeaders);
+        View containerSelectionInfoHeaders = findViewById(R.id.containerSelectionInfoHeaders);
+        View containerSelectionSortHeaders = findViewById(R.id.containerSelectionSortHeaders);
+        View containerSuccessRegHeaders = findViewById(R.id.containerSuccessRegHeaders);
+        View containerHeaders = findViewById(R.id.containerHeaders);
 
-        containerConfirmHeaders.setVisibility(View.VISIBLE);
-        containerSelectionHeaders.setVisibility(View.GONE);
-    }
+        int confirmHeadersState, selectionHeadersState, successRegHeadersState;
+        int allHeaders;
+        switch (headers) {
+            case CONFIRM:
+                allHeaders = View.VISIBLE;
+                confirmHeadersState = View.VISIBLE;
+                selectionHeadersState = View.GONE;
+                successRegHeadersState = View.GONE;
+                break;
+            case REGISTERED:
+                allHeaders = View.VISIBLE;
+                confirmHeadersState = View.GONE;
+                selectionHeadersState = View.GONE;
+                successRegHeadersState = View.VISIBLE;
+                break;
+            case SELECTION:
+                allHeaders = View.VISIBLE;
+                confirmHeadersState = View.GONE;
+                selectionHeadersState = View.VISIBLE;
+                successRegHeadersState = View.GONE;
+                break;
+            case HIDE:
+            default:
+                allHeaders = View.GONE;
+                confirmHeadersState = View.GONE;
+                selectionHeadersState = View.VISIBLE;
+                successRegHeadersState = View.GONE;
+        }
 
-    public void showSelectionHeaders() {
-        View containerConfirmHeaders = findViewById(R.id.containerForConfirmHeaders);
-        View containerSelectionHeaders = findViewById(R.id.containerForSelectionHeaders);
-
-        containerConfirmHeaders.setVisibility(View.GONE);
-        containerSelectionHeaders.setVisibility(View.VISIBLE);
+        containerHeaders.setVisibility(allHeaders);
+        containerConfirmHeaders.setVisibility(confirmHeadersState);
+        containerSuccessRegHeaders.setVisibility(successRegHeadersState);
+        containerSelectionInfoHeaders.setVisibility(selectionHeadersState);
+        containerSelectionSortHeaders.setVisibility(selectionHeadersState);
     }
 
     private void headerInit(SelectiveCoursesSelectionTimeParameters timeParams) {
@@ -468,7 +509,6 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
 //        selectedCoursesCounter = new SelectedCoursesCounter(selectedCoursesCounterTV, maxCoursesFirstSemester, maxCoursesSecondSemester);
         selectedCoursesCounter = new SelectedCoursesCounter(selectedCoursesCounterTV, studentDegree);
         selectedCoursesCounter.init();
-        containerHeaders.setVisibility(View.VISIBLE);
     }
 }
 

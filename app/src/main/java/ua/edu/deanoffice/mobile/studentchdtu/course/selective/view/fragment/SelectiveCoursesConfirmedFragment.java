@@ -36,7 +36,7 @@ public class SelectiveCoursesConfirmedFragment extends Fragment {
 
         SelectiveCoursesAdapter adapter = new SelectiveCoursesAdapter(selectiveCourses, getFragmentManager(), null);
         recyclerView.setAdapter(adapter);
-        adapter.disableCheckBoxes();
+        adapter.disableCheckBoxes(true);
 
         Switch btnExtendedView = view.findViewById(R.id.switchExtendedView);
         btnExtendedView.setOnCheckedChangeListener((buttonView, isChecked) -> {

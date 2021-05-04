@@ -1,20 +1,18 @@
 package ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment;
 
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import ua.edu.deanoffice.mobile.studentchdtu.R;
 
 public class InformationFragment extends Fragment {
-
     private final String informationMessage;
 
     public InformationFragment(String informationMessage) {

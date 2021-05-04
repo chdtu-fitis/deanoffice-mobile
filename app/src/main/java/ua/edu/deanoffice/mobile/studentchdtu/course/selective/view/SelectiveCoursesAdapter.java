@@ -95,7 +95,7 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
     @Override
     public SelectiveCoursesAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemLayoutView = LayoutInflater.from(parent.getContext()).inflate(
-                R.layout.adapter_chdtu_list_selectivecourse, null);
+                R.layout.adapter_list_selectivecourse, null);
 
         // create ViewHolder
         RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -167,12 +167,12 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         return selectiveCourses.getSelectiveCoursesFirstSemester().size() + selectiveCourses.getSelectiveCoursesSecondSemester().size();
     }
 
-    public void disableCheckBoxes() {
+    public void disableCheckBoxes(boolean disable) {
         for (SelectiveCourseFragment frag : selectiveCourseFragmentsFirstSemester) {
-            frag.setInteractive(false);
+            frag.setInteractive(!disable);
         }
         for (SelectiveCourseFragment frag : selectiveCourseFragmentsSecondSemester) {
-            frag.setInteractive(false);
+            frag.setInteractive(!disable);
         }
     }
 
@@ -207,39 +207,6 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         return false;
     }
 
-    /*  @Override
-        public void onClick(View v) {
-            Log.e("s", "Sda");
-            if (!interactive) return;
-
-            for (SelectiveCourseFragment frag : selectiveCourseFragmentsFirstSemester) {
-                frag.setCheckBoxInteractive(true);
-            }
-            for (SelectiveCourseFragment frag : selectiveCourseFragmentsSecondSemester) {
-                frag.setCheckBoxInteractive(true);
-            }
-
-            if (selectedCoursesCounter != null) {
-                StudentDegree studentDegree = selectedCoursesCounter.getStudentDegree();
-
-                selectedCourseFirstSemester = checkSelectiveCourses(
-                        selectiveCourses.getSelectiveCoursesFirstSemester(),
-                        selectiveCourseFragmentsFirstSemester,
-                        studentDegree.getMaxProfCoursesFirstSemester(),
-                        studentDegree.getMaxGenCoursesFirstSemester(),
-                        studentDegree.getMaxCoursesFirstSemester());
-
-                selectedCourseSecondSemester = checkSelectiveCourses(
-                        selectiveCourses.getSelectiveCoursesSecondSemester(),
-                        selectiveCourseFragmentsSecondSemester,
-                        studentDegree.getMaxProfCoursesSecondSemester(),
-                        studentDegree.getMaxGenCoursesSecondSemester(),
-                        studentDegree.getMaxCoursesSecondSemester());
-
-                selectedCoursesCounter.setSelectedFirstSemester(selectedCourseFirstSemester.size());
-                selectedCoursesCounter.setSelectedSecondSemester(selectedCourseSecondSemester.size());
-            }
-        }*/
 /*
     @Override
     public void onClick(View v) {
@@ -272,8 +239,8 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
                 selectedCoursesCounter.setSelectedSecondSemester(selectedCourseSecondSemester.size());
             }
         }
-    }*/
-/*
+    }
+
     public List<SelectiveCourse> checkSelectiveCourses(List<SelectiveCourse> selectiveCourseList, List<SelectiveCourseFragment> selectiveCourseFragments,
                                                        int maxProfCourses, int maxGenCourse, int maxSemCourses) {
         List<SelectiveCourse> selectedCourses = new ArrayList<>();

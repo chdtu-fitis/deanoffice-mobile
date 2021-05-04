@@ -10,111 +10,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <Switch
-            android:id="@+id/switchExtendedView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:gravity="right"
-            android:text="Розширений перегляд: "
-            android:textSize="16sp"
-            android:visibility="gone"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/sortLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:text="Сортувати предмети за: К-стю записаних студентів "
-            android:textStyle="bold"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/switchExtendedView" />
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/sortPanel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="6dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="10sp"
-            android:layout_marginEnd="8dp"
-            android:gravity="center"
-            android:visibility="gone"
-            app:cardBackgroundColor="@color/chdtu_value1"
-            app:cardCornerRadius="3dp"
-            app:cardElevation="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/sortLabel">
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="1dp"
-                app:cardCornerRadius="3dp"
-                app:cardElevation="0dp"
-                app:contentPadding="2dp">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/sortByCourse"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:text="Назвою"
-                        android:textSize="15sp" />
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="@color/chdtu_value2" />
-
-                    <TextView
-                        android:id="@+id/sortByFaculty"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:text="Факультетом"
-                        android:textSize="15sp" />
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="@color/chdtu_value2" />
-
-                    <TextView
-                        android:id="@+id/sortByStudentCount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:text="К-стю студентів"
-                        android:textSize="15sp" />
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
-
-        </androidx.cardview.widget.CardView>
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/listview"
             android:layout_width="match_parent"
             android:layout_height="0sp"
-            android:layout_marginTop="10sp"
             android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@+id/linearLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/sortPanel" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
             android:id="@+id/linearLayout"

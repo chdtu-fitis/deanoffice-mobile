@@ -15,11 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 
-import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -99,7 +97,7 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
     //Go from confirm mode to normal list
     protected void onClickButtonBackFromConfirmFragment(View button) {
         //Change Headers
-        showSelectionHeaders();
+        showHeaders(SelectiveCoursesActivity.Headers.SELECTION);
 
         //Rename Buttons
         confirmButton.setText(getRString(R.string.button_next));
@@ -115,6 +113,9 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
 
             //Change ConfirmButton onClickListener
             confirmButton.setOnClickListener(this::onClickConfirmButton);
+
+            //Unblocked Interactive With CheckBox
+            adapter.disableCheckBoxes(false);
         }
     }
 
@@ -122,7 +123,7 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
     protected void onClickConfirmButton(View button) {
         if (selectedCoursesCounter.confirmIsAvailable()) {
             //Change Headers
-            showConfirmHeaders();
+            showHeaders(SelectiveCoursesActivity.Headers.CONFIRM);
 
             //Rename Buttons
             confirmButton.setText(getRString(R.string.button_confirm));
@@ -142,6 +143,9 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
                 selectiveCoursesFinal.setSelectiveCoursesSecondSemester(adapter.getSelectedCourseSecondSemester());
 
                 confirmButton.setOnClickListener((viewConfirm) -> saveUserChoice(selectiveCoursesFinal));
+
+                //Blocked Interactive With CheckBox
+                adapter.disableCheckBoxes(true);
             }
         } else {
             Snackbar.make(button.findViewById(android.R.id.content), getRString(R.string.worn_select_courses), Snackbar.LENGTH_LONG)
@@ -175,6 +179,8 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
                             if (confirmed) {
                                 FragmentManager fragmentManager = getFragmentManager();
                                 if (fragmentManager != null) {
+                                    showHeaders(SelectiveCoursesActivity.Headers.CONFIRM);
+
                                     Fragment fragment = new SelectiveCoursesConfirmedFragment(selectiveCourses);
                                     fragmentManager.beginTransaction()
                                             .replace(R.id.fragment_container, fragment)
@@ -182,14 +188,7 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
                                 }
                             }
                         } else {
-                            try {
-                                ResponseBody errorBody = response.errorBody();
-                                if (errorBody != null) {
-                                    showError(errorBody.string());
-                                }
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            showError(getServerErrorMessage(response));
                         }
                         hideLoadingProgress();
                     }
@@ -254,18 +253,19 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
         return "";
     }
 
-    protected void showSelectionHeaders() {
+    protected void showHeaders(SelectiveCoursesActivity.Headers headers) {
         FragmentActivity activity = getActivity();
         if (activity != null) {
-            ((SelectiveCoursesActivity) activity).showSelectionHeaders();
+            ((SelectiveCoursesActivity) activity).setUpHeaders(headers);
         }
     }
 
-    protected void showConfirmHeaders() {
+    protected String getServerErrorMessage(Response response) {
         FragmentActivity activity = getActivity();
         if (activity != null) {
-            ((SelectiveCoursesActivity) activity).showConfirmHeaders();
+            return ((SelectiveCoursesActivity) activity).getServerErrorMessage(response);
         }
+        return "Error :(";
     }
 
     public void setExtendSelectiveCourseFragment(boolean isExtend) {
