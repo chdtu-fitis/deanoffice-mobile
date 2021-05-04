@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.Switch;
 
 import androidx.annotation.Nullable;
@@ -14,11 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourses;
-import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.ChdtuAdapter;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.SelectiveCoursesAdapter;
 
 public class SelectiveCoursesConfirmedFragment extends Fragment {
-
     private final SelectiveCourses selectiveCourses;
 
     public SelectiveCoursesConfirmedFragment(SelectiveCourses selectiveCourses) {
@@ -31,26 +28,22 @@ public class SelectiveCoursesConfirmedFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_selective_courses_confirmed, container, false);
     }
 
-
     @Override
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
         RecyclerView recyclerView = view.findViewById(R.id.listview1);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        SelectiveCoursesAdapter adapter = new SelectiveCoursesAdapter(selectiveCourses, getFragmentManager(), null, true);
+        SelectiveCoursesAdapter adapter = new SelectiveCoursesAdapter(selectiveCourses, getFragmentManager(), null);
         recyclerView.setAdapter(adapter);
         adapter.disableCheckBoxes();
 
         Switch btnExtendedView = view.findViewById(R.id.switchExtendedView);
-        btnExtendedView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    adapter.setExtendedView();
-                } else {
-                    adapter.setShortView();
-                }
+        btnExtendedView.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                adapter.setExtendedView();
+            } else {
+                adapter.setShortView();
             }
         });
     }

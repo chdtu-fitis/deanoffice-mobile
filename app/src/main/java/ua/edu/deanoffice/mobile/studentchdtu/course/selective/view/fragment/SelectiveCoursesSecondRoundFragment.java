@@ -80,7 +80,7 @@ public class SelectiveCoursesSecondRoundFragment extends BaseSelectiveCoursesFra
     }
 
     @Override
-    protected ConfirmedSelectiveCourses getConfirmedSelectiveCourses(SelectiveCourses selectiveCourses){
+    protected ConfirmedSelectiveCourses getConfirmedSelectiveCourses(SelectiveCourses selectiveCourses) {
         ConfirmedSelectiveCourses confirmedSelectiveCourses = new ConfirmedSelectiveCourses();
 
         if (selectedSelectiveCourses != null) {

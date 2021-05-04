@@ -28,7 +28,7 @@ public class SelectiveCoursesConfirmed extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        SelectiveCoursesAdapter adapter = new SelectiveCoursesAdapter(selectiveCourses, getSupportFragmentManager(), null, true);
+        SelectiveCoursesAdapter adapter = new SelectiveCoursesAdapter(selectiveCourses, getSupportFragmentManager(), null);
         recyclerView.setAdapter(adapter);
         adapter.disableCheckBoxes();
         Button selectiveCoursesButton = findViewById(R.id.menu_selectivecourses);

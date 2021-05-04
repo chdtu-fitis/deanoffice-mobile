@@ -1,7 +1,6 @@
 package ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -90,13 +89,14 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
     protected void fillSelectiveCoursesList() {
         if (showingSelectiveCourses == null) return;
 
-        SelectiveCoursesAdapter adapter = new SelectiveCoursesAdapter(showingSelectiveCourses, getFragmentManager(), selectedCoursesCounter, true);
+        SelectiveCoursesAdapter adapter = new SelectiveCoursesAdapter(showingSelectiveCourses, getFragmentManager(), selectedCoursesCounter);
         recyclerView.setAdapter(adapter);
 
         clearButton.setOnClickListener((v) -> adapter.clearSelected());
         confirmButton.setOnClickListener(this::onClickConfirmButton);
     }
 
+    //Go from confirm mode to normal list
     protected void onClickButtonBackFromConfirmFragment(View button) {
         //Change Headers
         showSelectionHeaders();
@@ -118,6 +118,7 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
         }
     }
 
+    //Go to confirm mode from normal list
     protected void onClickConfirmButton(View button) {
         if (selectedCoursesCounter.confirmIsAvailable()) {
             //Change Headers

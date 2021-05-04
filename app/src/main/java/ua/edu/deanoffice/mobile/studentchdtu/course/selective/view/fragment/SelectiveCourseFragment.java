@@ -15,6 +15,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import lombok.Getter;
+import lombok.Setter;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourse;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.Teacher;
@@ -30,29 +31,22 @@ public class SelectiveCourseFragment extends Fragment implements View.OnClickLis
     private CheckBox checkBox;
     private ImageView imageInfo;
     private Button btnCheckBox;
-    private final boolean interactive, showTrainingCycle;
+    private final boolean showTrainingCycle;
     private final OnClickListener listener;
     private TextView textTeacherName, textDepartmentName, textStudentCount;
     private boolean selectedFromFirstRound = false;
+    @Setter
+    private boolean interactive = false;
 
-    public SelectiveCourseFragment(SelectiveCourse selectiveCourse, int layout, OnClickListener listener, boolean interactive, boolean showTrainingCycle) {
+    public SelectiveCourseFragment(SelectiveCourse selectiveCourse, int layout, OnClickListener listener, boolean showTrainingCycle) {
         this.selectiveCourse = selectiveCourse;
         this.layout = layout;
         this.listener = listener;
-        this.interactive = interactive;
         this.showTrainingCycle = showTrainingCycle;
 
         if (selectiveCourse.isSelected()) {
             selectedFromFirstRound = true;
         }
-    }
-
-    public void setCheckBoxInteractive(boolean interactive) {
-        if (selectedFromFirstRound) {
-            interactive = false;
-        }
-        checkBox.setClickable(interactive);
-        btnCheckBox.setClickable(interactive);
     }
 
     public void setChecked(boolean checked) {
@@ -132,8 +126,6 @@ public class SelectiveCourseFragment extends Fragment implements View.OnClickLis
 
         btnCheckBox = view.findViewById(R.id.buttonBox);
         btnCheckBox.setOnClickListener(this);
-
-        setCheckBoxInteractive(interactive);
     }
 
     public void setShortView() {
@@ -150,6 +142,8 @@ public class SelectiveCourseFragment extends Fragment implements View.OnClickLis
 
     @Override
     public void onClick(View view) {
+        if(!interactive) return;
+
         boolean isSuccess = listener.onClick(this);
         if (isSuccess) {
             checkBox.setChecked(!checkBox.isChecked());
