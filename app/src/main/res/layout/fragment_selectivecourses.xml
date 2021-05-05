@@ -59,7 +59,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Сортувати предмети за: К-стю записаних студентів "
+            android:text="Сортувати предмети за:"
             android:id="@+id/sortLabel"
             android:textStyle="bold"
             android:gravity="left"
@@ -102,6 +102,7 @@
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
                         android:text="Назвою"
+                        style="@style/SortButtons"
                         android:textSize="15sp" />
 
                     <View
@@ -116,6 +117,7 @@
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
                         android:text="Факультетом"
+                        style="@style/SortButtons"
                         android:textSize="15sp" />
 
                     <View
@@ -130,6 +132,8 @@
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
                         android:text="К-стю студентів"
+                        style="@style/SortButtons"
+                        android:enabled="false"
                         android:textSize="15sp" />
                 </LinearLayout>
 
