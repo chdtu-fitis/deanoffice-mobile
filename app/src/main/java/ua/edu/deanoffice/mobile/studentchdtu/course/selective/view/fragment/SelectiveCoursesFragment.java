@@ -49,6 +49,7 @@ public class SelectiveCoursesFragment extends Fragment {
     private boolean isMasterDegree;
     private TextView sortLabel;
     private View sortPanel;
+    private List<View> sortButtons;
 
     @Nullable
     @Override
@@ -62,6 +63,7 @@ public class SelectiveCoursesFragment extends Fragment {
         this.view = view;
         selectiveCoursesCounter = view.findViewById(R.id.text_body);
 
+        initializeSortButtons();
         btnExtendedView = view.findViewById(R.id.switchExtendedView);
         btnExtendedView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -158,26 +160,34 @@ public class SelectiveCoursesFragment extends Fragment {
             currentAdapter = new ChdtuAdapter(selectiveCourses, getFragmentManager(), selectiveCoursesCounter, true, isMasterDegree);
             recyclerView.setAdapter(currentAdapter);
 
-            TextView btnSortByFaculty = (TextView) view.findViewById(R.id.sortByFaculty);
+            View.OnClickListener sortOnClickListener = new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    switch (v.getId()) {
+                        case R.id.sortByFaculty:
+                            sort(SelectiveCourse.ByFacultyName, selectiveCourses);
+                            disableSortButton(R.id.sortByFaculty);
+                            break;
+                        case R.id.sortByCourse:
+                            sort(SelectiveCourse.ByCourseName, selectiveCourses);
+                            disableSortButton(R.id.sortByCourse);
+                            break;
+                        case R.id.sortByStudentCount:
+                            sort(SelectiveCourse.ByStudentCount, selectiveCourses);
+                            disableSortButton(R.id.sortByStudentCount);
+                            break;
+                    }
+                }
+            };
 
-            btnSortByFaculty.setOnClickListener(v -> {
-                sort(SelectiveCourse.ByFacultyName, selectiveCourses);
-                setSortLabel("Факультетом");
-            });
+            TextView btnSortByFaculty = (TextView) view.findViewById(R.id.sortByFaculty);
+            btnSortByFaculty.setOnClickListener(sortOnClickListener);
 
             TextView btnSortByName = (TextView) view.findViewById(R.id.sortByCourse);
-
-            btnSortByName.setOnClickListener(v -> {
-                sort(SelectiveCourse.ByCourseName, selectiveCourses);
-                setSortLabel("Назвою");
-            });
+            btnSortByName.setOnClickListener(sortOnClickListener);
 
             TextView btnSortByStudentCount = view.findViewById(R.id.sortByStudentCount);
-
-            btnSortByStudentCount.setOnClickListener(v -> {
-                sort(SelectiveCourse.ByStudentCount, selectiveCourses);
-                setSortLabel("К-стю записаних студентів");
-            });
+            btnSortByStudentCount.setOnClickListener(sortOnClickListener);
 
             Button clearBtn = view.findViewById(R.id.clear_selectivecourses);
             clearBtn.setOnClickListener((view) -> {
@@ -268,6 +278,13 @@ public class SelectiveCoursesFragment extends Fragment {
         });
     }
 
+    private void initializeSortButtons() {
+        sortButtons = new ArrayList<>();
+        sortButtons.add(view.findViewById(R.id.sortByFaculty));
+        sortButtons.add(view.findViewById(R.id.sortByCourse));
+        sortButtons.add(view.findViewById(R.id.sortByStudentCount));
+    }
+
     private void setSortLabel(String attribute) {
         sortLabel.setText("Сортувати предмети за: " + attribute);
     }
@@ -287,6 +304,15 @@ public class SelectiveCoursesFragment extends Fragment {
         currentAdapter = new ChdtuAdapter(selectiveCourses, getFragmentManager(), selectiveCoursesCounter, true, isMasterDegree);
         currentAdapter.onClick(null);
         recyclerView.setAdapter(currentAdapter);
+    }
+
+    public void disableSortButton(int buttonId) {
+        view.findViewById(buttonId).setEnabled(false);
+        for (View view: sortButtons) {
+            if (view.getId() != buttonId) {
+                view.setEnabled(true);
+            }
+        }
     }
 
     public void error(String text) {
