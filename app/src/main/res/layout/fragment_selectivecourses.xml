@@ -57,10 +57,8 @@
                 android:text="Продовжити"
                 android:textColor="@color/white" />
 
-
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 </RelativeLayout>
