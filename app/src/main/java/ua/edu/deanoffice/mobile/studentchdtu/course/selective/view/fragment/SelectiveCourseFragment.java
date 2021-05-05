@@ -1,7 +1,6 @@
 package ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,9 +63,9 @@ public class SelectiveCourseFragment extends Fragment implements View.OnClickLis
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
         checkBox = view.findViewById(R.id.selectivecheckbox);
         imageInfo = view.findViewById(R.id.selectivecourseinfo);
-        TextView disqualifiedLabel = view.findViewById(R.id.labelDisqulifiedCourse);
 
         //Make disqualified
+        TextView disqualifiedLabel = view.findViewById(R.id.labelDisqulifiedCourse);
         if (!selectiveCourse.isAvailable()) {
             disqualifiedLabel.setVisibility(View.VISIBLE);
             view.setBackgroundColor(getResources().getColor(R.color.disqualified_course_fond, null));
@@ -82,21 +81,21 @@ public class SelectiveCourseFragment extends Fragment implements View.OnClickLis
             ((TextView) view.findViewById(R.id.selectivecoursename)).setText(selectiveCourse.getCourse().getCourseName().getName());
         }
 
-        textTeacherName = (TextView) view.findViewById(R.id.teacherName);
+        textTeacherName = view.findViewById(R.id.teacherName);
         if (selectiveCourse.getTeacher() != null) {
             textTeacherName.setText(selectiveCourse.getTeacher().getSurname() + " " + selectiveCourse.getTeacher().getName() + " " + selectiveCourse.getTeacher().getPatronimic());
         } else {
             ((LinearLayout) view.findViewById(R.id.textlayout)).removeView(textTeacherName);
         }
 
-        textDepartmentName = (TextView) view.findViewById(R.id.departmentName);
+        textDepartmentName = view.findViewById(R.id.departmentName);
 
         if (selectiveCourse.getDepartment() != null) {
             String facultyName = selectiveCourse.getDepartment().getFaculty().getAbbr();
             textDepartmentName.setText(facultyName + ", " + selectiveCourse.getDepartment().getName());
         }
 
-        textStudentCount = (TextView) view.findViewById(R.id.studentCount);
+        textStudentCount = view.findViewById(R.id.studentCount);
         textStudentCount.setText(Integer.toString(selectiveCourse.getStudentsCount()));
 
         checkBox.setChecked(selectiveCourse.isSelected());
@@ -142,7 +141,7 @@ public class SelectiveCourseFragment extends Fragment implements View.OnClickLis
 
     @Override
     public void onClick(View view) {
-        if(!interactive) return;
+        if (!interactive) return;
 
         boolean isSuccess = listener.onClick(this);
         if (isSuccess) {

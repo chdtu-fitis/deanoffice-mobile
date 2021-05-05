@@ -4,10 +4,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Switch;
 
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,11 +14,10 @@ import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourses;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.SelectiveCoursesAdapter;
 
-public class SelectiveCoursesConfirmedFragment extends Fragment {
-    private final SelectiveCourses selectiveCourses;
-
+public class SelectiveCoursesConfirmedFragment extends BaseSelectiveCoursesFragment {
     public SelectiveCoursesConfirmedFragment(SelectiveCourses selectiveCourses) {
-        this.selectiveCourses = selectiveCourses;
+        super(null);
+        this.showingSelectiveCourses = selectiveCourses;
     }
 
     @Nullable
@@ -30,21 +28,20 @@ public class SelectiveCoursesConfirmedFragment extends Fragment {
 
     @Override
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
-        RecyclerView recyclerView = view.findViewById(R.id.listview1);
+        recyclerView = view.findViewById(R.id.listview1);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        SelectiveCoursesAdapter adapter = new SelectiveCoursesAdapter(selectiveCourses, getFragmentManager(), null);
-        recyclerView.setAdapter(adapter);
-        adapter.disableCheckBoxes(true);
-
-        Switch btnExtendedView = view.findViewById(R.id.switchExtendedView);
-        btnExtendedView.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                adapter.setExtendedView();
-            } else {
-                adapter.setShortView();
+        View buttonToMainMenu = view.findViewById(R.id.buttonToMenu);
+        buttonToMainMenu.setOnClickListener((v) -> {
+            FragmentActivity activity = getActivity();
+            if (activity != null) {
+                activity.onBackPressed();
             }
         });
+
+        SelectiveCoursesAdapter adapter = new SelectiveCoursesAdapter(showingSelectiveCourses, getFragmentManager(), null);
+        recyclerView.setAdapter(adapter);
+        adapter.disableCheckBoxes(true);
     }
 }

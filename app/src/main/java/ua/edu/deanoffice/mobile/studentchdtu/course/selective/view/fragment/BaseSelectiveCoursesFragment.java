@@ -179,8 +179,7 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
                             if (confirmed) {
                                 FragmentManager fragmentManager = getFragmentManager();
                                 if (fragmentManager != null) {
-                                    showHeaders(SelectiveCoursesActivity.Headers.CONFIRM);
-
+                                    showHeaders(SelectiveCoursesActivity.Headers.REGISTERED);
                                     Fragment fragment = new SelectiveCoursesConfirmedFragment(selectiveCourses);
                                     fragmentManager.beginTransaction()
                                             .replace(R.id.fragment_container, fragment)

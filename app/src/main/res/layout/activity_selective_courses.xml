@@ -135,7 +135,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="left"
-                android:text="Сортувати предмети за: К-стю записаних студентів "
+                android:text="Сортувати предмети за:"
                 android:textAlignment="center"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -172,6 +172,7 @@
 
                         <TextView
                             android:id="@+id/sortByCourse"
+                            style="@style/SortButtons"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
@@ -186,6 +187,7 @@
 
                         <TextView
                             android:id="@+id/sortByFaculty"
+                            style="@style/SortButtons"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
@@ -200,10 +202,12 @@
 
                         <TextView
                             android:id="@+id/sortByStudentCount"
+                            style="@style/SortButtons"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
                             android:layout_marginRight="5dp"
+                            android:enabled="false"
                             android:text="К-стю студентів"
                             android:textSize="15sp" />
                     </LinearLayout>

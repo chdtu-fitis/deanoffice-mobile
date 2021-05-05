@@ -50,6 +50,31 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
     private SelectiveCourses selectedCourses, availableCourses;
     private TextView sortLabel;
     private BaseSelectiveCoursesFragment currentSelectedFragment = null;
+    private List<View> sortButtons;
+
+    @SuppressLint("NonConstantResourceId")
+    View.OnClickListener sortOnClickListener = v -> {
+        switch (v.getId()) {
+            case R.id.sortByFaculty:
+                if (currentSelectedFragment != null) {
+                    currentSelectedFragment.sort(SelectiveCourse.ByFacultyName);
+                }
+                disableSortButton(R.id.sortByFaculty);
+                break;
+            case R.id.sortByCourse:
+                if (currentSelectedFragment != null) {
+                    currentSelectedFragment.sort(SelectiveCourse.ByCourseName);
+                }
+                disableSortButton(R.id.sortByCourse);
+                break;
+            case R.id.sortByStudentCount:
+                if (currentSelectedFragment != null) {
+                    currentSelectedFragment.sort(SelectiveCourse.ByStudentCount);
+                }
+                disableSortButton(R.id.sortByStudentCount);
+                break;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +84,8 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         @SuppressLint("InflateParams")
         View contentView = inflater.inflate(R.layout.activity_selective_courses, mainContentBlock, false);
         mainContentBlock.addView(contentView, 1);
+
+        initializeSortButtons();
 
         @SuppressLint("UseSwitchCompatOrMaterialCode")
         Switch btnExtendedView = findViewById(R.id.switchExtendedView);
@@ -79,26 +106,9 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         TextView btnSortByFaculty = findViewById(R.id.sortByFaculty);
         TextView btnSortByStudentCount = findViewById(R.id.sortByStudentCount);
 
-        btnSortByFaculty.setOnClickListener(v -> {
-            if (currentSelectedFragment != null) {
-                currentSelectedFragment.sort(SelectiveCourse.ByFacultyName);
-            }
-            setSortLabel(getRString(R.string.label_sort_by_faculty));
-        });
-
-        btnSortByName.setOnClickListener(v -> {
-            if (currentSelectedFragment != null) {
-                currentSelectedFragment.sort(SelectiveCourse.ByCourseName);
-            }
-            setSortLabel(getRString(R.string.label_sort_by_name));
-        });
-
-        btnSortByStudentCount.setOnClickListener(v -> {
-            if (currentSelectedFragment != null) {
-                currentSelectedFragment.sort(SelectiveCourse.ByStudentCount);
-            }
-            setSortLabel(getRString(R.string.label_sort_by_students_count));
-        });
+        btnSortByFaculty.setOnClickListener(sortOnClickListener);
+        btnSortByName.setOnClickListener(sortOnClickListener);
+        btnSortByStudentCount.setOnClickListener(sortOnClickListener);
 
         sortLabel = findViewById(R.id.sortLabel);
         sortPanel = findViewById(R.id.sortPanel);
@@ -421,6 +431,22 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
     /*
      *   StateMachine Classes End
      */
+
+    private void initializeSortButtons() {
+        sortButtons = new ArrayList<>();
+        sortButtons.add(findViewById(R.id.sortByFaculty));
+        sortButtons.add(findViewById(R.id.sortByCourse));
+        sortButtons.add(findViewById(R.id.sortByStudentCount));
+    }
+
+    public void disableSortButton(int buttonId) {
+        findViewById(buttonId).setEnabled(false);
+        for (View view : sortButtons) {
+            if (view.getId() != buttonId) {
+                view.setEnabled(true);
+            }
+        }
+    }
 
     protected void setSortLabel(String attribute) {
         String sortedBy = getRString(R.string.info_sorted_by_attribute);

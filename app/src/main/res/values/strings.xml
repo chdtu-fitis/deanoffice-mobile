@@ -71,7 +71,7 @@
     <string name="label_disqualified_course">Дисципліну скасовано</string>
 
     //InformationFragment
-    <string name="info_left_before_next_round">До початку туру залишилось {left_time}</string>
+    <string name="info_left_before_next_round">До початку туру залишилось \n{left_time}</string>
 
     //Other Classes
     //DeadLineTimer
