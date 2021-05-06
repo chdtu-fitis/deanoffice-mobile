@@ -47,7 +47,7 @@ public class DeadLineTimer {
 
         if (weeks > TIME_BORDER) {
             result = weeks + TimeType.WEEKS.UA(context, getFormat(weeks));
-            days -=  weeks * 7;
+            days -= weeks * 7;
             result += " і " + days + TimeType.DAYS.UA(context, getFormat(days));
         } else if (days > TIME_BORDER) {
             result = days + TimeType.DAYS.UA(context, getFormat(days));
@@ -62,7 +62,7 @@ public class DeadLineTimer {
         } else if (seconds > 0) {
             result = context != null ? context.getResources().getString(R.string.dlt_seconds) : "";
         } else {
-            result = "";
+            result = "***";
         }
 
         return result;

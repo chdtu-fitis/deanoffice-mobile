@@ -6,18 +6,26 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -174,5 +182,65 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
 
     protected String getRString(int resource) {
         return getResources().getString(resource);
+    }
+
+    public void showError(String msg) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        ViewGroup viewGroup = findViewById(android.R.id.content);
+        View dialogView = LayoutInflater.from(this)
+                .inflate(R.layout.dialog_error_message, viewGroup, false);
+
+        TextView titleText = dialogView.findViewById(R.id.errorHeadline);
+        TextView bodyText = dialogView.findViewById(R.id.errorBody);
+
+        titleText.setText(getRString(R.string.error_msg_title));
+        bodyText.setText(msg);
+        builder.setView(dialogView);
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+        dialogView.findViewById(R.id.buttonOk).setOnClickListener((viewOk) -> {
+            alertDialog.dismiss();
+        });
+    }
+
+    public void showError(String msg, ErrorDialogListener action) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        ViewGroup viewGroup = findViewById(android.R.id.content);
+        View dialogView = LayoutInflater.from(this)
+                .inflate(R.layout.dialog_error_message, viewGroup, false);
+
+        TextView titleText = dialogView.findViewById(R.id.errorHeadline);
+        TextView bodyText = dialogView.findViewById(R.id.errorBody);
+
+        titleText.setText(getRString(R.string.error_msg_title));
+        bodyText.setText(msg);
+        builder.setView(dialogView);
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+        dialogView.findViewById(R.id.buttonOk).setOnClickListener((viewOk) -> {
+            alertDialog.dismiss();
+            action.onClickActionButton();
+        });
+    }
+
+    public String getServerErrorMessage(Response response){
+        String errorMessage = getRString(R.string.error_connection_failed);
+        if (response.errorBody() != null) {
+            try {
+                JSONObject object = new JSONObject(response.errorBody().string());
+                errorMessage = object.getString("message");
+            } catch (IOException | JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return errorMessage;
+    }
+
+    public interface ErrorDialogListener{
+        void onClickActionButton();
     }
 }

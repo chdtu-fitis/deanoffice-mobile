@@ -1,7 +1,6 @@
 package ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,58 +13,45 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import lombok.Getter;
+import lombok.Setter;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourse;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.Teacher;
 
-public class SelectiveCourseFragment extends Fragment {
+public class SelectiveCourseFragment extends Fragment implements View.OnClickListener {
+    public interface OnClickListener {
+        boolean onClick(Object obj);
+    }
 
     private final int layout;
+    @Getter
     private final SelectiveCourse selectiveCourse;
     private CheckBox checkBox;
     private ImageView imageInfo;
     private Button btnCheckBox;
-    private boolean interactive;
-    private boolean showTrainingCycle;
-    private View.OnClickListener listener;
-    private TextView textTeacherName;
-    private TextView textDepartmentName;
-    private TextView textStudentCount;
-    private TextView disqualifiedLabel;
+    private final boolean showTrainingCycle;
+    private final OnClickListener listener;
+    private TextView textTeacherName, textDepartmentName, textStudentCount;
     private boolean selectedFromFirstRound = false;
+    @Setter
+    private boolean interactive = true;
 
-    public SelectiveCourse getSelectiveCourse() {
-        return selectiveCourse;
-    }
+    public SelectiveCourseFragment(SelectiveCourse selectiveCourse, int layout, OnClickListener listener, boolean showTrainingCycle) {
+        this.selectiveCourse = selectiveCourse;
+        this.layout = layout;
+        this.listener = listener;
+        this.showTrainingCycle = showTrainingCycle;
 
-    public void setCheckBoxInteractive(boolean interactive) {
-        if (selectedFromFirstRound) {
-            interactive = false;
+        if (selectiveCourse.isSelected()) {
+            selectedFromFirstRound = true;
         }
-        checkBox.setClickable(interactive);
-        btnCheckBox.setClickable(interactive);
-    }
-
-    public boolean isChecked() {
-        return checkBox.isChecked();
     }
 
     public void setChecked(boolean checked) {
         if (selectedFromFirstRound) return;
         checkBox.setChecked(checked);
-        selectiveCourse.selected = checked;
-    }
-
-    public SelectiveCourseFragment(SelectiveCourse selectiveCourse, int layout, View.OnClickListener listener, boolean interactive, boolean showTrainingCycle) {
-        this.selectiveCourse = selectiveCourse;
-        this.layout = layout;
-        this.listener = listener;
-        this.interactive = interactive;
-        this.showTrainingCycle = showTrainingCycle;
-
-        if (selectiveCourse.selected) {
-            selectedFromFirstRound = true;
-        }
+        selectiveCourse.setSelected(checked);
     }
 
     @Override
@@ -77,9 +63,9 @@ public class SelectiveCourseFragment extends Fragment {
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
         checkBox = view.findViewById(R.id.selectivecheckbox);
         imageInfo = view.findViewById(R.id.selectivecourseinfo);
-        disqualifiedLabel = view.findViewById(R.id.labelDisqulifiedCourse);
 
         //Make disqualified
+        TextView disqualifiedLabel = view.findViewById(R.id.labelDisqulifiedCourse);
         if (!selectiveCourse.isAvailable()) {
             disqualifiedLabel.setVisibility(View.VISIBLE);
             view.setBackgroundColor(getResources().getColor(R.color.disqualified_course_fond, null));
@@ -95,24 +81,24 @@ public class SelectiveCourseFragment extends Fragment {
             ((TextView) view.findViewById(R.id.selectivecoursename)).setText(selectiveCourse.getCourse().getCourseName().getName());
         }
 
-        textTeacherName = (TextView) view.findViewById(R.id.teacherName);
+        textTeacherName = view.findViewById(R.id.teacherName);
         if (selectiveCourse.getTeacher() != null) {
             textTeacherName.setText(selectiveCourse.getTeacher().getSurname() + " " + selectiveCourse.getTeacher().getName() + " " + selectiveCourse.getTeacher().getPatronimic());
         } else {
             ((LinearLayout) view.findViewById(R.id.textlayout)).removeView(textTeacherName);
         }
 
-        textDepartmentName = (TextView) view.findViewById(R.id.departmentName);
+        textDepartmentName = view.findViewById(R.id.departmentName);
 
         if (selectiveCourse.getDepartment() != null) {
             String facultyName = selectiveCourse.getDepartment().getFaculty().getAbbr();
             textDepartmentName.setText(facultyName + ", " + selectiveCourse.getDepartment().getName());
         }
 
-        textStudentCount = (TextView) view.findViewById(R.id.studentCount);
+        textStudentCount = view.findViewById(R.id.studentCount);
         textStudentCount.setText(Integer.toString(selectiveCourse.getStudentsCount()));
 
-        checkBox.setChecked(selectiveCourse.selected);
+        checkBox.setChecked(selectiveCourse.isSelected());
 
         imageInfo.setOnClickListener((viewClick) -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(viewClick.getContext());
@@ -138,13 +124,7 @@ public class SelectiveCourseFragment extends Fragment {
         });
 
         btnCheckBox = view.findViewById(R.id.buttonBox);
-        btnCheckBox.setOnClickListener((viewButton) -> {
-            checkBox.setChecked(!checkBox.isChecked());
-            selectiveCourse.selected = checkBox.isChecked();
-            listener.onClick(viewButton);
-        });
-
-        setCheckBoxInteractive(interactive);
+        btnCheckBox.setOnClickListener(this);
     }
 
     public void setShortView() {
@@ -157,5 +137,16 @@ public class SelectiveCourseFragment extends Fragment {
         textTeacherName.setVisibility(View.VISIBLE);
         textDepartmentName.setVisibility(View.VISIBLE);
         textStudentCount.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (!interactive) return;
+
+        boolean isSuccess = listener.onClick(this);
+        if (isSuccess) {
+            checkBox.setChecked(!checkBox.isChecked());
+            selectiveCourse.setSelected(checkBox.isChecked());
+        }
     }
 }

@@ -1,10 +1,10 @@
 package ua.edu.deanoffice.mobile.studentchdtu.user.profile.model;
 
 import android.util.Log;
+
 import java.lang.reflect.Field;
 
 public abstract class ValidModel {
-
     public boolean isValid() {
         try {
             for (Field f : getClass().getDeclaredFields()) {

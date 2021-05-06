@@ -19,14 +19,13 @@
     //Info
     <string name="info_sel_courses">Оберіть дисципліни</string>
     <string name="info_confirm_sel_courses">Підтвердіть обрані дисципліни</string>
+    <string name="info_failed_load_selective_courses">Невдалось завантажити список дисциплін</string>
 
     //Buttons
     <string name="button_confirm">Підтвердити</string>
-    <string name="button_cancel">Скасувати</string>
-    <string name="button_next">Далі</string>
+    <string name="button_cancel">Назад</string>
+    <string name="button_next">Продовжити</string>
     <string name="button_uncheck_selection">Зняти виділення</string>
-    <string name="button_show_disqualified_courses">Дискваліфіковані предмети</string>
-    <string name="button_show_qualified_courses">Доступні предмети</string>
 
     //ActionBar titles
     <string name="action_bar_title_main_menu">Головне меню</string>
@@ -43,24 +42,39 @@
     <string name="option_enable_notif_on_reg_selective_courses">Запис на вибіркові предмети</string>
 
     //SelectiveCoursesActivity
+    <string name="info_before_first_round">Перший тур реєстрації на вибіркові дисципліни ще не почався</string>
     <string name="info_between_first_and_second_round">
-        Перший тур запису на вибіркові дисципліни вже завершився.
+        Перший тур реєстрації на вибіркові дисципліни завершився.
         \nВи матимете змогу обрати дисципліни у другому турі
     </string>
-    <string name="info_after_second_round">Другий тур запису на вибіркові дисципліни вже завершився</string>
-    <string name="info_before_first_round">Перший тур запису на вибіркові дисципліни ще не почався</string>
-    <string name="info_left_before_next_round">До початку туру залишилось {left_time}</string>
+    <string name="info_after_second_round">
+        Другий тур запису на вибіркові дисципліни вже завершився. Ви не обрали дисципліни або серед обраних у першому турі маєте дискваліфіковані,
+        тому вас буде зареєстровано на доступні дисципліни автоматично
+    </string>
+    <string name="header_success_registered">ЗАРЕЄСТРОВАНО</string>
+    <string name="header_success_registered2">Ваші предмети зареєстровано\nПерейдіть у меню для вибору інших дій</string>
+    <string name="header_study_years">Вибір предметів на {study_year_begin}-{study_year_end} н. р.</string>
+    <string name="header_left_time_to_end_round">До завершення реєстрації {left_time}</string>
+    <string name="header_selected_courses_counter">
+        Перший семестр ({semester_1_count} з {semester_1_max})
+        \nДругий семестр ({semester_2_count} з {semester_2_max})
+    </string>
 
     //Fragments
+    //SelectiveCoursesFragment
+    <string name="label_sort_by_faculty">Факультетом</string>
+    <string name="label_sort_by_name">Назвою</string>
+    <string name="label_sort_by_students_count">К-стю записаних студентів</string>
+    <string name="info_sorted_by_attribute">Сортувати предмети за: {attribute}</string>
+
     //SelectiveCourseFragment
     <string name="label_disqualified_course">Дисципліну скасовано</string>
 
-    //SelectiveCoursesSecondRound
-    <string name="header_study_years">Вибір предметів на {study_year_begin}-{study_year_end} н. р.</string>
+    //InformationFragment
+    <string name="info_left_before_next_round">До початку туру залишилось \n{left_time}</string>
 
+    //Other Classes
     //DeadLineTimer
-    <string name="dlt_to_reg_finish">До завершення реєстрації {left_time}</string>
-
     <string name="dlt_f1_minutes">" хвилина"</string>
     <string name="dlt_f2_minutes">" хвилини"</string>
     <string name="dlt_f3_minutes">" хвилин"</string>

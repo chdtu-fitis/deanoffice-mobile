@@ -9,55 +9,31 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/text_head"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/listview1"
             android:layout_width="match_parent"
+            android:layout_height="0sp"
+            android:layout_marginBottom="20dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@+id/buttonToMenu"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.55" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonToMenu"
+            android:layout_width="109sp"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="ЗАРЕЄСТРОВАНО"
-            android:textColor="@color/gray"
-            android:textSize="22sp"
-            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:background="@drawable/round_rect_shape"
+            android:text="Меню"
+            android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.05" />
-
-        <TextView
-            android:id="@+id/text_body"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Ваші предмети зареєстровано\nПерейдіть у меню для вибору інших дій"
-            android:textColor="@color/gray"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_head" />
-
-        <Switch
-            android:id="@+id/switchExtendedView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:gravity="right"
-            android:text="Розширений перегляд: "
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_body" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/listview1"
-            android:layout_marginTop="20sp"
-            android:layout_width="match_parent"
-            android:layout_height="0sp"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_body"
-            app:layout_constraintVertical_bias="0.55" />
+            app:layout_constraintVertical_bias="0.85" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

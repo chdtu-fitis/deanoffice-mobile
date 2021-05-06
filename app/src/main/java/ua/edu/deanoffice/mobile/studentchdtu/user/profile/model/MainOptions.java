@@ -1,10 +1,8 @@
 package ua.edu.deanoffice.mobile.studentchdtu.user.profile.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 public class MainOptions {
     //Constance IDs
     public final static String APP_MAIN_OPTIONS = "application_main_options";
