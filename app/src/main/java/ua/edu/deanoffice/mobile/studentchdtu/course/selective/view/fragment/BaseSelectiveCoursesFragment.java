@@ -39,6 +39,7 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
     protected RecyclerView recyclerView;
     protected SelectiveCourses showingSelectiveCourses;
     protected Button clearButton, confirmButton;
+    protected View toFirstSemesterButton, toSecondSemesterButton;
 
     public BaseSelectiveCoursesFragment(SelectedCoursesCounter selectedCoursesCounter) {
         this.selectedCoursesCounter = selectedCoursesCounter;
@@ -58,6 +59,14 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
 
         clearButton = view.findViewById(R.id.clear_selectivecourses);
         confirmButton = view.findViewById(R.id.confirm_selectivecourses);
+
+        toFirstSemesterButton = view.findViewById(R.id.buttonToFirstSemester);
+        toSecondSemesterButton = view.findViewById(R.id.buttonToSecondSemester);
+
+        toFirstSemesterButton.setOnClickListener(v -> selectSemester(1));
+        toSecondSemesterButton.setOnClickListener(v -> selectSemester(2));
+
+        selectSemester(1);
 
         selectedCoursesCounter.setSelectListener(new SelectedCoursesCounter.SelectListener() {
             @Override
@@ -205,6 +214,27 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
         ConfirmedSelectiveCourses confirmedSelectiveCourses = new ConfirmedSelectiveCourses();
         confirmedSelectiveCourses.setSelectiveCourses(selectiveCourses.getSelectiveCoursesIds());
         return confirmedSelectiveCourses;
+    }
+
+    protected void selectSemester(int semester) {
+        switch (semester) {
+            case 2:
+                toFirstSemesterButton.setVisibility(View.VISIBLE);
+                toSecondSemesterButton.setVisibility(View.GONE);
+                break;
+            case 1:
+            default:
+                toSecondSemesterButton.setVisibility(View.VISIBLE);
+                toFirstSemesterButton.setVisibility(View.GONE);
+        }
+    }
+
+    protected void showFirstSemester(){
+
+    }
+
+    protected void showSecondSemester(){
+
     }
 
     protected void disableButton(View button) {
