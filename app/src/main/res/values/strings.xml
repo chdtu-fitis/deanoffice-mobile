@@ -12,6 +12,7 @@
     <string name="error_msg_title">Помилка</string>
     <string name="error_connection_failed">Помилка під час підключення до серверу, спробуйте пізніше</string>
     <string name="error_login">Неправильно введений логін або пароль</string>
+    <string name="error_null_selective_courses_adapter">Виникла помилка при створенні списку обраних дисциплін. Переконайтесь, що ви обрали дисципліни і на перший, і на другий семестри.</string>
 
     //Worn
     <string name="worn_select_courses">Оберіть дисципліни</string>
@@ -55,10 +56,8 @@
     <string name="header_success_registered2">Ваші предмети зареєстровано\nПерейдіть у меню для вибору інших дій</string>
     <string name="header_study_years">Вибір предметів на {study_year_begin}-{study_year_end} н. р.</string>
     <string name="header_left_time_to_end_round">До завершення реєстрації {left_time}</string>
-    <string name="header_selected_courses_counter">
-        Перший семестр ({semester_1_count} з {semester_1_max})
-        \nДругий семестр ({semester_2_count} з {semester_2_max})
-    </string>
+    <string name="header_selected_courses_counter_s1">Перший семестр ({semester_1_count} з {semester_1_max})</string>
+    <string name="header_selected_courses_counter_s2">Другий семестр ({semester_2_count} з {semester_2_max})</string>
 
     //Fragments
     //SelectiveCoursesFragment
@@ -66,6 +65,10 @@
     <string name="label_sort_by_name">Назвою</string>
     <string name="label_sort_by_students_count">К-стю записаних студентів</string>
     <string name="info_sorted_by_attribute">Сортувати предмети за: {attribute}</string>
+
+    //SelectiveCoursesConfirmedFragment
+    <string name="label_selected_courses_s1">Перший семестр</string>
+    <string name="label_selected_courses_s2">Другий семестр</string>
 
     //SelectiveCourseFragment
     <string name="label_disqualified_course">Дисципліну скасовано</string>

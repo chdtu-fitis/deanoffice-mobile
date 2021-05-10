@@ -24,24 +24,22 @@ import ua.edu.deanoffice.mobile.studentchdtu.course.selective.SelectedCoursesCou
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.Department;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourse;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.Teacher;
-import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.SelectiveCourseFragment;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.enums.Semester;
 
 public class SelectiveCoursesAdapter2 extends RecyclerView.Adapter<SelectiveCoursesAdapter2.ViewHolder> {
-    public enum  Semester{
-        FIRST,
-        SECOND
-    }
     // 1 - bak
     // 3 - magistr
 
     private final SelectedCoursesCounter selectedCoursesCounter;
     private final List<SelectiveCourse> selectiveCoursesList;
+    @Getter
     private final List<SelectiveCourse> selectedCourse;
     private final List<SelectiveCourse> selectedCourseFromFirstRound;
     private final boolean showTrainingCycle;
-    private boolean showExtendView = false;
+    private static boolean showExtendView = true;
     private boolean showUncheckedCourses = true;
     private boolean interactive = true;
+    @Getter
     private final Semester semester;
 
     public SelectiveCoursesAdapter2(List<SelectiveCourse> selectiveCoursesList, SelectedCoursesCounter selectedCoursesCounter, Semester semester) {
@@ -121,11 +119,7 @@ public class SelectiveCoursesAdapter2 extends RecyclerView.Adapter<SelectiveCour
         }
 
         if (!course.isSelected()) {
-            if (showUncheckedCourses) {
-                viewHolder.itemView.setVisibility(View.VISIBLE);
-            } else {
-                viewHolder.itemView.setVisibility(View.GONE);
-            }
+            viewHolder.setVisible(showUncheckedCourses);
         }
 
         viewHolder.setInteractive(interactive);
@@ -135,6 +129,7 @@ public class SelectiveCoursesAdapter2 extends RecyclerView.Adapter<SelectiveCour
         final TextView textTeacherName, textDepartmentName, textStudentCount, textCourseName;
         final LinearLayout informationBlock;
         final CheckBox checkBox;
+        final ViewGroup.LayoutParams normalParams;
 
         @Setter
         private boolean selectedFromFirstRound = false;
@@ -148,6 +143,7 @@ public class SelectiveCoursesAdapter2 extends RecyclerView.Adapter<SelectiveCour
 
         public ViewHolder(View view) {
             super(view);
+            normalParams = view.getLayoutParams();
 
             checkBox = view.findViewById(R.id.selectivecheckbox);
             ImageView imageInfo = view.findViewById(R.id.selectivecourseinfo);
@@ -203,15 +199,27 @@ public class SelectiveCoursesAdapter2 extends RecyclerView.Adapter<SelectiveCour
         }
 
         public void setShortView() {
+            setVisible(true);
             textTeacherName.setVisibility(View.GONE);
             textDepartmentName.setVisibility(View.GONE);
             textStudentCount.setVisibility(View.GONE);
         }
 
         public void setExtendedView() {
+            setVisible(true);
             textTeacherName.setVisibility(View.VISIBLE);
             textDepartmentName.setVisibility(View.VISIBLE);
             textStudentCount.setVisibility(View.VISIBLE);
+        }
+
+        public void setVisible(boolean isVisible) {
+            if (isVisible) {
+                itemView.setVisibility(View.VISIBLE);
+                itemView.setLayoutParams(normalParams);
+            } else {
+                itemView.setVisibility(View.GONE);
+                itemView.setLayoutParams(new ViewGroup.LayoutParams(0, 0));
+            }
         }
 
         @Override
@@ -220,8 +228,7 @@ public class SelectiveCoursesAdapter2 extends RecyclerView.Adapter<SelectiveCour
 
             boolean isSuccess = listener.onClick(this);
             if (isSuccess) {
-                checkBox.setChecked(!checkBox.isChecked());
-                selectiveCourse.setSelected(checkBox.isChecked());
+                setChecked(!checkBox.isChecked());
             }
         }
 
@@ -253,10 +260,10 @@ public class SelectiveCoursesAdapter2 extends RecyclerView.Adapter<SelectiveCour
         SelectiveCourse course = viewHolder.getSelectiveCourse();
 
         boolean isSuccess;
-        if(semester == Semester.FIRST){
+        if (semester == Semester.FIRST) {
             isSuccess = addOrRemoveToSelectedList(course, selectedCourse, selectedCoursesCounter.isFirstSemesterFull());
             selectedCoursesCounter.setSelectedFirstSemester(selectedCourse.size());
-        }else{
+        } else {
             isSuccess = addOrRemoveToSelectedList(course, selectedCourse, selectedCoursesCounter.isSecondSemesterFull());
             selectedCoursesCounter.setSelectedSecondSemester(selectedCourse.size());
         }
@@ -281,16 +288,20 @@ public class SelectiveCoursesAdapter2 extends RecyclerView.Adapter<SelectiveCour
     }
 
     public void clearSelected() {
+        List<SelectiveCourse> coursesListToDelete = new ArrayList<>();
         for (SelectiveCourse course : selectedCourse) {
             if (course.isSelected() && !selectedCourseFromFirstRound.contains(course)) {
                 course.setSelected(false);
-                selectedCourse.remove(course);
+                coursesListToDelete.add(course);
             }
         }
+        for (SelectiveCourse course : coursesListToDelete) {
+            selectedCourse.remove(course);
+        }
 
-        if(semester == Semester.FIRST) {
+        if (semester == Semester.FIRST) {
             selectedCoursesCounter.setSelectedFirstSemester(selectedCourse.size());
-        }else{
+        } else {
             selectedCoursesCounter.setSelectedSecondSemester(selectedCourse.size());
         }
 
