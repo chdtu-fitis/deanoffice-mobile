@@ -13,4 +13,6 @@
     <color name="act_background">#F1F7FE</color>
     <color name="red">#ff0000</color>
     <color name="disqualified_course_fond">#3EF37100</color>
+    <color name="professional_training_cycle">#FB8C00</color>
+    <color name="general_training_cycle">#36b100</color>
 </resources>

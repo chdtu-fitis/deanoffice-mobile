@@ -1,6 +1,10 @@
 package ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,15 +75,19 @@ public class SelectiveCourseFragment extends Fragment implements View.OnClickLis
             view.setBackgroundColor(getResources().getColor(R.color.disqualified_course_fond, null));
         }
 
-        if (showTrainingCycle) {
-            if (selectiveCourse.getTrainingCycle().equals("GENERAL")) {
-                ((TextView) view.findViewById(R.id.selectivecoursename)).setText(selectiveCourse.getCourse().getCourseName().getName() + " (Загальний рівень)");
-            } else {
-                ((TextView) view.findViewById(R.id.selectivecoursename)).setText(selectiveCourse.getCourse().getCourseName().getName() + " (Професійний рівень)");
-            }
-        } else {
-            ((TextView) view.findViewById(R.id.selectivecoursename)).setText(selectiveCourse.getCourse().getCourseName().getName());
-        }
+        String courseName = selectiveCourse.getCourse().getCourseName().getName();
+        String trainingCycle = selectiveCourse.getTrainingCycle();
+
+        SpannableString coloredCourseName = trainingCycle.equals("GENERAL") ?
+                new SpannableString(courseName + " (Заг.) ") :
+                new SpannableString(courseName + " (Проф.)");
+
+        coloredCourseName.setSpan(trainingCycle.equals("GENERAL") ?
+                        new ForegroundColorSpan(getResources().getColor(R.color.general_training_cycle, null)) :
+                        new ForegroundColorSpan(getResources().getColor(R.color.professional_training_cycle, null)),
+                courseName.length() + 1, courseName.length() + 8, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        ((TextView) view.findViewById(R.id.selectivecoursename)).setText(coloredCourseName);
 
         textTeacherName = view.findViewById(R.id.teacherName);
         if (selectiveCourse.getTeacher() != null) {
@@ -106,6 +114,10 @@ public class SelectiveCourseFragment extends Fragment implements View.OnClickLis
             View dialogView = LayoutInflater.from(viewClick.getContext()).inflate(R.layout.dialog_selectivecourse_info, viewGroup, false);
 
             ((TextView) dialogView.findViewById(R.id.selectiveCourseName)).setText(selectiveCourse.getCourse().getCourseName().getName());
+            if (selectiveCourse.getTrainingCycle().equals("GENERAL")) {
+                ((TextView) dialogView.findViewById(R.id.selectiveCourseTrainingCycle)).setText("Загальний рівень");
+                ((TextView) dialogView.findViewById(R.id.selectiveCourseTrainingCycle)).setTextColor(getResources().getColor(R.color.general_training_cycle, null));
+            }
             ((TextView) dialogView.findViewById(R.id.selectiveCourseFaculty)).setText(selectiveCourse.getDepartment().getFaculty().getName());
             ((TextView) dialogView.findViewById(R.id.selectiveCourseDepartment)).setText(selectiveCourse.getDepartment().getName());
             ((TextView) dialogView.findViewById(R.id.selectiveCourseStudentCount)).setText("Кількість записаних студентів: " + selectiveCourse.getStudentsCount());
