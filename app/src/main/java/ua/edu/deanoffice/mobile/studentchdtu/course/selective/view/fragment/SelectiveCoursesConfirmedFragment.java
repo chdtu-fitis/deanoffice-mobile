@@ -17,7 +17,6 @@ import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourses;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.enums.Semester;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.SelectiveCoursesAdapter;
-import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.SelectiveCoursesAdapter2;
 
 public class SelectiveCoursesConfirmedFragment extends BaseSelectiveCoursesFragment {
     private TextView textSelectedSemester;
@@ -57,7 +56,7 @@ public class SelectiveCoursesConfirmedFragment extends BaseSelectiveCoursesFragm
         initAdapters();
 
         if (recyclerView != null) {
-            SelectiveCoursesAdapter2 adapter = (SelectiveCoursesAdapter2) recyclerView.getAdapter();
+            SelectiveCoursesAdapter adapter = (SelectiveCoursesAdapter) recyclerView.getAdapter();
             if (adapter != null) {
                 adapter.disableCheckBoxes(true);
             }

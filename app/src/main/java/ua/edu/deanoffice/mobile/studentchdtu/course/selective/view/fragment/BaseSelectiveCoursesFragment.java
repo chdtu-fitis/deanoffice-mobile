@@ -33,14 +33,14 @@ import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCou
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.StudentDegreeSelectiveCoursesIds;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.enums.Semester;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.service.SelectiveCourseRequests;
-import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.SelectiveCoursesAdapter2;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.SelectiveCoursesAdapter;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.activity.SelectiveCoursesActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
 
 public abstract class BaseSelectiveCoursesFragment extends Fragment {
     protected SelectedCoursesCounter selectedCoursesCounter;
     protected RecyclerView recyclerView;
-    protected SelectiveCoursesAdapter2 adapterFirstSemester, adapterSecondSemester;
+    protected SelectiveCoursesAdapter adapterFirstSemester, adapterSecondSemester;
     protected SelectiveCourses showingSelectiveCourses;
     protected Button clearButton, confirmButton;
     protected View toFirstSemesterButton, toSecondSemesterButton;
@@ -75,7 +75,7 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
 
         clearButton.setOnClickListener((v) -> {
             if (recyclerView != null) {
-                SelectiveCoursesAdapter2 adapter = (SelectiveCoursesAdapter2) recyclerView.getAdapter();
+                SelectiveCoursesAdapter adapter = (SelectiveCoursesAdapter) recyclerView.getAdapter();
                 if (adapter != null) {
                     adapter.clearSelected();
                 }
@@ -114,14 +114,14 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
 
         List<SelectiveCourse> selectiveCourseList;
         selectiveCourseList = showingSelectiveCourses.getSelectiveCoursesFirstSemester();
-        adapterFirstSemester = new SelectiveCoursesAdapter2(selectiveCourseList, selectedCoursesCounter, Semester.FIRST);
+        adapterFirstSemester = new SelectiveCoursesAdapter(selectiveCourseList, selectedCoursesCounter, Semester.FIRST);
 
         selectiveCourseList = showingSelectiveCourses.getSelectiveCoursesSecondSemester();
-        adapterSecondSemester = new SelectiveCoursesAdapter2(selectiveCourseList, selectedCoursesCounter, Semester.SECOND);
+        adapterSecondSemester = new SelectiveCoursesAdapter(selectiveCourseList, selectedCoursesCounter, Semester.SECOND);
 
         Semester semester = Semester.FIRST;
         if (recyclerView != null) {
-            SelectiveCoursesAdapter2 adapter = (SelectiveCoursesAdapter2) recyclerView.getAdapter();
+            SelectiveCoursesAdapter adapter = (SelectiveCoursesAdapter) recyclerView.getAdapter();
             if (adapter != null) {
                 semester = adapter.getSemester();
             }
@@ -138,10 +138,10 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
         confirmButton.setText(getRString(R.string.button_next));
         clearButton.setText(getRString(R.string.button_uncheck_selection));
 
-        List<SelectiveCoursesAdapter2> adaptersList = new ArrayList<>();
+        List<SelectiveCoursesAdapter> adaptersList = new ArrayList<>();
         adaptersList.add(adapterFirstSemester);
         adaptersList.add(adapterSecondSemester);
-        for (SelectiveCoursesAdapter2 adapter : adaptersList) {
+        for (SelectiveCoursesAdapter adapter : adaptersList) {
             if (adapter != null) {
                 //Show hidden courses in list
                 adapter.showAllHiddenCourseFragments();
@@ -151,7 +151,7 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
         }
         //Change ClearButton onClickListener
         clearButton.setOnClickListener((v) -> {
-            SelectiveCoursesAdapter2 adapter = (SelectiveCoursesAdapter2) recyclerView.getAdapter();
+            SelectiveCoursesAdapter adapter = (SelectiveCoursesAdapter) recyclerView.getAdapter();
             adapter.clearSelected();
         });
         //Change ConfirmButton onClickListener
@@ -171,11 +171,11 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
             //Change ClearButton onClickListener
             clearButton.setOnClickListener(this::onClickButtonBackFromConfirmFragment);
 
-            List<SelectiveCoursesAdapter2> adaptersList = new ArrayList<>();
+            List<SelectiveCoursesAdapter> adaptersList = new ArrayList<>();
             adaptersList.add(adapterFirstSemester);
             adaptersList.add(adapterSecondSemester);
             SelectiveCourses selectiveCoursesFinal = new SelectiveCourses();
-            for (SelectiveCoursesAdapter2 adapter : adaptersList) {
+            for (SelectiveCoursesAdapter adapter : adaptersList) {
                 if (adapter != null) {
                     //Hide unchecked and disqualified courses in list
                     adapter.hideAllUncheckedCourseFragments();
@@ -273,7 +273,7 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
         if (showingSelectiveCourses == null) return;
         if (adapterFirstSemester == null) {
             List<SelectiveCourse> selectiveCourseList = showingSelectiveCourses.getSelectiveCoursesFirstSemester();
-            adapterFirstSemester = new SelectiveCoursesAdapter2(selectiveCourseList, selectedCoursesCounter, Semester.FIRST);
+            adapterFirstSemester = new SelectiveCoursesAdapter(selectiveCourseList, selectedCoursesCounter, Semester.FIRST);
         }
         recyclerView.setAdapter(adapterFirstSemester);
 
@@ -286,7 +286,7 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
         if (showingSelectiveCourses == null) return;
         if (adapterSecondSemester == null) {
             List<SelectiveCourse> selectiveCourseList = showingSelectiveCourses.getSelectiveCoursesSecondSemester();
-            adapterSecondSemester = new SelectiveCoursesAdapter2(selectiveCourseList, selectedCoursesCounter, Semester.SECOND);
+            adapterSecondSemester = new SelectiveCoursesAdapter(selectiveCourseList, selectedCoursesCounter, Semester.SECOND);
         }
         recyclerView.setAdapter(adapterSecondSemester);
 
@@ -357,7 +357,7 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
 
     public void setExtendSelectiveCourseFragment(boolean isExtend) {
         if (recyclerView != null) {
-            SelectiveCoursesAdapter2 adapter = (SelectiveCoursesAdapter2) recyclerView.getAdapter();
+            SelectiveCoursesAdapter adapter = (SelectiveCoursesAdapter) recyclerView.getAdapter();
             if (adapter != null) {
                 if (isExtend) {
                     adapter.setExtendedView();
@@ -378,7 +378,7 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
     }
 
     protected void updateRecyclerView() {
-        SelectiveCoursesAdapter2 adapter = (SelectiveCoursesAdapter2) recyclerView.getAdapter();
+        SelectiveCoursesAdapter adapter = (SelectiveCoursesAdapter) recyclerView.getAdapter();
         if (adapter != null) {
             adapter.notifyDataSetChanged();
         }
