@@ -21,6 +21,17 @@
             android:layout_marginBottom="10dp"/>
 
         <TextView
+            android:id="@+id/selectiveCourseTrainingCycle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="Професійний рівень"
+            android:textSize="16sp"
+            android:textAlignment="textStart"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textColor="@color/professional_training_cycle" />
+
+        <TextView
             android:id="@+id/selectiveCourseFaculty"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -63,14 +74,15 @@
             android:text="Кількість студентів: "
             android:textAlignment="textStart"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:textColor="@color/gray"
-            android:textStyle="bold" />
+            android:textColor="@color/chdtu_value2"/>
 
         <TextView
             android:id="@+id/selectiveCourseDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:textSize="15sp"
+            android:textStyle="italic"
             android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla eu erat tincidunt lacus fermentum rutrum."
             android:textAlignment="textStart"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"

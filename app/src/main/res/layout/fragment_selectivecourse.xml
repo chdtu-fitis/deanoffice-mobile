@@ -50,6 +50,7 @@
                 android:layout_width="326dp"
                 android:layout_height="wrap_content"
                 android:gravity="top"
+                android:text="ФІТІС, кафедра програмного забезпечення"
                 android:textAlignment="gravity"
                 android:textColor="@color/gray"
                 android:textSize="15sp"
@@ -77,12 +78,12 @@
 
         <TextView
             android:id="@+id/studentCount"
-            android:layout_width="wrap_content"
+            android:layout_width="27dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
-            android:background="@drawable/badge_round"
+            android:background="@drawable/student_count_badge"
             android:gravity="center"
-            android:text="115"
+            android:text="77"
             android:textColor="#FFF"
             android:textSize="15sp"
             android:textStyle="bold"
