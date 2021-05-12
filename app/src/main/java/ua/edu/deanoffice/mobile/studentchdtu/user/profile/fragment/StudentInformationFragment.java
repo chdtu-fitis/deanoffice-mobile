@@ -18,8 +18,8 @@ import ua.edu.deanoffice.mobile.studentchdtu.user.profile.model.Student;
 
 public class StudentInformationFragment extends Fragment {
 
-    private Map<String, TextView> studentInformationViews = new HashMap<>();
-    private Student student;
+    private final Map<String, TextView> studentInformationViews = new HashMap<>();
+    private final Student student;
 
     @Nullable
     @Override
@@ -33,8 +33,6 @@ public class StudentInformationFragment extends Fragment {
 
     @Override
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Інформація про студента");
-
         studentInformationViews.put("Name", (TextView) view.findViewById(R.id.studentNameTextView));
         studentInformationViews.put("Facult", (TextView) view.findViewById(R.id.facultyNameTextView));
         studentInformationViews.put("Degree", (TextView) view.findViewById(R.id.degreeNameTextView));
@@ -51,6 +49,5 @@ public class StudentInformationFragment extends Fragment {
         studentInformationViews.get("GroupAndYear").setText(student.getDegrees()[0].getStudentGroup().getName());
         studentInformationViews.get("Termin").setText((student.getDegrees()[0].getTuitionForm().equals("FULL_TIME") ? "Денна" : "Заочна")
                 + (student.getDegrees()[0].getTuitionTerm().equals("REGULAR") ? "" : "Скорочена"));
-
     }
 }

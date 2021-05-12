@@ -31,6 +31,7 @@
     <string name="action_bar_title_main_menu">Головне меню</string>
     <string name="action_bar_title_selective_courses">Реєстрація на вибіркові дисципліни</string>
     <string name="action_bar_title_main_options">Налаштування</string>
+    <string name="action_bar_title_student_info">Картка студента</string>
 
     //Activities
     //MainMenuActivity
