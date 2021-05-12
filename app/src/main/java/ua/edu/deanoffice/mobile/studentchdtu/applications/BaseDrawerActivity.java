@@ -1,11 +1,9 @@
 package ua.edu.deanoffice.mobile.studentchdtu.applications;
 
 import android.annotation.SuppressLint;
-import android.app.ActivityManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -35,6 +34,7 @@ import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.activity.Sele
 import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
 import ua.edu.deanoffice.mobile.studentchdtu.user.login.activity.LoginActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.activity.MainOptionsActivity;
+import ua.edu.deanoffice.mobile.studentchdtu.user.profile.fragment.StudentInformationFragment;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.model.Student;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.service.ProfileRequests;
 
@@ -119,10 +119,11 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
                     finish();
                     break;
                 case R.id.nav_info:
-//                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-//                            new StudentInformationFragment(App.getInstance().getCurrentStudent())).commit();
-//                    drawer.closeDrawers();
-//                    break;
+                    Fragment studentInformationFragment = new StudentInformationFragment(App.getInstance().getCurrentStudent());
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragment_container, studentInformationFragment)
+                            .commit();
+                    break;
                 case R.id.nav_schedule:
                 case R.id.nav_applications:
                 default:
@@ -227,7 +228,7 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
         });
     }
 
-    public String getServerErrorMessage(Response response){
+    public String getServerErrorMessage(Response response) {
         String errorMessage = getRString(R.string.error_connection_failed);
         if (response.errorBody() != null) {
             try {
@@ -240,7 +241,7 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
         return errorMessage;
     }
 
-    public interface ErrorDialogListener{
+    public interface ErrorDialogListener {
         void onClickActionButton();
     }
 }
