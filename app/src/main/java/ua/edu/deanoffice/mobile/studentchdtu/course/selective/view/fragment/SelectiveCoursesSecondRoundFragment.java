@@ -15,7 +15,7 @@ public class SelectiveCoursesSecondRoundFragment extends BaseSelectiveCoursesFra
     public SelectiveCoursesSecondRoundFragment(SelectedCoursesCounter selectedCoursesCounter,
                                                SelectiveCourses availableSelectiveCourses,
                                                SelectiveCourses selectedSelectiveCourses) {
-        super(selectedCoursesCounter);
+        super(null, selectedCoursesCounter);
         this.selectedSelectiveCourses = selectedSelectiveCourses;
 
         showingSelectiveCourses = null;

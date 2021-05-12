@@ -15,8 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,6 +31,7 @@ import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.ExistingId;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourse;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourses;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.StudentDegreeSelectiveCoursesIds;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.enums.Semester;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.service.SelectiveCourseRequests;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.SelectiveCoursesAdapter;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.activity.SelectiveCoursesActivity;
@@ -37,10 +40,13 @@ import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
 public abstract class BaseSelectiveCoursesFragment extends Fragment {
     protected SelectedCoursesCounter selectedCoursesCounter;
     protected RecyclerView recyclerView;
+    protected SelectiveCoursesAdapter adapterFirstSemester, adapterSecondSemester;
     protected SelectiveCourses showingSelectiveCourses;
     protected Button clearButton, confirmButton;
+    protected View toFirstSemesterButton, toSecondSemesterButton;
 
-    public BaseSelectiveCoursesFragment(SelectedCoursesCounter selectedCoursesCounter) {
+    public BaseSelectiveCoursesFragment(SelectiveCourses selectiveCourses, SelectedCoursesCounter selectedCoursesCounter) {
+        this.showingSelectiveCourses = selectiveCourses;
         this.selectedCoursesCounter = selectedCoursesCounter;
     }
 
@@ -58,6 +64,24 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
 
         clearButton = view.findViewById(R.id.clear_selectivecourses);
         confirmButton = view.findViewById(R.id.confirm_selectivecourses);
+
+        toFirstSemesterButton = view.findViewById(R.id.buttonToFirstSemester);
+        toSecondSemesterButton = view.findViewById(R.id.buttonToSecondSemester);
+
+        toFirstSemesterButton.setOnClickListener(v -> selectSemester(Semester.FIRST));
+        toSecondSemesterButton.setOnClickListener(v -> selectSemester(Semester.SECOND));
+
+        initAdapters();
+
+        clearButton.setOnClickListener((v) -> {
+            if (recyclerView != null) {
+                SelectiveCoursesAdapter adapter = (SelectiveCoursesAdapter) recyclerView.getAdapter();
+                if (adapter != null) {
+                    adapter.clearSelected();
+                }
+            }
+        });
+        confirmButton.setOnClickListener(this::onClickConfirmButton);
 
         selectedCoursesCounter.setSelectListener(new SelectedCoursesCounter.SelectListener() {
             @Override
@@ -80,18 +104,29 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
                 disableButton(confirmButton);
             }
         });
-
-        fillSelectiveCoursesList();
     }
 
-    protected void fillSelectiveCoursesList() {
+    /**
+     * Create adapters.
+     */
+    protected void initAdapters() {
         if (showingSelectiveCourses == null) return;
 
-        SelectiveCoursesAdapter adapter = new SelectiveCoursesAdapter(showingSelectiveCourses, getFragmentManager(), selectedCoursesCounter);
-        recyclerView.setAdapter(adapter);
+        List<SelectiveCourse> selectiveCourseList;
+        selectiveCourseList = showingSelectiveCourses.getSelectiveCoursesFirstSemester();
+        adapterFirstSemester = new SelectiveCoursesAdapter(selectiveCourseList, selectedCoursesCounter, Semester.FIRST);
 
-        clearButton.setOnClickListener((v) -> adapter.clearSelected());
-        confirmButton.setOnClickListener(this::onClickConfirmButton);
+        selectiveCourseList = showingSelectiveCourses.getSelectiveCoursesSecondSemester();
+        adapterSecondSemester = new SelectiveCoursesAdapter(selectiveCourseList, selectedCoursesCounter, Semester.SECOND);
+
+        Semester semester = Semester.FIRST;
+        if (recyclerView != null) {
+            SelectiveCoursesAdapter adapter = (SelectiveCoursesAdapter) recyclerView.getAdapter();
+            if (adapter != null) {
+                semester = adapter.getSemester();
+            }
+        }
+        selectSemester(semester);
     }
 
     //Go from confirm mode to normal list
@@ -103,20 +138,24 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
         confirmButton.setText(getRString(R.string.button_next));
         clearButton.setText(getRString(R.string.button_uncheck_selection));
 
-        SelectiveCoursesAdapter adapter = (SelectiveCoursesAdapter) recyclerView.getAdapter();
-        if (adapter != null) {
-            //Show hidden courses in list
-            adapter.showAllHiddenCourseFragments();
-
-            //Change ClearButton onClickListener
-            clearButton.setOnClickListener((v) -> adapter.clearSelected());
-
-            //Change ConfirmButton onClickListener
-            confirmButton.setOnClickListener(this::onClickConfirmButton);
-
-            //Unblocked Interactive With CheckBox
-            adapter.disableCheckBoxes(false);
+        List<SelectiveCoursesAdapter> adaptersList = new ArrayList<>();
+        adaptersList.add(adapterFirstSemester);
+        adaptersList.add(adapterSecondSemester);
+        for (SelectiveCoursesAdapter adapter : adaptersList) {
+            if (adapter != null) {
+                //Show hidden courses in list
+                adapter.showAllHiddenCourseFragments();
+                //Unblocked Interactive With CheckBox
+                adapter.disableCheckBoxes(false);
+            }
         }
+        //Change ClearButton onClickListener
+        clearButton.setOnClickListener((v) -> {
+            SelectiveCoursesAdapter adapter = (SelectiveCoursesAdapter) recyclerView.getAdapter();
+            adapter.clearSelected();
+        });
+        //Change ConfirmButton onClickListener
+        confirmButton.setOnClickListener(this::onClickConfirmButton);
     }
 
     //Go to confirm mode from normal list
@@ -132,21 +171,29 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
             //Change ClearButton onClickListener
             clearButton.setOnClickListener(this::onClickButtonBackFromConfirmFragment);
 
-            SelectiveCoursesAdapter adapter = (SelectiveCoursesAdapter) recyclerView.getAdapter();
-            if (adapter != null) {
-                //Hide unchecked and disqualified courses in list
-                adapter.hideAllUncheckedCourseFragments();
+            List<SelectiveCoursesAdapter> adaptersList = new ArrayList<>();
+            adaptersList.add(adapterFirstSemester);
+            adaptersList.add(adapterSecondSemester);
+            SelectiveCourses selectiveCoursesFinal = new SelectiveCourses();
+            for (SelectiveCoursesAdapter adapter : adaptersList) {
+                if (adapter != null) {
+                    //Hide unchecked and disqualified courses in list
+                    adapter.hideAllUncheckedCourseFragments();
 
-                //Change ConfirmButton onClickListener
-                SelectiveCourses selectiveCoursesFinal = new SelectiveCourses();
-                selectiveCoursesFinal.setSelectiveCoursesFirstSemester(adapter.getSelectedCourseFirstSemester());
-                selectiveCoursesFinal.setSelectiveCoursesSecondSemester(adapter.getSelectedCourseSecondSemester());
+                    if (adapter.getSemester() == Semester.FIRST) {
+                        selectiveCoursesFinal.setSelectiveCoursesFirstSemester(adapter.getSelectedCourse());
+                    } else {
+                        selectiveCoursesFinal.setSelectiveCoursesSecondSemester(adapter.getSelectedCourse());
+                    }
 
-                confirmButton.setOnClickListener((viewConfirm) -> saveUserChoice(selectiveCoursesFinal));
-
-                //Blocked Interactive With CheckBox
-                adapter.disableCheckBoxes(true);
+                    //Blocked Interactive With CheckBox
+                    adapter.disableCheckBoxes(true);
+                } else {
+                    showError(getRString(R.string.error_null_selective_courses_adapter));
+                }
             }
+            //Change ConfirmButton onClickListener
+            confirmButton.setOnClickListener((viewConfirm) -> saveUserChoice(selectiveCoursesFinal));
         } else {
             Snackbar.make(button.findViewById(android.R.id.content), getRString(R.string.worn_select_courses), Snackbar.LENGTH_LONG)
                     .setAction("No action", null).show();
@@ -205,6 +252,47 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
         ConfirmedSelectiveCourses confirmedSelectiveCourses = new ConfirmedSelectiveCourses();
         confirmedSelectiveCourses.setSelectiveCourses(selectiveCourses.getSelectiveCoursesIds());
         return confirmedSelectiveCourses;
+    }
+
+    protected void selectSemester(Semester semester) {
+        switch (semester) {
+            case FIRST:
+                toSecondSemesterButton.setVisibility(View.VISIBLE);
+                toFirstSemesterButton.setVisibility(View.GONE);
+                showFirstSemester();
+                break;
+            case SECOND:
+                toFirstSemesterButton.setVisibility(View.VISIBLE);
+                toSecondSemesterButton.setVisibility(View.GONE);
+                showSecondSemester();
+                break;
+        }
+    }
+
+    protected void showFirstSemester() {
+        if (showingSelectiveCourses == null) return;
+        if (adapterFirstSemester == null) {
+            List<SelectiveCourse> selectiveCourseList = showingSelectiveCourses.getSelectiveCoursesFirstSemester();
+            adapterFirstSemester = new SelectiveCoursesAdapter(selectiveCourseList, selectedCoursesCounter, Semester.FIRST);
+        }
+        recyclerView.setAdapter(adapterFirstSemester);
+
+        if(selectedCoursesCounter != null){
+            selectedCoursesCounter.switchSemester(Semester.FIRST);
+        }
+    }
+
+    protected void showSecondSemester() {
+        if (showingSelectiveCourses == null) return;
+        if (adapterSecondSemester == null) {
+            List<SelectiveCourse> selectiveCourseList = showingSelectiveCourses.getSelectiveCoursesSecondSemester();
+            adapterSecondSemester = new SelectiveCoursesAdapter(selectiveCourseList, selectedCoursesCounter, Semester.SECOND);
+        }
+        recyclerView.setAdapter(adapterSecondSemester);
+
+        if(selectedCoursesCounter != null){
+            selectedCoursesCounter.switchSemester(Semester.SECOND);
+        }
     }
 
     protected void disableButton(View button) {

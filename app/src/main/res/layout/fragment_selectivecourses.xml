@@ -6,20 +6,46 @@
     android:layout_height="match_parent">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/listview"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="0sp"
             android:orientation="vertical"
+            android:paddingLeft="-5dp"
+            android:paddingRight="-5dp"
             app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/buttonToSecondSemester"
             app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/buttonToFirstSemester"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <ImageView
+            android:id="@+id/buttonToFirstSemester"
+            android:layout_width="30dp"
+            android:layout_height="200dp"
+            android:rotation="-180"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toBottomOf="@+id/listview"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/listview"
+            app:srcCompat="@drawable/ic_arrow" />
+
+        <ImageView
+            android:id="@+id/buttonToSecondSemester"
+            android:layout_width="30dp"
+            android:layout_height="200dp"
+            android:rotation="0"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toBottomOf="@+id/listview"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/listview"
+            app:srcCompat="@drawable/ic_arrow" />
 
         <LinearLayout
             android:id="@+id/linearLayout"
