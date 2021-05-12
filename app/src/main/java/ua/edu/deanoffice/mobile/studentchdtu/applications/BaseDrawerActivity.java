@@ -34,6 +34,7 @@ import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.activity.Sele
 import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
 import ua.edu.deanoffice.mobile.studentchdtu.user.login.activity.LoginActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.activity.MainOptionsActivity;
+import ua.edu.deanoffice.mobile.studentchdtu.user.profile.activity.StudentInformationActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.fragment.StudentInformationFragment;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.model.Student;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.service.ProfileRequests;
@@ -119,10 +120,8 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
                     finish();
                     break;
                 case R.id.nav_info:
-                    Fragment studentInformationFragment = new StudentInformationFragment(App.getInstance().getCurrentStudent());
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.fragment_container, studentInformationFragment)
-                            .commit();
+                    Intent studentInfoActivity = new Intent(this, StudentInformationActivity.class);
+                    startActivity(studentInfoActivity);
                     break;
                 case R.id.nav_schedule:
                 case R.id.nav_applications:
