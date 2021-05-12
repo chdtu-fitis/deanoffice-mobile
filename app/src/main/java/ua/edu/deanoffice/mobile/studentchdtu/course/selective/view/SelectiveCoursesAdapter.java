@@ -1,6 +1,9 @@
 package ua.edu.deanoffice.mobile.studentchdtu.course.selective.view;
 
 import android.annotation.SuppressLint;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,15 +86,28 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
             viewHolder.makeDisqualified();
         }
 
-        String courseNameString = course.getCourse().getCourseName().getName();
+        String courseName = course.getCourse().getCourseName().getName();
         if (showTrainingCycle) {
             if (course.getTrainingCycle().equals("GENERAL")) {
-                courseNameString += " (Загальний рівень)";
+                courseName += " (Загальний рівень)";
             } else {
-                courseNameString += " (Професійний рівень)";
+                courseName += " (Професійний рівень)";
             }
         }
-        viewHolder.textCourseName.setText(courseNameString);
+
+        SpannableString coloredCourseName = course.getTrainingCycle().equals("GENERAL") ?
+                new SpannableString(courseName + " (Заг.) ") :
+                new SpannableString(courseName + " (Проф.)");
+
+        int generalColor = viewHolder.itemView.getResources().getColor(R.color.general_training_cycle, null);
+        int professionalColor = viewHolder.itemView.getResources().getColor(R.color.professional_training_cycle, null);
+
+        coloredCourseName.setSpan(course.getTrainingCycle().equals("GENERAL") ?
+                        new ForegroundColorSpan(generalColor) :
+                        new ForegroundColorSpan(professionalColor),
+                courseName.length() + 1, courseName.length() + 8, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        viewHolder.textCourseName.setText(coloredCourseName);
 
         if (course.getTeacher() != null) {
             Teacher teacher = course.getTeacher();
@@ -165,6 +181,11 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
                 View dialogView = LayoutInflater.from(viewClick.getContext()).inflate(R.layout.dialog_selectivecourse_info, viewGroup, false);
 
                 ((TextView) dialogView.findViewById(R.id.selectiveCourseName)).setText(selectiveCourse.getCourse().getCourseName().getName());
+                if (selectiveCourse.getTrainingCycle().equals("GENERAL")) {
+                    int generalColor = itemView.getResources().getColor(R.color.general_training_cycle, null);
+                    ((TextView) dialogView.findViewById(R.id.selectiveCourseTrainingCycle)).setText("Загальний рівень");
+                    ((TextView) dialogView.findViewById(R.id.selectiveCourseTrainingCycle)).setTextColor(generalColor);
+                }
                 ((TextView) dialogView.findViewById(R.id.selectiveCourseFaculty)).setText(selectiveCourse.getDepartment().getFaculty().getName());
                 ((TextView) dialogView.findViewById(R.id.selectiveCourseDepartment)).setText(selectiveCourse.getDepartment().getName());
                 ((TextView) dialogView.findViewById(R.id.selectiveCourseStudentCount)).setText("Кількість записаних студентів: " + selectiveCourse.getStudentsCount());
