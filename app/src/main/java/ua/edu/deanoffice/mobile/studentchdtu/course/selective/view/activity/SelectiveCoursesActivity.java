@@ -57,9 +57,17 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         switch (v.getId()) {
             case R.id.sortByFaculty:
                 if (currentSelectedFragment != null) {
+                    currentSelectedFragment.sort(SelectiveCourse.ByCourseName);
                     currentSelectedFragment.sort(SelectiveCourse.ByFacultyName);
                 }
                 disableSortButton(R.id.sortByFaculty);
+                break;
+            case R.id.sortByTrainingCycle:
+                if (currentSelectedFragment != null) {
+                    currentSelectedFragment.sort(SelectiveCourse.ByCourseName);
+                    currentSelectedFragment.sort(SelectiveCourse.ByTrainingCycle);
+                }
+                disableSortButton(R.id.sortByTrainingCycle);
                 break;
             case R.id.sortByCourse:
                 if (currentSelectedFragment != null) {
@@ -86,6 +94,8 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         mainContentBlock.addView(contentView, 1);
 
         initializeSortButtons();
+        sortLabel = findViewById(R.id.sortLabel);
+        sortPanel = findViewById(R.id.sortPanel);
 
         @SuppressLint("UseSwitchCompatOrMaterialCode")
         Switch btnExtendedView = findViewById(R.id.switchExtendedView);
@@ -100,18 +110,6 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
                 }
             }
         });
-
-        //Init Sorting Buttons
-        TextView btnSortByName = findViewById(R.id.sortByCourse);
-        TextView btnSortByFaculty = findViewById(R.id.sortByFaculty);
-        TextView btnSortByStudentCount = findViewById(R.id.sortByStudentCount);
-
-        btnSortByFaculty.setOnClickListener(sortOnClickListener);
-        btnSortByName.setOnClickListener(sortOnClickListener);
-        btnSortByStudentCount.setOnClickListener(sortOnClickListener);
-
-        sortLabel = findViewById(R.id.sortLabel);
-        sortPanel = findViewById(R.id.sortPanel);
 
         getSupportActionBar().setTitle(getRString(R.string.action_bar_title_selective_courses));
 
@@ -306,6 +304,10 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
                 } else {
                     fragment = new SelectiveCoursesFragment(selectedCoursesCounter, availableCourses);
                     setUpHeaders(Headers.SELECTION);
+                    if (hasGeneralAndProfessional(availableCourses.getSelectiveCoursesFirstSemester()) ||
+                        hasGeneralAndProfessional(availableCourses.getSelectiveCoursesSecondSemester())) {
+                        initializeTrainingCycleSortButton();
+                    }
                 }
             } else {
                 fragment = new SelectiveCoursesConfirmedFragment(selectedCourses);
@@ -358,6 +360,10 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
                 } else {
                     fragment = new SelectiveCoursesSecondRoundFragment(selectedCoursesCounter, availableCourses);
                     setUpHeaders(Headers.SELECTION);
+                    if (hasGeneralAndProfessional(availableCourses.getSelectiveCoursesFirstSemester()) ||
+                        hasGeneralAndProfessional(availableCourses.getSelectiveCoursesSecondSemester())) {
+                        initializeTrainingCycleSortButton();
+                    }
                 }
             } else {
                 if (existDisqualifiedCourse(selectedCourses)) {
@@ -437,15 +443,37 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         sortButtons.add(findViewById(R.id.sortByFaculty));
         sortButtons.add(findViewById(R.id.sortByCourse));
         sortButtons.add(findViewById(R.id.sortByStudentCount));
+
+        findViewById(R.id.sortByCourse).setOnClickListener(sortOnClickListener);
+        findViewById(R.id.sortByFaculty).setOnClickListener(sortOnClickListener);
+        findViewById(R.id.sortByStudentCount).setOnClickListener(sortOnClickListener);
+    }
+
+    private void initializeTrainingCycleSortButton() {
+        sortButtons.add(findViewById(R.id.sortByTrainingCycle));
+        findViewById(R.id.sortByTrainingCycle).setVisibility(View.VISIBLE);
+        findViewById(R.id.trainingCycleDelimiter).setVisibility(View.VISIBLE);
+        findViewById(R.id.sortByTrainingCycle).setOnClickListener(sortOnClickListener);
+    }
+
+    public boolean hasGeneralAndProfessional(List<SelectiveCourse> availableCourses) {
+        boolean hasGeneral = false;
+        boolean hasProfessional = false;
+        for (SelectiveCourse selectiveCourse : availableCourses) {
+            if (selectiveCourse.getTrainingCycle().equals("GENERAL")) {
+                hasGeneral = true;
+            } else {
+                hasProfessional = true;
+            }
+        }
+        return hasGeneral && hasProfessional;
     }
 
     public void disableSortButton(int buttonId) {
-        findViewById(buttonId).setEnabled(false);
         for (View view : sortButtons) {
-            if (view.getId() != buttonId) {
-                view.setEnabled(true);
-            }
+            view.setEnabled(true);
         }
+        findViewById(buttonId).setEnabled(false);
     }
 
     protected void setSortLabel(String attribute) {

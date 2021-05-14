@@ -100,9 +100,8 @@
                 android:id="@+id/textSelectedCoursesCounter"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="start"
+                android:gravity="center"
                 android:text="2 в 1 семестрі (0/2) 3 в 2 семестрі (0/3)"
-                android:textAlignment="center"
                 android:textColor="@color/gray"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -134,9 +133,8 @@
                 android:id="@+id/sortLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="left"
+                android:gravity="center"
                 android:text="Сортувати предмети за:"
-                android:textAlignment="center"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -209,6 +207,24 @@
                             android:layout_marginRight="5dp"
                             android:enabled="false"
                             android:text="К-стю студентів"
+                            android:textSize="15sp" />
+
+                        <View
+                            android:id="@+id/trainingCycleDelimiter"
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:visibility="gone"
+                            android:background="@color/chdtu_value2" />
+
+                        <TextView
+                            android:id="@+id/sortByTrainingCycle"
+                            style="@style/SortButtons"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            android:text="Циклом"
+                            android:visibility="gone"
                             android:textSize="15sp" />
                     </LinearLayout>
 
