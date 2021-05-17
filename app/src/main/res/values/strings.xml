@@ -24,9 +24,8 @@
 
     //Buttons
     <string name="button_confirm">Підтвердити</string>
-    <string name="button_cancel">Назад</string>
-    <string name="button_next">Продовжити</string>
-    <string name="button_uncheck_selection">Зняти виділення</string>
+    <string name="button_back">Назад</string>
+    <string name="button_next">Далі</string>
 
     //ActionBar titles
     <string name="action_bar_title_main_menu">Головне меню</string>

@@ -64,6 +64,10 @@
                 android:textColor="@color/gray"
                 android:textSize="22sp"
                 android:textStyle="bold" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="20dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -107,21 +111,21 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="10dp" />
+
+            <Switch
+                android:id="@+id/switchExtendedView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:gravity="right"
+                android:text="Розширений перегляд: "
+                android:textSize="16sp"
+                app:layout_constraintTop_toTopOf="parent" />
+
         </LinearLayout>
-
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="10dp" />
-
-        <Switch
-            android:id="@+id/switchExtendedView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:gravity="right"
-            android:text="Розширений перегляд: "
-            android:textSize="16sp"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
             android:id="@+id/containerSelectionSortHeaders"

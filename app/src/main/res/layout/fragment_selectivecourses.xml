@@ -15,42 +15,17 @@
             android:layout_width="0dp"
             android:layout_height="0sp"
             android:orientation="vertical"
-            android:paddingLeft="-5dp"
-            android:paddingRight="-5dp"
             app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-            app:layout_constraintEnd_toStartOf="@+id/buttonToSecondSemester"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/buttonToFirstSemester"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
         </androidx.recyclerview.widget.RecyclerView>
 
-        <ImageView
-            android:id="@+id/buttonToFirstSemester"
-            android:layout_width="30dp"
-            android:layout_height="200dp"
-            android:rotation="-180"
-            android:scaleType="fitXY"
-            app:layout_constraintBottom_toBottomOf="@+id/listview"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/listview"
-            app:srcCompat="@drawable/ic_arrow" />
-
-        <ImageView
-            android:id="@+id/buttonToSecondSemester"
-            android:layout_width="30dp"
-            android:layout_height="200dp"
-            android:rotation="0"
-            android:scaleType="fitXY"
-            app:layout_constraintBottom_toBottomOf="@+id/listview"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/listview"
-            app:srcCompat="@drawable/ic_arrow" />
-
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="75sp"
+            android:layout_height="60dp"
             android:layout_marginBottom="1sp"
             android:background="@color/white"
             android:gravity="center"
@@ -61,26 +36,22 @@
             app:layout_constraintTop_toBottomOf="@+id/listview">
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/clear_selectivecourses"
+                android:id="@+id/left_control_button"
                 android:layout_width="160sp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginEnd="50sp"
-                android:alpha="0.5"
                 android:background="@drawable/round_rect_shape"
-                android:enabled="false"
-                android:text="Зняти виділення"
+                android:text="@string/button_back"
                 android:textColor="@color/white" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/confirm_selectivecourses"
+                android:id="@+id/right_control_button"
                 android:layout_width="160sp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:alpha="0.5"
                 android:background="@drawable/round_rect_shape"
-                android:enabled="false"
-                android:text="Продовжити"
+                android:text="@string/button_next"
                 android:textColor="@color/white" />
 
         </LinearLayout>
