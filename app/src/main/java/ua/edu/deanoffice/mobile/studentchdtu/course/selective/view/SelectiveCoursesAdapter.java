@@ -38,7 +38,6 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
     @Getter
     private final List<SelectiveCourse> selectedCourse;
     private final List<SelectiveCourse> selectedCourseFromFirstRound;
-    private final boolean showTrainingCycle;
     private static boolean showExtendView = true;
     private boolean showUncheckedCourses = true;
     private boolean interactive = true;
@@ -49,7 +48,6 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         this.selectiveCoursesList = selectiveCoursesList;
         this.selectedCourse = new ArrayList<>(selectiveCoursesList.size());
         this.selectedCoursesCounter = selectedCoursesCounter;
-        this.showTrainingCycle = hasGeneralAndProfessional();
         this.semester = semester;
 
         this.selectedCourseFromFirstRound = new ArrayList<>();
@@ -87,14 +85,6 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         }
 
         String courseName = course.getCourse().getCourseName().getName();
-        if (showTrainingCycle) {
-            if (course.getTrainingCycle().equals("GENERAL")) {
-                courseName += " (Загальний рівень)";
-            } else {
-                courseName += " (Професійний рівень)";
-            }
-        }
-
         SpannableString coloredCourseName = course.getTrainingCycle().equals("GENERAL") ?
                 new SpannableString(courseName + " (Заг.) ") :
                 new SpannableString(courseName + " (Проф.)");
@@ -256,19 +246,6 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         public interface OnClickListener {
             boolean onClick(ViewHolder viewHolder);
         }
-    }
-
-    public boolean hasGeneralAndProfessional() {
-        boolean hasGeneral = false;
-        boolean hasProfessional = false;
-        for (SelectiveCourse selectiveCourse : selectedCourse) {
-            if (selectiveCourse.getTrainingCycle().equals("GENERAL")) {
-                hasGeneral = true;
-            } else {
-                hasProfessional = true;
-            }
-        }
-        return hasGeneral && hasProfessional;
     }
 
     @Override

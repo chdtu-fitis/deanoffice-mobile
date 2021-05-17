@@ -26,6 +26,11 @@ public class SelectiveCourse extends ModelBase {
         return uaCollator.compare(facultyName1, facultyName2);
     };
 
+    public static Comparator<SelectiveCourse> ByTrainingCycle = (one, two) -> {
+        Collator engCollator = Collator.getInstance(Locale.ENGLISH);
+        return engCollator.compare(one.getTrainingCycle(), two.getTrainingCycle());
+    };
+
     public static Comparator<SelectiveCourse> ByCourseName = (one, two) -> {
         String courseName1 = one.getCourse().getCourseName().getName();
         String courseName2 = two.getCourse().getCourseName().getName();
