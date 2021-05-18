@@ -262,7 +262,6 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
     /*
      * Setup Control Buttons
      */
-
     protected void showControlButtons(ControlButtonsState state) {
         leftControlButton.setText(state.getLeftButtonLabel());
         rightControlButton.setText(state.getRightButtonLabel());
@@ -391,7 +390,6 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
             }
         }
     }
-
     /*
      * End Setup Control Buttons
      */

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +38,6 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
     private final List<SelectiveCourse> selectiveCoursesList;
     @Getter
     private final List<SelectiveCourse> selectedCourse;
-    private final List<SelectiveCourse> selectedCourseFromFirstRound;
     private final boolean showTrainingCycle;
     private static boolean showExtendView = true;
     private boolean showUncheckedCourses = true;
@@ -52,19 +52,16 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         this.showTrainingCycle = hasGeneralAndProfessional();
         this.semester = semester;
 
-        this.selectedCourseFromFirstRound = new ArrayList<>();
-
-        //Add selective courses from first round
+        //Label selective courses from first round
         for (SelectiveCourse course : selectiveCoursesList) {
             if (course.isSelected()) {
-                selectedCourseFromFirstRound.add(course);
+                course.setSelectedFromFirstRound(true);
+                if (course.isAvailable()) {
+                    selectedCourse.add(course);
+                }
             }
         }
-        for (SelectiveCourse course : selectedCourseFromFirstRound) {
-            if (course.isAvailable()) {
-                selectedCourse.add(course);
-            }
-        }
+        Log.e("Adapter", "+1");
     }
 
     @NonNull
@@ -72,6 +69,7 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
     public SelectiveCoursesAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.fragment_selectivecourse, parent, false);
+        Log.e("onCreateViewHolder", "+1");
         return new ViewHolder(view);
     }
 
@@ -81,7 +79,9 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         SelectiveCourse course = selectiveCoursesList.get(position);
 
         viewHolder.setSelectiveCourse(course);
-
+        Log.e("Name", course.getCourse().getCourseName().getName());
+        Log.e("Iteractive", interactive + "");
+        Log.e("IsSelected", course.isSelected() + "");
         if (!course.isAvailable()) {
             viewHolder.makeDisqualified();
         }
@@ -126,7 +126,6 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
 
         viewHolder.checkBox.setChecked(course.isSelected());
         viewHolder.setListener(this::onClick);
-        viewHolder.setSelectedFromFirstRound(course.isSelected());
 
         if (showExtendView) {
             viewHolder.setExtendedView();
@@ -147,8 +146,6 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         final CheckBox checkBox;
         final ViewGroup.LayoutParams normalParams;
 
-        @Setter
-        private boolean selectedFromFirstRound = false;
         @Setter
         private boolean interactive = true;
         @Setter
@@ -214,7 +211,7 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         }
 
         public void setChecked(boolean checked) {
-            if (selectedFromFirstRound) return;
+            if (selectiveCourse.isSelectedFromFirstRound()) return;
             checkBox.setChecked(checked);
             selectiveCourse.setSelected(checked);
         }
@@ -311,7 +308,7 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
     public void clearSelected() {
         List<SelectiveCourse> coursesListToDelete = new ArrayList<>();
         for (SelectiveCourse course : selectedCourse) {
-            if (course.isSelected() && !selectedCourseFromFirstRound.contains(course)) {
+            if (course.isSelected() && !course.isSelectedFromFirstRound()) {
                 course.setSelected(false);
                 coursesListToDelete.add(course);
             }
