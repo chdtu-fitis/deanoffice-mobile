@@ -233,11 +233,23 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
         showHeaders(SelectiveCoursesActivity.Headers.CONFIRM);
 
         ViewGroup viewGroup = getView().findViewById(R.id.сontainer_сonfirmed_сourses);
+        fillSelectedSelectiveCoursesContainer(viewGroup);
+        recyclerView.setVisibility(View.GONE);
+    }
+
+    protected void fillSelectedSelectiveCoursesContainer(ViewGroup viewGroup){
         viewGroup.removeAllViews();
 
-        List<SelectiveCourse> selectiveCourseList = showingSelectiveCourses.getSelectiveCoursesBothSemesters();
-        final boolean showTrainingCycle = hasGeneralAndProfessional(selectiveCourseList);
-        for (SelectiveCourse course : selectiveCourseList) {
+        SemesterLabel firstSemesterLabel = new SemesterLabel(Semester.FIRST);
+        SemesterLabel secondSemesterLabel = new SemesterLabel(Semester.SECOND);
+
+        List<SelectiveCourse> firstSemesterCoursesList = showingSelectiveCourses.getSelectiveCoursesFirstSemester();
+        List<SelectiveCourse> secondSemesterCoursesList = showingSelectiveCourses.getSelectiveCoursesSecondSemester();
+        final boolean showTrainingCycle = hasGeneralAndProfessional(showingSelectiveCourses.getSelectiveCoursesBothSemesters());
+
+        View firstSemesterLabelView = firstSemesterLabel.onCreateView(getContext(), viewGroup);
+        viewGroup.addView(firstSemesterLabelView);
+        for (SelectiveCourse course : firstSemesterCoursesList) {
             if (course.isSelected() && course.isAvailable()) {
                 ViewHolder viewHolder = createViewHolder(viewGroup);
                 bindViewHolder(viewHolder, course, showTrainingCycle);
@@ -248,7 +260,19 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
             }
         }
 
-        recyclerView.setVisibility(View.GONE);
+        View secondSemesterLabelView = secondSemesterLabel.onCreateView(getContext(), viewGroup);
+        viewGroup.addView(secondSemesterLabelView);
+        for (SelectiveCourse course : secondSemesterCoursesList) {
+            if (course.isSelected() && course.isAvailable()) {
+                ViewHolder viewHolder = createViewHolder(viewGroup);
+                bindViewHolder(viewHolder, course, showTrainingCycle);
+                viewHolder.setInteractive(false);
+                viewHolder.setExtendedView();
+                viewHolder.setVisible(true);
+                viewGroup.addView(viewHolder.itemView);
+            }
+        }
+
         viewGroup.setVisibility(View.VISIBLE);
     }
 
