@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -9,63 +8,30 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/textSelectedSemester"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:gravity="start"
-            android:text="@string/label_selected_courses_s1"
-            android:textAlignment="center"
-            android:textColor="@color/gray"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="10dp" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/listview1"
-            android:layout_width="0dp"
-            android:layout_height="0sp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:orientation="vertical"
-            android:paddingLeft="-5dp"
-            android:paddingRight="-5dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="7dp"
             app:layout_constraintBottom_toTopOf="@+id/buttonToMenu"
-            app:layout_constraintEnd_toStartOf="@+id/buttonToSecondSemester"
-            app:layout_constraintStart_toEndOf="@+id/buttonToFirstSemester"
-            app:layout_constraintTop_toBottomOf="@+id/textSelectedSemester"
-            app:layout_constraintVertical_bias="0.55" />
-
-        <ImageView
-            android:id="@+id/buttonToFirstSemester"
-            android:layout_width="30dp"
-            android:layout_height="200dp"
-            android:rotation="-180"
-            android:scaleType="fitXY"
-            app:layout_constraintBottom_toBottomOf="@+id/listview1"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/listview1"
-            app:srcCompat="@drawable/ic_arrow" />
-
-        <ImageView
-            android:id="@+id/buttonToSecondSemester"
-            android:layout_width="30dp"
-            android:layout_height="200dp"
-            android:rotation="0"
-            android:scaleType="fitXY"
-            app:layout_constraintBottom_toBottomOf="@+id/listview1"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/listview1"
-            app:srcCompat="@drawable/ic_arrow" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:id="@+id/сontainer_сonfirmed_сourses"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal|top"
+                android:orientation="vertical"
+                android:visibility="visible" />
+        </ScrollView>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttonToMenu"
             android:layout_width="109sp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="7dp"
             android:background="@drawable/round_rect_shape"
             android:text="Меню"
             android:textColor="@color/white"

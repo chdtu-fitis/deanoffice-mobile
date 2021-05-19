@@ -418,11 +418,11 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
                     } else {
                         selectiveCoursesFinal.setSelectiveCoursesSecondSemester(adapter.getSelectedCourse());
                     }
-                    saveUserChoice(selectiveCoursesFinal);
                 } else {
                     showError(getRString(R.string.error_null_selective_courses_adapter));
                 }
             }
+            saveUserChoice(selectiveCoursesFinal);
         }
     }
     /*
