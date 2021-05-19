@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +26,7 @@ import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.SelectedCoursesCounter;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.Department;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourse;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourses;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.Teacher;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.enums.Semester;
 
@@ -40,7 +40,6 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
     private final List<SelectiveCourse> selectedCourse;
     private final boolean showTrainingCycle;
     private static boolean showExtendView = true;
-    private boolean showUncheckedCourses = true;
     private boolean interactive = true;
     @Getter
     private final Semester semester;
@@ -49,7 +48,7 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         this.selectiveCoursesList = selectiveCoursesList;
         this.selectedCourse = new ArrayList<>(selectiveCoursesList.size());
         this.selectedCoursesCounter = selectedCoursesCounter;
-        this.showTrainingCycle = hasGeneralAndProfessional();
+        this.showTrainingCycle = hasGeneralAndProfessional(selectiveCoursesList);
         this.semester = semester;
 
         //Label selective courses from first round
@@ -61,27 +60,31 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
                 }
             }
         }
-        Log.e("Adapter", "+1");
     }
 
     @NonNull
     @Override
     public SelectiveCoursesAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return createViewHolder(parent);
+    }
+
+    public static SelectiveCoursesAdapter.ViewHolder createViewHolder(@NonNull ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.fragment_selectivecourse, parent, false);
-        Log.e("onCreateViewHolder", "+1");
         return new ViewHolder(view);
     }
 
-    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         SelectiveCourse course = selectiveCoursesList.get(position);
+        bindViewHolder(viewHolder, course, showTrainingCycle);
+        viewHolder.setListener(this::onClick);
+        viewHolder.setInteractive(interactive);
+    }
 
+    @SuppressLint("SetTextI18n")
+    public static void bindViewHolder(@NonNull ViewHolder viewHolder, SelectiveCourse course, boolean showTrainingCycle) {
         viewHolder.setSelectiveCourse(course);
-        Log.e("Name", course.getCourse().getCourseName().getName());
-        Log.e("Iteractive", interactive + "");
-        Log.e("IsSelected", course.isSelected() + "");
         if (!course.isAvailable()) {
             viewHolder.makeDisqualified();
         }
@@ -125,22 +128,15 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         viewHolder.textStudentCount.setText(Integer.toString(course.getStudentsCount()));
 
         viewHolder.checkBox.setChecked(course.isSelected());
-        viewHolder.setListener(this::onClick);
 
         if (showExtendView) {
             viewHolder.setExtendedView();
         } else {
             viewHolder.setShortView();
         }
-
-        if (!course.isSelected()) {
-            viewHolder.setVisible(showUncheckedCourses);
-        }
-
-        viewHolder.setInteractive(interactive);
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         final TextView textTeacherName, textDepartmentName, textStudentCount, textCourseName;
         final LinearLayout informationBlock;
         final CheckBox checkBox;
@@ -255,10 +251,10 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         }
     }
 
-    public boolean hasGeneralAndProfessional() {
+    public static boolean hasGeneralAndProfessional(List<SelectiveCourse> selectiveCoursesList) {
         boolean hasGeneral = false;
         boolean hasProfessional = false;
-        for (SelectiveCourse selectiveCourse : selectedCourse) {
+        for (SelectiveCourse selectiveCourse : selectiveCoursesList) {
             if (selectiveCourse.getTrainingCycle().equals("GENERAL")) {
                 hasGeneral = true;
             } else {
@@ -302,37 +298,6 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
 
     public void disableCheckBoxes(boolean disable) {
         interactive = !disable;
-        notifyDataSetChanged();
-    }
-
-    public void clearSelected() {
-        List<SelectiveCourse> coursesListToDelete = new ArrayList<>();
-        for (SelectiveCourse course : selectedCourse) {
-            if (course.isSelected() && !course.isSelectedFromFirstRound()) {
-                course.setSelected(false);
-                coursesListToDelete.add(course);
-            }
-        }
-        for (SelectiveCourse course : coursesListToDelete) {
-            selectedCourse.remove(course);
-        }
-
-        if (semester == Semester.FIRST) {
-            selectedCoursesCounter.setSelectedFirstSemester(selectedCourse.size());
-        } else {
-            selectedCoursesCounter.setSelectedSecondSemester(selectedCourse.size());
-        }
-
-        notifyDataSetChanged();
-    }
-
-    public void hideAllUncheckedCourseFragments() {
-        showUncheckedCourses = false;
-        notifyDataSetChanged();
-    }
-
-    public void showAllHiddenCourseFragments() {
-        showUncheckedCourses = true;
         notifyDataSetChanged();
     }
 

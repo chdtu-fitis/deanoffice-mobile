@@ -53,7 +53,7 @@
     </string>
     <string name="header_success_registered">ЗАРЕЄСТРОВАНО</string>
     <string name="header_success_registered2">Ваші предмети зареєстровано\nПерейдіть у меню для вибору інших дій</string>
-    <string name="header_study_years">Вибір предметів на {study_year_begin}-{study_year_end} н. р.</string>
+    <string name="header_study_years">"({study_year_begin}-{study_year_end}) "</string>
     <string name="header_left_time_to_end_round">До завершення реєстрації {left_time}</string>
     <string name="header_selected_courses_counter_s1">Перший семестр ({semester_1_count} з {semester_1_max})</string>
     <string name="header_selected_courses_counter_s2">Другий семестр ({semester_2_count} з {semester_2_max})</string>
