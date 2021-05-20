@@ -37,7 +37,6 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
     private final List<SelectiveCourse> selectiveCoursesList;
     @Getter
     private final List<SelectiveCourse> selectedCourse;
-    private final boolean showTrainingCycle;
     private static boolean showExtendView = true;
     private boolean interactive = true;
     @Getter
@@ -47,7 +46,6 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         this.selectiveCoursesList = selectiveCoursesList;
         this.selectedCourse = new ArrayList<>(selectiveCoursesList.size());
         this.selectedCoursesCounter = selectedCoursesCounter;
-        this.showTrainingCycle = hasGeneralAndProfessional(selectiveCoursesList);
         this.semester = semester;
 
         //Label selective courses from first round
@@ -76,13 +74,13 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         SelectiveCourse course = selectiveCoursesList.get(position);
-        bindViewHolder(viewHolder, course, showTrainingCycle);
+        bindViewHolder(viewHolder, course);
         viewHolder.setListener(this::onClick);
         viewHolder.setInteractive(interactive);
     }
 
     @SuppressLint("SetTextI18n")
-    public static void bindViewHolder(@NonNull ViewHolder viewHolder, SelectiveCourse course, boolean showTrainingCycle) {
+    public static void bindViewHolder(@NonNull ViewHolder viewHolder, SelectiveCourse course) {
         viewHolder.setSelectiveCourse(course);
         if (!course.isAvailable()) {
             viewHolder.makeDisqualified();
@@ -240,19 +238,6 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         public interface OnClickListener {
             boolean onClick(ViewHolder viewHolder);
         }
-    }
-
-    public static boolean hasGeneralAndProfessional(List<SelectiveCourse> selectiveCoursesList) {
-        boolean hasGeneral = false;
-        boolean hasProfessional = false;
-        for (SelectiveCourse selectiveCourse : selectiveCoursesList) {
-            if (selectiveCourse.getTrainingCycle().equals("GENERAL")) {
-                hasGeneral = true;
-            } else {
-                hasProfessional = true;
-            }
-        }
-        return hasGeneral && hasProfessional;
     }
 
     @Override

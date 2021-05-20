@@ -41,7 +41,6 @@ import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
 import static ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.SelectiveCoursesAdapter.ViewHolder;
 import static ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.SelectiveCoursesAdapter.bindViewHolder;
 import static ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.SelectiveCoursesAdapter.createViewHolder;
-import static ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.SelectiveCoursesAdapter.hasGeneralAndProfessional;
 
 public abstract class BaseSelectiveCoursesFragment extends Fragment {
     public enum FragmentState {
@@ -236,11 +235,10 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
         viewGroup.removeAllViews();
 
         List<SelectiveCourse> selectiveCourseList = showingSelectiveCourses.getSelectiveCoursesBothSemesters();
-        final boolean showTrainingCycle = hasGeneralAndProfessional(selectiveCourseList);
         for (SelectiveCourse course : selectiveCourseList) {
             if (course.isSelected() && course.isAvailable()) {
                 ViewHolder viewHolder = createViewHolder(viewGroup);
-                bindViewHolder(viewHolder, course, showTrainingCycle);
+                bindViewHolder(viewHolder, course);
                 viewHolder.setInteractive(false);
                 viewHolder.setExtendedView();
                 viewHolder.setVisible(true);
