@@ -232,10 +232,22 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
         showHeaders(SelectiveCoursesActivity.Headers.CONFIRM);
 
         ViewGroup viewGroup = getView().findViewById(R.id.сontainer_сonfirmed_сourses);
+        fillSelectedSelectiveCoursesContainer(viewGroup);
+        recyclerView.setVisibility(View.GONE);
+    }
+
+    protected void fillSelectedSelectiveCoursesContainer(ViewGroup viewGroup) {
         viewGroup.removeAllViews();
 
-        List<SelectiveCourse> selectiveCourseList = showingSelectiveCourses.getSelectiveCoursesBothSemesters();
-        for (SelectiveCourse course : selectiveCourseList) {
+        SemesterLabel firstSemesterLabel = new SemesterLabel(Semester.FIRST);
+        SemesterLabel secondSemesterLabel = new SemesterLabel(Semester.SECOND);
+
+        List<SelectiveCourse> firstSemesterCoursesList = showingSelectiveCourses.getSelectiveCoursesFirstSemester();
+        List<SelectiveCourse> secondSemesterCoursesList = showingSelectiveCourses.getSelectiveCoursesSecondSemester();
+
+        View firstSemesterLabelView = firstSemesterLabel.onCreateView(getContext(), viewGroup);
+        viewGroup.addView(firstSemesterLabelView);
+        for (SelectiveCourse course : firstSemesterCoursesList) {
             if (course.isSelected() && course.isAvailable()) {
                 ViewHolder viewHolder = createViewHolder(viewGroup);
                 bindViewHolder(viewHolder, course);
@@ -246,7 +258,19 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
             }
         }
 
-        recyclerView.setVisibility(View.GONE);
+        View secondSemesterLabelView = secondSemesterLabel.onCreateView(getContext(), viewGroup);
+        viewGroup.addView(secondSemesterLabelView);
+        for (SelectiveCourse course : secondSemesterCoursesList) {
+            if (course.isSelected() && course.isAvailable()) {
+                ViewHolder viewHolder = createViewHolder(viewGroup);
+                bindViewHolder(viewHolder, course);
+                viewHolder.setInteractive(false);
+                viewHolder.setExtendedView();
+                viewHolder.setVisible(true);
+                viewGroup.addView(viewHolder.itemView);
+            }
+        }
+
         viewGroup.setVisibility(View.VISIBLE);
     }
 
@@ -392,11 +416,11 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
                     } else {
                         selectiveCoursesFinal.setSelectiveCoursesSecondSemester(adapter.getSelectedCourse());
                     }
-                    saveUserChoice(selectiveCoursesFinal);
                 } else {
                     showError(getRString(R.string.error_null_selective_courses_adapter));
                 }
             }
+            saveUserChoice(selectiveCoursesFinal);
         }
     }
     /*
