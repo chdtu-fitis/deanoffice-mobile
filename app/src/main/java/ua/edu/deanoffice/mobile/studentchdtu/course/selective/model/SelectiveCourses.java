@@ -11,6 +11,7 @@ public class SelectiveCourses extends ValidModel {
     private List<SelectiveCourse> selectiveCoursesFirstSemester;
     private List<SelectiveCourse> selectiveCoursesSecondSemester;
     private SelectiveCoursesSelectionTimeParameters selectiveCoursesSelectionTimeParameters;
+    private SelectiveCoursesSelectionRules[] selectiveCoursesSelectionRules;
 
     public List<Integer> getSelectiveCoursesIds() {
         List<Integer> selectiveCoursesIds = new ArrayList<>();
