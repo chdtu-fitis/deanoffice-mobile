@@ -37,12 +37,6 @@ public class SelectiveCoursesConfirmedFragment extends BaseSelectiveCoursesFragm
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        toFirstSemesterButton = view.findViewById(R.id.buttonToFirstSemester);
-        toSecondSemesterButton = view.findViewById(R.id.buttonToSecondSemester);
-
-        toFirstSemesterButton.setOnClickListener(v -> selectSemester(Semester.FIRST));
-        toSecondSemesterButton.setOnClickListener(v -> selectSemester(Semester.SECOND));
-
         textSelectedSemester = view.findViewById(R.id.textSelectedSemester);
 
         View buttonToMainMenu = view.findViewById(R.id.buttonToMenu);

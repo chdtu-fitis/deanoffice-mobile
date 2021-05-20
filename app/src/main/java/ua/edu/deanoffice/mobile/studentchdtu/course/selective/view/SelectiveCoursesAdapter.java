@@ -37,9 +37,7 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
     private final List<SelectiveCourse> selectiveCoursesList;
     @Getter
     private final List<SelectiveCourse> selectedCourse;
-    private final List<SelectiveCourse> selectedCourseFromFirstRound;
     private static boolean showExtendView = true;
-    private boolean showUncheckedCourses = true;
     private boolean interactive = true;
     @Getter
     private final Semester semester;
@@ -50,17 +48,13 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         this.selectedCoursesCounter = selectedCoursesCounter;
         this.semester = semester;
 
-        this.selectedCourseFromFirstRound = new ArrayList<>();
-
-        //Add selective courses from first round
+        //Label selective courses from first round
         for (SelectiveCourse course : selectiveCoursesList) {
             if (course.isSelected()) {
-                selectedCourseFromFirstRound.add(course);
-            }
-        }
-        for (SelectiveCourse course : selectedCourseFromFirstRound) {
-            if (course.isAvailable()) {
-                selectedCourse.add(course);
+                course.setSelectedFromFirstRound(true);
+                if (course.isAvailable()) {
+                    selectedCourse.add(course);
+                }
             }
         }
     }
@@ -68,18 +62,26 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
     @NonNull
     @Override
     public SelectiveCoursesAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return createViewHolder(parent);
+    }
+
+    public static SelectiveCoursesAdapter.ViewHolder createViewHolder(@NonNull ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View view = inflater.inflate(R.layout.fragment_selectivecourse, parent, false);
         return new ViewHolder(view);
     }
 
-    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         SelectiveCourse course = selectiveCoursesList.get(position);
+        bindViewHolder(viewHolder, course);
+        viewHolder.setListener(this::onClick);
+        viewHolder.setInteractive(interactive);
+    }
 
+    @SuppressLint("SetTextI18n")
+    public static void bindViewHolder(@NonNull ViewHolder viewHolder, SelectiveCourse course) {
         viewHolder.setSelectiveCourse(course);
-
         if (!course.isAvailable()) {
             viewHolder.makeDisqualified();
         }
@@ -115,30 +117,20 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         viewHolder.textStudentCount.setText(Integer.toString(course.getStudentsCount()));
 
         viewHolder.checkBox.setChecked(course.isSelected());
-        viewHolder.setListener(this::onClick);
-        viewHolder.setSelectedFromFirstRound(course.isSelected());
 
         if (showExtendView) {
             viewHolder.setExtendedView();
         } else {
             viewHolder.setShortView();
         }
-
-        if (!course.isSelected()) {
-            viewHolder.setVisible(showUncheckedCourses);
-        }
-
-        viewHolder.setInteractive(interactive);
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         final TextView textTeacherName, textDepartmentName, textStudentCount, textCourseName;
         final LinearLayout informationBlock;
         final CheckBox checkBox;
         final ViewGroup.LayoutParams normalParams;
 
-        @Setter
-        private boolean selectedFromFirstRound = false;
         @Setter
         private boolean interactive = true;
         @Setter
@@ -204,7 +196,7 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         }
 
         public void setChecked(boolean checked) {
-            if (selectedFromFirstRound) return;
+            if (selectiveCourse.isSelectedFromFirstRound()) return;
             checkBox.setChecked(checked);
             selectiveCourse.setSelected(checked);
         }
@@ -282,37 +274,6 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
 
     public void disableCheckBoxes(boolean disable) {
         interactive = !disable;
-        notifyDataSetChanged();
-    }
-
-    public void clearSelected() {
-        List<SelectiveCourse> coursesListToDelete = new ArrayList<>();
-        for (SelectiveCourse course : selectedCourse) {
-            if (course.isSelected() && !selectedCourseFromFirstRound.contains(course)) {
-                course.setSelected(false);
-                coursesListToDelete.add(course);
-            }
-        }
-        for (SelectiveCourse course : coursesListToDelete) {
-            selectedCourse.remove(course);
-        }
-
-        if (semester == Semester.FIRST) {
-            selectedCoursesCounter.setSelectedFirstSemester(selectedCourse.size());
-        } else {
-            selectedCoursesCounter.setSelectedSecondSemester(selectedCourse.size());
-        }
-
-        notifyDataSetChanged();
-    }
-
-    public void hideAllUncheckedCourseFragments() {
-        showUncheckedCourses = false;
-        notifyDataSetChanged();
-    }
-
-    public void showAllHiddenCourseFragments() {
-        showUncheckedCourses = true;
         notifyDataSetChanged();
     }
 
