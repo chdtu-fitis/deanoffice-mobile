@@ -44,6 +44,7 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
     private static boolean showExtendView = true;
     private boolean showUncheckedCourses = true;
     private boolean interactive = true;
+    private TextView itemCountView;
     @Getter
     private final Semester semester;
 
@@ -52,6 +53,9 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         this.selectiveCoursesListFull = new ArrayList<>(selectiveCoursesList);
         this.selectedCourse = new ArrayList<>(selectiveCoursesList.size());
         this.selectedCoursesCounter = selectedCoursesCounter;
+        if (selectedCoursesCounter != null) {
+            itemCountView = selectedCoursesCounter.getCountOfCourseView();
+        }
         this.semester = semester;
 
         this.selectedCourseFromFirstRound = new ArrayList<>();
