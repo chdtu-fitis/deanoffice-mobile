@@ -33,13 +33,15 @@ public class StudentInformationFragment extends Fragment {
 
     @Override
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
-        studentInformationViews.put("Name", (TextView) view.findViewById(R.id.studentNameTextView));
-        studentInformationViews.put("Facult", (TextView) view.findViewById(R.id.facultyNameTextView));
-        studentInformationViews.put("Degree", (TextView) view.findViewById(R.id.degreeNameTextView));
-        studentInformationViews.put("Speciality", (TextView) view.findViewById(R.id.specialityNameTextView));
-        studentInformationViews.put("Specialization", (TextView) view.findViewById(R.id.specializationNameTextView));
-        studentInformationViews.put("GroupAndYear", (TextView) view.findViewById(R.id.groupNameTextView));
-        studentInformationViews.put("Termin", (TextView) view.findViewById(R.id.tuitionFormNameTextView));
+        studentInformationViews.put("Name", view.findViewById(R.id.studentNameTextView));
+        studentInformationViews.put("Facult", view.findViewById(R.id.facultyNameTextView));
+        studentInformationViews.put("Degree", view.findViewById(R.id.degreeNameTextView));
+        studentInformationViews.put("Speciality", view.findViewById(R.id.specialityNameTextView));
+        studentInformationViews.put("Specialization", view.findViewById(R.id.specializationNameTextView));
+        studentInformationViews.put("GroupAndYear", view.findViewById(R.id.groupNameTextView));
+        studentInformationViews.put("Termin", view.findViewById(R.id.tuitionFormNameTextView));
+        studentInformationViews.put("RealYear", view.findViewById(R.id.realYearNameTextView));
+        studentInformationViews.put("Year", view.findViewById(R.id.yearNameTextView));
 
         studentInformationViews.get("Name").setText(student.getSurname() + " " + student.getName() + " " + student.getPatronimic());
         studentInformationViews.get("Facult").setText("Факультет інформаційних технологій і систем");
@@ -49,5 +51,7 @@ public class StudentInformationFragment extends Fragment {
         studentInformationViews.get("GroupAndYear").setText(student.getDegrees()[0].getStudentGroup().getName());
         studentInformationViews.get("Termin").setText((student.getDegrees()[0].getTuitionForm().equals("FULL_TIME") ? "Денна" : "Заочна")
                 + (student.getDegrees()[0].getTuitionTerm().equals("REGULAR") ? "" : "Скорочена"));
+        studentInformationViews.get("RealYear").setText(String.valueOf(student.getDegrees()[0].getRealYear()));
+        studentInformationViews.get("Year").setText(String.valueOf(student.getDegrees()[0].getYear()));
     }
 }
