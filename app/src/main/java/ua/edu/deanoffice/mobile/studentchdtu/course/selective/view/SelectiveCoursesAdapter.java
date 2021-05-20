@@ -89,14 +89,6 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         }
 
         String courseName = course.getCourse().getCourseName().getName();
-        if (showTrainingCycle) {
-            if (course.getTrainingCycle().equals("GENERAL")) {
-                courseName += " (Загальний рівень)";
-            } else {
-                courseName += " (Професійний рівень)";
-            }
-        }
-
         SpannableString coloredCourseName = course.getTrainingCycle().equals("GENERAL") ?
                 new SpannableString(courseName + " (Заг.) ") :
                 new SpannableString(courseName + " (Проф.)");
