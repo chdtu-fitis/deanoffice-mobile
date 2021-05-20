@@ -38,7 +38,6 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
     @Getter
     private final List<SelectiveCourse> selectedCourse;
     private static boolean showExtendView = true;
-    private boolean interactive = true;
     @Getter
     private final Semester semester;
 
@@ -74,13 +73,12 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         SelectiveCourse course = selectiveCoursesList.get(position);
-        bindViewHolder(viewHolder, course);
+        bindViewHolder(viewHolder, course, selectedCoursesCounter);
         viewHolder.setListener(this::onClick);
-        viewHolder.setInteractive(interactive);
     }
 
     @SuppressLint("SetTextI18n")
-    public static void bindViewHolder(@NonNull ViewHolder viewHolder, SelectiveCourse course) {
+    public static void bindViewHolder(@NonNull ViewHolder viewHolder, SelectiveCourse course, SelectedCoursesCounter selectedCoursesCounter) {
         viewHolder.setSelectiveCourse(course);
         if (!course.isAvailable()) {
             viewHolder.makeDisqualified();
@@ -123,6 +121,8 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         } else {
             viewHolder.setShortView();
         }
+
+        viewHolder.setCrowded(course.getStudentsCount() >= selectedCoursesCounter.getMaxStudentsCount());
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -130,8 +130,9 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         final LinearLayout informationBlock;
         final CheckBox checkBox;
         final ViewGroup.LayoutParams normalParams;
-
-        @Setter
+        final static int
+                studentCountBadgeCrowed = R.drawable.student_count_badge_crowded,
+                studentCountBadgeNormal = R.drawable.student_count_badge;
         private boolean interactive = true;
         @Setter
         @Getter
@@ -193,6 +194,7 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
             disqualifiedLabel.setVisibility(View.VISIBLE);
             int fondColor = itemView.getContext().getResources().getColor(R.color.disqualified_course_fond, null);
             itemView.setBackgroundColor(fondColor);
+            setBlocked(true);
         }
 
         public void setChecked(boolean checked) {
@@ -225,6 +227,17 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
             }
         }
 
+        @SuppressLint("UseCompatLoadingForDrawables")
+        public void setCrowded(boolean didCrowed) {
+            if (didCrowed) {
+                textStudentCount.setBackground(itemView.getContext().getDrawable(studentCountBadgeCrowed));
+                setBlocked(true);
+            } else {
+                textStudentCount.setBackground(itemView.getContext().getDrawable(studentCountBadgeNormal));
+                setBlocked(false);
+            }
+        }
+
         @Override
         public void onClick(View view) {
             if (!interactive) return;
@@ -232,6 +245,16 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
             boolean isSuccess = listener.onClick(this);
             if (isSuccess) {
                 setChecked(!checkBox.isChecked());
+            }
+        }
+
+        public void setBlocked(boolean isBlock) {
+            if (isBlock) {
+                checkBox.setAlpha(0.5f);
+                interactive = false;
+            } else {
+                checkBox.setAlpha(1f);
+                interactive = true;
             }
         }
 
@@ -270,11 +293,6 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
             return list.remove(course);
         }
         return false;
-    }
-
-    public void disableCheckBoxes(boolean disable) {
-        interactive = !disable;
-        notifyDataSetChanged();
     }
 
     public void setExtendedView() {

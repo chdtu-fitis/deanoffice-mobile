@@ -8,4 +8,7 @@ public class SelectiveCoursesSelectionTimeParameters {
     private CourseSelectionPeriod courseSelectionPeriod;
     private int studyYear;
     private long timeLeftUntilCurrentRoundEnd;
+    private int generalMinStudentsCount;
+    private int professionalMinStudentsCount;
+    private int maxStudentsCount;
 }

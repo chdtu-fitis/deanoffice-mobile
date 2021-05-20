@@ -5,6 +5,7 @@ import android.widget.TextView;
 
 import lombok.Getter;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCoursesSelectionTimeParameters;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.enums.Semester;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.StudentDegree;
 
@@ -12,20 +13,19 @@ public class SelectedCoursesCounter {
     @Getter
     private int selectedFirstSemester, selectedSecondSemester;
     @Getter
-    private final int maxCoursesFirstSemester, maxCoursesSecondSemester;
+    private final int maxCoursesFirstSemester, maxCoursesSecondSemester, maxStudentsCount;
 
     private final TextView textView;
     private SelectListener selectListener = null;
     @Getter
-    private final StudentDegree studentDegree;
     private Semester selectedSemester = Semester.FIRST;
     private boolean didAllCoursesSelected = false;
 
-    public SelectedCoursesCounter(TextView textView, StudentDegree studentDegree) {
+    public SelectedCoursesCounter(TextView textView, SelectiveCoursesSelectionTimeParameters timeParams) {
         this.textView = textView;
-        this.maxCoursesFirstSemester = studentDegree.getMaxCoursesFirstSemester();
-        this.maxCoursesSecondSemester = studentDegree.getMaxCoursesSecondSemester();
-        this.studentDegree = studentDegree;
+        this.maxCoursesFirstSemester = 3;
+        this.maxCoursesSecondSemester = 2;
+        this.maxStudentsCount = timeParams.getMaxStudentsCount();
     }
 
     public void init() {
