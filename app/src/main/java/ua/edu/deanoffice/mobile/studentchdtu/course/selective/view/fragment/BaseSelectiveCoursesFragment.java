@@ -279,6 +279,7 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
 
         if(selectedCoursesCounter != null){
             selectedCoursesCounter.switchSemester(Semester.FIRST);
+            adapterFirstSemester.updateItemCountView();
         }
     }
 
@@ -292,6 +293,7 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
 
         if(selectedCoursesCounter != null){
             selectedCoursesCounter.switchSemester(Semester.SECOND);
+            adapterSecondSemester.updateItemCountView();
         }
     }
 
@@ -382,5 +384,12 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
         if (adapter != null) {
             adapter.notifyDataSetChanged();
         }
+    }
+
+    public SelectiveCoursesAdapter getCurrentAdapter() {
+        if (recyclerView != null) {
+            return (SelectiveCoursesAdapter) recyclerView.getAdapter();
+        }
+        return null;
     }
 }

@@ -23,4 +23,10 @@ public class SelectiveCourses extends ValidModel {
         }
         return selectiveCoursesIds;
     }
+
+    public List<SelectiveCourse> getAllSelectiveCourses() {
+        List<SelectiveCourse> allSelectiveCourses = new ArrayList<>(selectiveCoursesFirstSemester);
+        allSelectiveCourses.addAll(selectiveCoursesSecondSemester);
+        return allSelectiveCourses;
+    }
 }
