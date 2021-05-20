@@ -41,7 +41,6 @@ import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
 import static ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.SelectiveCoursesAdapter.ViewHolder;
 import static ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.SelectiveCoursesAdapter.bindViewHolder;
 import static ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.SelectiveCoursesAdapter.createViewHolder;
-import static ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.SelectiveCoursesAdapter.hasGeneralAndProfessional;
 
 public abstract class BaseSelectiveCoursesFragment extends Fragment {
     public enum FragmentState {
@@ -245,14 +244,13 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
 
         List<SelectiveCourse> firstSemesterCoursesList = showingSelectiveCourses.getSelectiveCoursesFirstSemester();
         List<SelectiveCourse> secondSemesterCoursesList = showingSelectiveCourses.getSelectiveCoursesSecondSemester();
-        final boolean showTrainingCycle = hasGeneralAndProfessional(showingSelectiveCourses.getSelectiveCoursesBothSemesters());
 
         View firstSemesterLabelView = firstSemesterLabel.onCreateView(getContext(), viewGroup);
         viewGroup.addView(firstSemesterLabelView);
         for (SelectiveCourse course : firstSemesterCoursesList) {
             if (course.isSelected() && course.isAvailable()) {
                 ViewHolder viewHolder = createViewHolder(viewGroup);
-                bindViewHolder(viewHolder, course, showTrainingCycle);
+                bindViewHolder(viewHolder, course);
                 viewHolder.setInteractive(false);
                 viewHolder.setExtendedView();
                 viewHolder.setVisible(true);
@@ -265,7 +263,7 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
         for (SelectiveCourse course : secondSemesterCoursesList) {
             if (course.isSelected() && course.isAvailable()) {
                 ViewHolder viewHolder = createViewHolder(viewGroup);
-                bindViewHolder(viewHolder, course, showTrainingCycle);
+                bindViewHolder(viewHolder, course);
                 viewHolder.setInteractive(false);
                 viewHolder.setExtendedView();
                 viewHolder.setVisible(true);
