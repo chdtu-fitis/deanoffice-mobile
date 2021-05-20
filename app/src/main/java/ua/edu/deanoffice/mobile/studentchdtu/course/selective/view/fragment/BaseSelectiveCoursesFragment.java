@@ -236,7 +236,7 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
         recyclerView.setVisibility(View.GONE);
     }
 
-    protected void fillSelectedSelectiveCoursesContainer(ViewGroup viewGroup){
+    protected void fillSelectedSelectiveCoursesContainer(ViewGroup viewGroup) {
         viewGroup.removeAllViews();
 
         SemesterLabel firstSemesterLabel = new SemesterLabel(Semester.FIRST);
