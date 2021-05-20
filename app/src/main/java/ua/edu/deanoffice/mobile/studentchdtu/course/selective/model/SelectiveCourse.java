@@ -18,12 +18,18 @@ public class SelectiveCourse extends ModelBase {
     private int studyYear;
     private int studentsCount;
     private boolean selected;
+    private boolean selectedFromFirstRound;
 
     public static Comparator<SelectiveCourse> ByFacultyName = (one, two) -> {
         String facultyName1 = one.getDepartment().getFaculty().getAbbr();
         String facultyName2 = two.getDepartment().getFaculty().getAbbr();
         Collator uaCollator = Collator.getInstance(new Locale("uk", "UA"));
         return uaCollator.compare(facultyName1, facultyName2);
+    };
+
+    public static Comparator<SelectiveCourse> ByTrainingCycle = (one, two) -> {
+        Collator engCollator = Collator.getInstance(Locale.ENGLISH);
+        return engCollator.compare(one.getTrainingCycle(), two.getTrainingCycle());
     };
 
     public static Comparator<SelectiveCourse> ByCourseName = (one, two) -> {

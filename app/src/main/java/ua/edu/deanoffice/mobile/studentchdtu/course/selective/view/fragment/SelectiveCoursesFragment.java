@@ -5,7 +5,6 @@ import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCou
 
 public class SelectiveCoursesFragment extends BaseSelectiveCoursesFragment {
     public SelectiveCoursesFragment(SelectedCoursesCounter selectedCoursesCounter, SelectiveCourses availableSelectiveCourses) {
-        super(selectedCoursesCounter);
-        this.showingSelectiveCourses = availableSelectiveCourses;
+        super(availableSelectiveCourses, selectedCoursesCounter);
     }
 }

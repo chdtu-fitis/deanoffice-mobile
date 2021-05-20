@@ -5,6 +5,7 @@ import android.widget.TextView;
 
 import lombok.Getter;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.enums.Semester;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.StudentDegree;
 
 public class SelectedCoursesCounter {
@@ -14,16 +15,16 @@ public class SelectedCoursesCounter {
     private final int maxCoursesFirstSemester, maxCoursesSecondSemester;
 
     private final TextView textView;
-    private final SelectedStates selectedStates;
     private SelectListener selectListener = null;
     @Getter
     private final StudentDegree studentDegree;
+    private Semester selectedSemester = Semester.FIRST;
+    private boolean didAllCoursesSelected = false;
 
     public SelectedCoursesCounter(TextView textView, StudentDegree studentDegree) {
         this.textView = textView;
         this.maxCoursesFirstSemester = studentDegree.getMaxCoursesFirstSemester();
         this.maxCoursesSecondSemester = studentDegree.getMaxCoursesSecondSemester();
-        this.selectedStates = new SelectedStates();
         this.studentDegree = studentDegree;
     }
 
@@ -86,31 +87,21 @@ public class SelectedCoursesCounter {
                 selectedSecondSemester == maxCoursesSecondSemester;
     }
 
+    public void switchSemester(Semester semester) {
+        this.selectedSemester = semester;
+        update();
+    }
+
     private void onSelectedCoursesCountChanged() {
         if (selectListener != null) {
-            if (selectedFirstSemester > 0 || selectedSecondSemester > 0) {
-                if (!selectedStates.hasOneSelected) {
-                    selectedStates.hasOneSelected = true;
-                    selectListener.onOneSelected();
-                }
-                if (!selectedStates.hasAllSelected) {
-                    if (hasAllSelected()) {
-                        selectedStates.hasAllSelected = true;
-                        selectListener.onAllSelected();
-                    }
-                } else {
-                    if (!hasAllSelected()) {
-                        selectedStates.hasAllSelected = false;
-                        selectListener.onNotAllSelected();
-                    }
+            if (hasAllSelected()) {
+                if (!didAllCoursesSelected) {
+                    didAllCoursesSelected = true;
+                    selectListener.onAllSelected();
                 }
             } else {
-                if (selectedStates.hasOneSelected) {
-                    selectedStates.hasOneSelected = false;
-                    selectListener.onLastDeselected();
-                }
-                if (selectedStates.hasAllSelected) {
-                    selectedStates.hasAllSelected = false;
+                if (didAllCoursesSelected) {
+                    didAllCoursesSelected = false;
                     selectListener.onNotAllSelected();
                 }
             }
@@ -120,12 +111,19 @@ public class SelectedCoursesCounter {
     private void update() {
         if (textView != null) {
             Context context = textView.getContext();
-            String counterString = context.getResources().getString(R.string.header_selected_courses_counter);
-            counterString = counterString.replace("{semester_1_count}", selectedFirstSemester + "");
-            counterString = counterString.replace("{semester_1_max}", maxCoursesFirstSemester + "");
-            counterString = counterString.replace("{semester_2_count}", selectedSecondSemester + "");
-            counterString = counterString.replace("{semester_2_max}", maxCoursesSecondSemester + "");
-
+            String counterString = "";
+            switch (selectedSemester) {
+                case FIRST:
+                    counterString = context.getResources().getString(R.string.header_selected_courses_counter_s1);
+                    counterString = counterString.replace("{semester_1_count}", selectedFirstSemester + "");
+                    counterString = counterString.replace("{semester_1_max}", maxCoursesFirstSemester + "");
+                    break;
+                case SECOND:
+                    counterString = context.getResources().getString(R.string.header_selected_courses_counter_s2);
+                    counterString = counterString.replace("{semester_2_count}", selectedSecondSemester + "");
+                    counterString = counterString.replace("{semester_2_max}", maxCoursesSecondSemester + "");
+                    break;
+            }
             textView.setText(counterString);
             onSelectedCoursesCountChanged();
         }
@@ -137,17 +135,8 @@ public class SelectedCoursesCounter {
     }
 
     public interface SelectListener {
-        void onOneSelected();
-
         void onAllSelected();
 
-        void onLastDeselected();
-
         void onNotAllSelected();
-    }
-
-    private static class SelectedStates {
-        public boolean hasOneSelected = false;
-        public boolean hasAllSelected = false;
     }
 }

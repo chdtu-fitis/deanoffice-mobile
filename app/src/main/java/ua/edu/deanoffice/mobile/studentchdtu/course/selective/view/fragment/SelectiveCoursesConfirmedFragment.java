@@ -7,17 +7,16 @@ import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+
+import org.jetbrains.annotations.NotNull;
 
 import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourses;
-import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.SelectiveCoursesAdapter;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.activity.SelectiveCoursesActivity;
 
 public class SelectiveCoursesConfirmedFragment extends BaseSelectiveCoursesFragment {
     public SelectiveCoursesConfirmedFragment(SelectiveCourses selectiveCourses) {
-        super(null);
-        this.showingSelectiveCourses = selectiveCourses;
+        super(selectiveCourses, null);
     }
 
     @Nullable
@@ -27,10 +26,11 @@ public class SelectiveCoursesConfirmedFragment extends BaseSelectiveCoursesFragm
     }
 
     @Override
-    public void onViewCreated(final View view, final Bundle savedInstanceState) {
-        recyclerView = view.findViewById(R.id.listview1);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
+    public void onViewCreated(final @NotNull View view, final Bundle savedInstanceState) {
+        showHeaders(SelectiveCoursesActivity.Headers.REGISTERED);
+
+        ViewGroup viewGroup = getView().findViewById(R.id.сontainer_сonfirmed_сourses);
+        fillSelectedSelectiveCoursesContainer(viewGroup);
 
         View buttonToMainMenu = view.findViewById(R.id.buttonToMenu);
         buttonToMainMenu.setOnClickListener((v) -> {
@@ -39,9 +39,5 @@ public class SelectiveCoursesConfirmedFragment extends BaseSelectiveCoursesFragm
                 activity.onBackPressed();
             }
         });
-
-        SelectiveCoursesAdapter adapter = new SelectiveCoursesAdapter(showingSelectiveCourses, getFragmentManager(), null);
-        recyclerView.setAdapter(adapter);
-        adapter.disableCheckBoxes(true);
     }
 }
