@@ -86,10 +86,10 @@
                     android:id="@+id/textStudyYears"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="(2021-2022) "
+                    android:text="2021-2022 н.р. "
                     android:textAlignment="center"
-                    android:textColor="@color/light_gray"
-                    android:textSize="18sp"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -98,9 +98,10 @@
                     android:layout_height="wrap_content"
                     android:text="Перший семестр (0/2)"
                     android:textAlignment="center"
-                    android:textColor="@color/gray"
-                    android:textSize="18sp"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
+
             </LinearLayout>
 
             <TextView

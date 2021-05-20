@@ -26,7 +26,6 @@ import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.SelectedCoursesCounter;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.Department;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourse;
-import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourses;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.Teacher;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.enums.Semester;
 
