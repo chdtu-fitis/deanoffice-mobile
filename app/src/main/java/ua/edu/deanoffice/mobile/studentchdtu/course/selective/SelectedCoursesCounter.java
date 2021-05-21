@@ -15,13 +15,21 @@ public class SelectedCoursesCounter {
     private final int maxCoursesFirstSemester, maxCoursesSecondSemester;
 
     private final TextView textView;
+    private final TextView countOfCourseView;
+
     private SelectListener selectListener = null;
     @Getter
     private final StudentDegree studentDegree;
+    @Getter
     private Semester selectedSemester = Semester.FIRST;
     private boolean didAllCoursesSelected = false;
 
-    public SelectedCoursesCounter(TextView textView, StudentDegree studentDegree) {
+    public TextView getCountOfCourseView() {
+        return countOfCourseView;
+    }
+
+    public SelectedCoursesCounter(TextView countOfCourseView, TextView textView, StudentDegree studentDegree) {
+        this.countOfCourseView = countOfCourseView;
         this.textView = textView;
         this.maxCoursesFirstSemester = studentDegree.getMaxCoursesFirstSemester();
         this.maxCoursesSecondSemester = studentDegree.getMaxCoursesSecondSemester();

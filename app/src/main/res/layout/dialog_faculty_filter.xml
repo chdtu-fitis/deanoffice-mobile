@@ -1,0 +1,46 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/round_rect_shape_white">
+    <LinearLayout
+        android:id="@+id/facultyFilterContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/facultyFilterTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Фільтр факультетів"
+            android:textAlignment="textStart"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textColor="@color/gray"
+            android:textStyle="bold"
+            android:layout_marginBottom="10dp"/>
+
+       <TextView
+            android:id="@+id/selectiveCourseStudentCount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:text="Обрані факультети: "
+            android:textAlignment="textStart"
+            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+            android:textColor="@color/chdtu_value2"/>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/facultyFilterBtnOk"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/round_rect_shape"
+        android:text="Ok"
+        android:textColor="#FFF" />
+</LinearLayout>

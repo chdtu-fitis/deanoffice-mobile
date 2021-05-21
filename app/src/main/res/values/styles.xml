@@ -43,7 +43,7 @@
         <item name="android:indeterminateDrawable">@drawable/chdtu_progressbar</item>
     </style>
 
-    <style name="SortButtons" parent="Widget.AppCompat.TextView">
+    <style name="SelectedElement" parent="Widget.AppCompat.TextView">
         <item name="android:textColor">@color/disable_text_color</item>
     </style>
 
