@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -29,22 +31,29 @@ import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCou
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.Teacher;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.enums.Semester;
 
-public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCoursesAdapter.ViewHolder> {
+public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCoursesAdapter.ViewHolder> implements Filterable {
     // 1 - bak
     // 3 - magistr
 
     private final SelectedCoursesCounter selectedCoursesCounter;
     private final List<SelectiveCourse> selectiveCoursesList;
+    private final List<SelectiveCourse> selectiveCoursesListFull;
     @Getter
     private final List<SelectiveCourse> selectedCourse;
     private static boolean showExtendView = true;
+    private boolean interactive = true;
+    private TextView itemCountView;
     @Getter
     private final Semester semester;
 
     public SelectiveCoursesAdapter(List<SelectiveCourse> selectiveCoursesList, SelectedCoursesCounter selectedCoursesCounter, Semester semester) {
         this.selectiveCoursesList = selectiveCoursesList;
+        this.selectiveCoursesListFull = new ArrayList<>(selectiveCoursesList);
         this.selectedCourse = new ArrayList<>(selectiveCoursesList.size());
         this.selectedCoursesCounter = selectedCoursesCounter;
+        if (selectedCoursesCounter != null) {
+            itemCountView = selectedCoursesCounter.getCountOfCourseView();
+        }
         this.semester = semester;
 
         //Label selective courses from first round
@@ -56,6 +65,12 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
                 }
             }
         }
+        this.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                updateItemCountView();
+            }
+        });
     }
 
     @NonNull
@@ -123,6 +138,37 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         }
 
         viewHolder.setCrowded(course.getStudentsCount() >= selectedCoursesCounter.getMaxStudentsCount());
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                List<SelectiveCourse> filteredSelectiveCourses = new ArrayList<>();
+                if (constraint == null || constraint.length() == 0) {
+                    filteredSelectiveCourses.addAll(selectiveCoursesListFull);
+                } else {
+                    String facultyFilterPattern = constraint.toString().toUpperCase().trim();
+                    for (SelectiveCourse course : selectiveCoursesListFull) {
+                        if (facultyFilterPattern.contains(course.getDepartment().getFaculty().getAbbr().toUpperCase())) {
+                            filteredSelectiveCourses.add(course);
+                        }
+                    }
+                }
+
+                FilterResults results = new FilterResults();
+                results.values = filteredSelectiveCourses;
+                return results;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                selectiveCoursesList.clear();
+                selectiveCoursesList.addAll((List) results.values);
+                notifyDataSetChanged();
+            }
+        };
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -266,6 +312,18 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
     @Override
     public int getItemCount() {
         return selectiveCoursesList.size();
+    }
+
+    public void updateItemCountView() {
+        if (selectedCoursesCounter!=null) {
+            if (getItemCount() == selectiveCoursesListFull.size()) {
+                itemCountView.setEnabled(true);
+                itemCountView.setText("(" + getItemCount() + ")");
+            } else {
+                itemCountView.setEnabled(false);
+                itemCountView.setText("(" + getItemCount() + "/" + selectiveCoursesListFull.size() + ")");
+            }
+        }
     }
 
     public boolean onClick(ViewHolder viewHolder) {
