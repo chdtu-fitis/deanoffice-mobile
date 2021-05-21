@@ -417,7 +417,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
                     fragment = new SelectiveCoursesFragment(selectedCoursesCounter, availableCourses);
                     setUpHeaders(Headers.SELECTION);
                     if (hasGeneralAndProfessional(availableCourses.getSelectiveCoursesFirstSemester()) ||
-                        hasGeneralAndProfessional(availableCourses.getSelectiveCoursesSecondSemester())) {
+                            hasGeneralAndProfessional(availableCourses.getSelectiveCoursesSecondSemester())) {
                         initializeTrainingCycleSortButton();
                     }
                     initializeFacultyFilteringCheckBoxes(getAvailableFacultyAbbr(availableCourses));
@@ -474,7 +474,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
                     fragment = new SelectiveCoursesSecondRoundFragment(selectedCoursesCounter, availableCourses);
                     setUpHeaders(Headers.SELECTION);
                     if (hasGeneralAndProfessional(availableCourses.getSelectiveCoursesFirstSemester()) ||
-                        hasGeneralAndProfessional(availableCourses.getSelectiveCoursesSecondSemester())) {
+                            hasGeneralAndProfessional(availableCourses.getSelectiveCoursesSecondSemester())) {
                         initializeTrainingCycleSortButton();
                     }
                     initializeFacultyFilteringCheckBoxes(getAvailableFacultyAbbr(availableCourses));
@@ -570,7 +570,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         findViewById(R.id.sortByTrainingCycle).setOnClickListener(sortOnClickListener);
     }
 
-    public boolean hasGeneralAndProfessional(List<SelectiveCourse> availableCourses) {
+    public static boolean hasGeneralAndProfessional(List<SelectiveCourse> availableCourses) {
         boolean hasGeneral = false;
         boolean hasProfessional = false;
         for (SelectiveCourse selectiveCourse : availableCourses) {
