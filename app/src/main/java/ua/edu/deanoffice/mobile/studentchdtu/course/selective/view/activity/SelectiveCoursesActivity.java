@@ -677,7 +677,8 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
 //        int maxCoursesFirstSemester = studentDegree.getMaxCoursesFirstSemester();
 //        int maxCoursesSecondSemester = studentDegree.getMaxCoursesSecondSemester();
 //        selectedCoursesCounter = new SelectedCoursesCounter(selectedCoursesCounterTV, maxCoursesFirstSemester, maxCoursesSecondSemester);
-        selectedCoursesCounter = new SelectedCoursesCounter(viewCountOfCourses, selectedCoursesCounterTV, studentDegree);
+
+        selectedCoursesCounter = new SelectedCoursesCounter(viewCountOfCourses, selectedCoursesCounterTV, timeParams);
         selectedCoursesCounter.init();
     }
 }

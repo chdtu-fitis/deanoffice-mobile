@@ -252,8 +252,8 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
         for (SelectiveCourse course : firstSemesterCoursesList) {
             if (course.isSelected() && course.isAvailable()) {
                 ViewHolder viewHolder = createViewHolder(viewGroup);
-                bindViewHolder(viewHolder, course);
-                viewHolder.setInteractive(false);
+                bindViewHolder(viewHolder, course, selectedCoursesCounter);
+                viewHolder.setBlocked(true);
                 viewHolder.setExtendedView();
                 viewHolder.setVisible(true);
                 viewGroup.addView(viewHolder.itemView);
@@ -265,8 +265,8 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
         for (SelectiveCourse course : secondSemesterCoursesList) {
             if (course.isSelected() && course.isAvailable()) {
                 ViewHolder viewHolder = createViewHolder(viewGroup);
-                bindViewHolder(viewHolder, course);
-                viewHolder.setInteractive(false);
+                bindViewHolder(viewHolder, course, selectedCoursesCounter);
+                viewHolder.setBlocked(true);
                 viewHolder.setExtendedView();
                 viewHolder.setVisible(true);
                 viewGroup.addView(viewHolder.itemView);

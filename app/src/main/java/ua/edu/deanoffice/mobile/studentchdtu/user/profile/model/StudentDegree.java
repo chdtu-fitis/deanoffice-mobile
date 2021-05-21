@@ -11,4 +11,6 @@ public class StudentDegree extends ValidModel {
     private String tuitionForm;
     private String tuitionTerm;
     private boolean active;
+    private int year;
+    private int realYear;
 }
