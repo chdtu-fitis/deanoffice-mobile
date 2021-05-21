@@ -212,6 +212,7 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
 
         if (selectedCoursesCounter != null) {
             selectedCoursesCounter.switchSemester(Semester.FIRST);
+            adapterFirstSemester.updateItemCountView();
         }
     }
 
@@ -225,6 +226,7 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
 
         if (selectedCoursesCounter != null) {
             selectedCoursesCounter.switchSemester(Semester.SECOND);
+            adapterSecondSemester.updateItemCountView();
         }
     }
 
@@ -250,8 +252,8 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
         for (SelectiveCourse course : firstSemesterCoursesList) {
             if (course.isSelected() && course.isAvailable()) {
                 ViewHolder viewHolder = createViewHolder(viewGroup);
-                bindViewHolder(viewHolder, course);
-                viewHolder.setInteractive(false);
+                bindViewHolder(viewHolder, course, selectedCoursesCounter);
+                viewHolder.setBlocked(true);
                 viewHolder.setExtendedView();
                 viewHolder.setVisible(true);
                 viewGroup.addView(viewHolder.itemView);
@@ -263,8 +265,8 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
         for (SelectiveCourse course : secondSemesterCoursesList) {
             if (course.isSelected() && course.isAvailable()) {
                 ViewHolder viewHolder = createViewHolder(viewGroup);
-                bindViewHolder(viewHolder, course);
-                viewHolder.setInteractive(false);
+                bindViewHolder(viewHolder, course, selectedCoursesCounter);
+                viewHolder.setBlocked(true);
                 viewHolder.setExtendedView();
                 viewHolder.setVisible(true);
                 viewGroup.addView(viewHolder.itemView);
@@ -469,6 +471,13 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
         if (adapter != null) {
             adapter.notifyDataSetChanged();
         }
+    }
+
+    public SelectiveCoursesAdapter getCurrentAdapter() {
+        if (recyclerView != null) {
+            return (SelectiveCoursesAdapter) recyclerView.getAdapter();
+        }
+        return null;
     }
 
     protected void onBackPressed() {

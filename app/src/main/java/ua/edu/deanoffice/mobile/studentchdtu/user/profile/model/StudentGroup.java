@@ -4,5 +4,6 @@ import lombok.Data;
 
 @Data
 public class StudentGroup {
+    private int id;
     private String name;
 }

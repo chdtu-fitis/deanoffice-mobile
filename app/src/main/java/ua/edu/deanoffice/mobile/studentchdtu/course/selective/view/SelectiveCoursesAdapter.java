@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -29,23 +31,29 @@ import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCou
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.Teacher;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.enums.Semester;
 
-public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCoursesAdapter.ViewHolder> {
+public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCoursesAdapter.ViewHolder> implements Filterable {
     // 1 - bak
     // 3 - magistr
 
     private final SelectedCoursesCounter selectedCoursesCounter;
     private final List<SelectiveCourse> selectiveCoursesList;
+    private final List<SelectiveCourse> selectiveCoursesListFull;
     @Getter
     private final List<SelectiveCourse> selectedCourse;
     private static boolean showExtendView = true;
     private boolean interactive = true;
+    private TextView itemCountView;
     @Getter
     private final Semester semester;
 
     public SelectiveCoursesAdapter(List<SelectiveCourse> selectiveCoursesList, SelectedCoursesCounter selectedCoursesCounter, Semester semester) {
         this.selectiveCoursesList = selectiveCoursesList;
+        this.selectiveCoursesListFull = new ArrayList<>(selectiveCoursesList);
         this.selectedCourse = new ArrayList<>(selectiveCoursesList.size());
         this.selectedCoursesCounter = selectedCoursesCounter;
+        if (selectedCoursesCounter != null) {
+            itemCountView = selectedCoursesCounter.getCountOfCourseView();
+        }
         this.semester = semester;
 
         //Label selective courses from first round
@@ -57,6 +65,12 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
                 }
             }
         }
+        this.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onChanged() {
+                updateItemCountView();
+            }
+        });
     }
 
     @NonNull
@@ -74,13 +88,12 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         SelectiveCourse course = selectiveCoursesList.get(position);
-        bindViewHolder(viewHolder, course);
+        bindViewHolder(viewHolder, course, selectedCoursesCounter);
         viewHolder.setListener(this::onClick);
-        viewHolder.setInteractive(interactive);
     }
 
     @SuppressLint("SetTextI18n")
-    public static void bindViewHolder(@NonNull ViewHolder viewHolder, SelectiveCourse course) {
+    public static void bindViewHolder(@NonNull ViewHolder viewHolder, SelectiveCourse course, SelectedCoursesCounter selectedCoursesCounter) {
         viewHolder.setSelectiveCourse(course);
         if (!course.isAvailable()) {
             viewHolder.makeDisqualified();
@@ -123,6 +136,41 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         } else {
             viewHolder.setShortView();
         }
+
+        if (selectedCoursesCounter!=null) {
+            viewHolder.setCrowded(course.getStudentsCount() >= selectedCoursesCounter.getMaxStudentsCount());
+        }
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                List<SelectiveCourse> filteredSelectiveCourses = new ArrayList<>();
+                if (constraint == null || constraint.length() == 0) {
+                    filteredSelectiveCourses.addAll(selectiveCoursesListFull);
+                } else {
+                    String facultyFilterPattern = constraint.toString().toUpperCase().trim();
+                    for (SelectiveCourse course : selectiveCoursesListFull) {
+                        if (facultyFilterPattern.contains(course.getDepartment().getFaculty().getAbbr().toUpperCase())) {
+                            filteredSelectiveCourses.add(course);
+                        }
+                    }
+                }
+
+                FilterResults results = new FilterResults();
+                results.values = filteredSelectiveCourses;
+                return results;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                selectiveCoursesList.clear();
+                selectiveCoursesList.addAll((List) results.values);
+                notifyDataSetChanged();
+            }
+        };
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -130,8 +178,9 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         final LinearLayout informationBlock;
         final CheckBox checkBox;
         final ViewGroup.LayoutParams normalParams;
-
-        @Setter
+        final static int
+                studentCountBadgeCrowed = R.drawable.student_count_badge_crowded,
+                studentCountBadgeNormal = R.drawable.student_count_badge;
         private boolean interactive = true;
         @Setter
         @Getter
@@ -193,6 +242,7 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
             disqualifiedLabel.setVisibility(View.VISIBLE);
             int fondColor = itemView.getContext().getResources().getColor(R.color.disqualified_course_fond, null);
             itemView.setBackgroundColor(fondColor);
+            setBlocked(true);
         }
 
         public void setChecked(boolean checked) {
@@ -225,6 +275,17 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
             }
         }
 
+        @SuppressLint("UseCompatLoadingForDrawables")
+        public void setCrowded(boolean didCrowed) {
+            if (didCrowed) {
+                textStudentCount.setBackground(itemView.getContext().getDrawable(studentCountBadgeCrowed));
+                setBlocked(true);
+            } else {
+                textStudentCount.setBackground(itemView.getContext().getDrawable(studentCountBadgeNormal));
+                setBlocked(false);
+            }
+        }
+
         @Override
         public void onClick(View view) {
             if (!interactive) return;
@@ -232,6 +293,16 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
             boolean isSuccess = listener.onClick(this);
             if (isSuccess) {
                 setChecked(!checkBox.isChecked());
+            }
+        }
+
+        public void setBlocked(boolean isBlock) {
+            if (isBlock) {
+                checkBox.setAlpha(0.5f);
+                interactive = false;
+            } else {
+                checkBox.setAlpha(1f);
+                interactive = true;
             }
         }
 
@@ -243,6 +314,18 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
     @Override
     public int getItemCount() {
         return selectiveCoursesList.size();
+    }
+
+    public void updateItemCountView() {
+        if (selectedCoursesCounter!=null) {
+            if (getItemCount() == selectiveCoursesListFull.size()) {
+                itemCountView.setEnabled(true);
+                itemCountView.setText("(" + getItemCount() + ")");
+            } else {
+                itemCountView.setEnabled(false);
+                itemCountView.setText("(" + getItemCount() + "/" + selectiveCoursesListFull.size() + ")");
+            }
+        }
     }
 
     public boolean onClick(ViewHolder viewHolder) {
@@ -270,11 +353,6 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
             return list.remove(course);
         }
         return false;
-    }
-
-    public void disableCheckBoxes(boolean disable) {
-        interactive = !disable;
-        notifyDataSetChanged();
     }
 
     public void setExtendedView() {

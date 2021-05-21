@@ -5,15 +5,21 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import lombok.Getter;
 import retrofit2.Call;
@@ -28,7 +34,9 @@ import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCou
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCoursesSelectionTimeParameters;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCoursesStudentDegree;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.enums.CourseSelectionPeriod;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.enums.Semester;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.service.SelectiveCourseRequests;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.SelectiveCoursesAdapter;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.StudentDegree;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.BaseSelectiveCoursesFragment;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.InformationFragment;
@@ -36,6 +44,7 @@ import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.Sele
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.SelectiveCoursesFragment;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.SelectiveCoursesSecondRoundFragment;
 import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
+import ua.edu.deanoffice.mobile.studentchdtu.shared.util.UAComparator;
 
 public class SelectiveCoursesActivity extends BaseDrawerActivity {
     public enum Headers {
@@ -46,11 +55,16 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
     }
 
     private View sortPanel;
+    private TextView sortLabel;
+    private List<View> sortButtons;
+    private TextView viewCountOfCourses;
+    private List<CheckBox> facultyFilteringCheckBoxes = new ArrayList<>();
+    private List<String> selectedFacultyForFirstSemester = new ArrayList<>();
+    private List<String> selectedFacultyForSecondSemester = new ArrayList<>();
+    private AlertDialog dialogFacultyFiltering;
     private SelectedCoursesCounter selectedCoursesCounter;
     private SelectiveCourses selectedCourses, availableCourses;
-    private TextView sortLabel;
     private BaseSelectiveCoursesFragment currentSelectedFragment = null;
-    private List<View> sortButtons;
 
     @SuppressLint("NonConstantResourceId")
     View.OnClickListener sortOnClickListener = v -> {
@@ -96,6 +110,8 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         initializeSortButtons();
         sortLabel = findViewById(R.id.sortLabel);
         sortPanel = findViewById(R.id.sortPanel);
+        viewCountOfCourses = findViewById(R.id.countOfCourses);
+        viewCountOfCourses.setOnClickListener(onClickShowFiltering);
 
         @SuppressLint("UseSwitchCompatOrMaterialCode")
         Switch btnExtendedView = findViewById(R.id.switchExtendedView);
@@ -116,6 +132,102 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         setUpHeaders(Headers.HIDE);
 
         loadStudentSelectedCourses();
+    }
+
+    private void initializeFacultyFilteringCheckBoxes(Set<String> facultiesAbbr) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        ViewGroup viewGroup = findViewById(android.R.id.content);
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_faculty_filter, viewGroup, false);
+
+        LinearLayout ll = (LinearLayout) dialogView.findViewById(R.id.facultyFilterContent);
+        for (String facultyAbbr: facultiesAbbr) {
+            CheckBox cb = new CheckBox(dialogView.getContext());
+            cb.setText(facultyAbbr);
+            cb.setChecked(true);
+            ll.addView(cb);
+            facultyFilteringCheckBoxes.add(cb);
+            selectedFacultyForFirstSemester.add(facultyAbbr);
+            selectedFacultyForSecondSemester.add(facultyAbbr);
+        }
+
+        builder.setView(dialogView);
+        dialogFacultyFiltering = builder.create();
+
+        dialogView.findViewById(R.id.facultyFilterBtnOk).setOnClickListener(onClickFilteringOk);
+
+        findViewById(R.id.facultyFilterBtn).setOnClickListener(onClickShowFiltering);
+    }
+
+    private View.OnClickListener onClickFilteringOk = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (selectedCoursesCounter.getSelectedSemester() == Semester.FIRST) {
+                selectedFacultyForFirstSemester.clear();
+            } else {
+                selectedFacultyForSecondSemester.clear();
+            }
+
+            StringBuilder facultyFilterPattern = new StringBuilder();
+            for (CheckBox facultyCheckBox: facultyFilteringCheckBoxes) {
+                if (facultyCheckBox.isChecked()) {
+                    facultyFilterPattern.append(" " + facultyCheckBox.getText());
+                    if (selectedCoursesCounter.getSelectedSemester() == Semester.FIRST) {
+                        selectedFacultyForFirstSemester.add(facultyCheckBox.getText().toString());
+                    } else {
+                        selectedFacultyForSecondSemester.add(facultyCheckBox.getText().toString());
+                    }
+                }
+            }
+
+            SelectiveCoursesAdapter selectiveCoursesAdapter = currentSelectedFragment.getCurrentAdapter();
+            if (selectiveCoursesAdapter != null) {
+                selectiveCoursesAdapter.getFilter()
+                        .filter(facultyFilterPattern.toString());
+            }
+
+            dialogFacultyFiltering.dismiss();
+        }
+    };
+
+    private View.OnClickListener onClickShowFiltering = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            restoreFilteringStateForSemester(selectedCoursesCounter.getSelectedSemester());
+            dialogFacultyFiltering.show();
+        }
+    };
+
+    private void restoreFilteringStateForSemester(Semester semester) {
+        switch (semester) {
+            case FIRST:
+                for (CheckBox facultyCheck : facultyFilteringCheckBoxes) {
+                    if (selectedFacultyForFirstSemester.contains(facultyCheck.getText())) {
+                        facultyCheck.setChecked(true);
+                    } else {
+                        facultyCheck.setChecked(false);
+                    }
+                }
+                break;
+            case SECOND:
+                for (CheckBox facultyCheck : facultyFilteringCheckBoxes) {
+                    if (selectedFacultyForSecondSemester.contains(facultyCheck.getText())) {
+                        facultyCheck.setChecked(true);
+                    } else {
+                        facultyCheck.setChecked(false);
+                    }
+                }
+                break;
+        }
+    }
+
+    private Set<String> getAvailableFacultyAbbr(SelectiveCourses availableCourses){
+        Set<String> uniqueFaculties = new TreeSet<String>(new UAComparator());
+
+        for (SelectiveCourse selectiveCourse: availableCourses.getSelectiveCoursesBothSemesters()) {
+            uniqueFaculties.add(selectiveCourse.getDepartment().getFaculty().getAbbr());
+        }
+        return uniqueFaculties;
     }
 
     private void loadStudentSelectedCourses() {
@@ -308,6 +420,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
                             hasGeneralAndProfessional(availableCourses.getSelectiveCoursesSecondSemester())) {
                         initializeTrainingCycleSortButton();
                     }
+                    initializeFacultyFilteringCheckBoxes(getAvailableFacultyAbbr(availableCourses));
                 }
             } else {
                 fragment = new SelectiveCoursesConfirmedFragment(selectedCourses);
@@ -364,6 +477,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
                             hasGeneralAndProfessional(availableCourses.getSelectiveCoursesSecondSemester())) {
                         initializeTrainingCycleSortButton();
                     }
+                    initializeFacultyFilteringCheckBoxes(getAvailableFacultyAbbr(availableCourses));
                 }
             } else {
                 if (existDisqualifiedCourse(selectedCourses)) {
@@ -491,6 +605,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         View containerConfirmHeaders = findViewById(R.id.containerConfirmHeaders);
         View containerSelectionInfoHeaders = findViewById(R.id.containerSelectionInfoHeaders);
         View containerSelectionSortHeaders = findViewById(R.id.containerSelectionSortHeaders);
+        View containerSelectionFunctionalHeaders = findViewById(R.id.containerSelectionFunctionalHeaders);
         View containerSuccessRegHeaders = findViewById(R.id.containerSuccessRegHeaders);
         View containerHeaders = findViewById(R.id.containerHeaders);
 
@@ -528,6 +643,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         containerSuccessRegHeaders.setVisibility(successRegHeadersState);
         containerSelectionInfoHeaders.setVisibility(selectionHeadersState);
         containerSelectionSortHeaders.setVisibility(selectionHeadersState);
+        containerSelectionFunctionalHeaders.setVisibility(selectionHeadersState);
     }
 
     private void headerInit(SelectiveCoursesSelectionTimeParameters timeParams) {
@@ -561,7 +677,8 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
 //        int maxCoursesFirstSemester = studentDegree.getMaxCoursesFirstSemester();
 //        int maxCoursesSecondSemester = studentDegree.getMaxCoursesSecondSemester();
 //        selectedCoursesCounter = new SelectedCoursesCounter(selectedCoursesCounterTV, maxCoursesFirstSemester, maxCoursesSecondSemester);
-        selectedCoursesCounter = new SelectedCoursesCounter(selectedCoursesCounterTV, studentDegree);
+
+        selectedCoursesCounter = new SelectedCoursesCounter(viewCountOfCourses, selectedCoursesCounterTV, timeParams);
         selectedCoursesCounter.init();
     }
 }
