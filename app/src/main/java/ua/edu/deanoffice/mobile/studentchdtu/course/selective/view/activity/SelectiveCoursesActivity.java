@@ -224,7 +224,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
     private Set<String> getAvailableFacultyAbbr(SelectiveCourses availableCourses){
         Set<String> uniqueFaculties = new TreeSet<String>(new UAComparator());
 
-        for (SelectiveCourse selectiveCourse: availableCourses.getAllSelectiveCourses()) {
+        for (SelectiveCourse selectiveCourse: availableCourses.getSelectiveCoursesBothSemesters()) {
             uniqueFaculties.add(selectiveCourse.getDepartment().getFaculty().getAbbr());
         }
         return uniqueFaculties;
