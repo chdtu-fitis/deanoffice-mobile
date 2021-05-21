@@ -137,7 +137,9 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
             viewHolder.setShortView();
         }
 
-        viewHolder.setCrowded(course.getStudentsCount() >= selectedCoursesCounter.getMaxStudentsCount());
+        if (selectedCoursesCounter!=null) {
+            viewHolder.setCrowded(course.getStudentsCount() >= selectedCoursesCounter.getMaxStudentsCount());
+        }
     }
 
     @Override
