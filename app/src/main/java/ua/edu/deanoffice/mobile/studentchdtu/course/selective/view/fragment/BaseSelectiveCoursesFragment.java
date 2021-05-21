@@ -387,7 +387,7 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
 
         @Override
         protected void onClickRightButton(View button) {
-            if (selectedCoursesCounter.confirmIsAvailable()) {
+            if (selectedCoursesCounter.hasAllSelected()) {
                 changeFragmentState(FragmentState.CONFIRM_SCREEN);
             } else {
                 Snackbar.make(button.findViewById(android.R.id.content), getRString(R.string.worn_select_courses), Snackbar.LENGTH_LONG)
@@ -414,9 +414,9 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
             for (SelectiveCoursesAdapter adapter : adaptersList) {
                 if (adapter != null) {
                     if (adapter.getSemester() == Semester.FIRST) {
-                        selectiveCoursesFinal.setSelectiveCoursesFirstSemester(adapter.getSelectedCourse());
+                        selectiveCoursesFinal.setSelectiveCoursesFirstSemester(adapter.getSelectedCoursesList());
                     } else {
-                        selectiveCoursesFinal.setSelectiveCoursesSecondSemester(adapter.getSelectedCourse());
+                        selectiveCoursesFinal.setSelectiveCoursesSecondSemester(adapter.getSelectedCoursesList());
                     }
                 } else {
                     showError(getRString(R.string.error_null_selective_courses_adapter));

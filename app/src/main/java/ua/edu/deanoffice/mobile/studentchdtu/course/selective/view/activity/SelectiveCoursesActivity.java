@@ -3,6 +3,7 @@ package ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.activity;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.ArrayMap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import androidx.fragment.app.FragmentManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -31,17 +33,18 @@ import ua.edu.deanoffice.mobile.studentchdtu.course.selective.DeadLineTimer;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.SelectedCoursesCounter;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourse;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourses;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCoursesSelectionRules;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCoursesSelectionTimeParameters;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCoursesStudentDegree;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.enums.CourseSelectionPeriod;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.enums.Semester;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.enums.TypeCycle;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.service.SelectiveCourseRequests;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.SelectiveCoursesAdapter;
-import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.StudentDegree;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.BaseSelectiveCoursesFragment;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.InformationFragment;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.SelectiveCoursesConfirmedFragment;
-import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.SelectiveCoursesFragment;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.SelectiveCoursesFirstRoundFragment;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.SelectiveCoursesSecondRoundFragment;
 import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
 import ua.edu.deanoffice.mobile.studentchdtu.shared.util.UAComparator;
@@ -58,9 +61,9 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
     private TextView sortLabel;
     private List<View> sortButtons;
     private TextView viewCountOfCourses;
-    private List<CheckBox> facultyFilteringCheckBoxes = new ArrayList<>();
-    private List<String> selectedFacultyForFirstSemester = new ArrayList<>();
-    private List<String> selectedFacultyForSecondSemester = new ArrayList<>();
+    private final List<CheckBox> facultyFilteringCheckBoxes = new ArrayList<>();
+    private final List<String> selectedFacultyForFirstSemester = new ArrayList<>();
+    private final List<String> selectedFacultyForSecondSemester = new ArrayList<>();
     private AlertDialog dialogFacultyFiltering;
     private SelectedCoursesCounter selectedCoursesCounter;
     private SelectiveCourses selectedCourses, availableCourses;
@@ -140,8 +143,8 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         ViewGroup viewGroup = findViewById(android.R.id.content);
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_faculty_filter, viewGroup, false);
 
-        LinearLayout ll = (LinearLayout) dialogView.findViewById(R.id.facultyFilterContent);
-        for (String facultyAbbr: facultiesAbbr) {
+        LinearLayout ll = dialogView.findViewById(R.id.facultyFilterContent);
+        for (String facultyAbbr : facultiesAbbr) {
             CheckBox cb = new CheckBox(dialogView.getContext());
             cb.setText(facultyAbbr);
             cb.setChecked(true);
@@ -159,7 +162,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         findViewById(R.id.facultyFilterBtn).setOnClickListener(onClickShowFiltering);
     }
 
-    private View.OnClickListener onClickFilteringOk = new View.OnClickListener() {
+    private final View.OnClickListener onClickFilteringOk = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             if (selectedCoursesCounter.getSelectedSemester() == Semester.FIRST) {
@@ -169,7 +172,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
             }
 
             StringBuilder facultyFilterPattern = new StringBuilder();
-            for (CheckBox facultyCheckBox: facultyFilteringCheckBoxes) {
+            for (CheckBox facultyCheckBox : facultyFilteringCheckBoxes) {
                 if (facultyCheckBox.isChecked()) {
                     facultyFilterPattern.append(" " + facultyCheckBox.getText());
                     if (selectedCoursesCounter.getSelectedSemester() == Semester.FIRST) {
@@ -190,7 +193,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         }
     };
 
-    private View.OnClickListener onClickShowFiltering = new View.OnClickListener() {
+    private final View.OnClickListener onClickShowFiltering = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             restoreFilteringStateForSemester(selectedCoursesCounter.getSelectedSemester());
@@ -202,29 +205,21 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         switch (semester) {
             case FIRST:
                 for (CheckBox facultyCheck : facultyFilteringCheckBoxes) {
-                    if (selectedFacultyForFirstSemester.contains(facultyCheck.getText())) {
-                        facultyCheck.setChecked(true);
-                    } else {
-                        facultyCheck.setChecked(false);
-                    }
+                    facultyCheck.setChecked(selectedFacultyForFirstSemester.contains(facultyCheck.getText()));
                 }
                 break;
             case SECOND:
                 for (CheckBox facultyCheck : facultyFilteringCheckBoxes) {
-                    if (selectedFacultyForSecondSemester.contains(facultyCheck.getText())) {
-                        facultyCheck.setChecked(true);
-                    } else {
-                        facultyCheck.setChecked(false);
-                    }
+                    facultyCheck.setChecked(selectedFacultyForSecondSemester.contains(facultyCheck.getText()));
                 }
                 break;
         }
     }
 
-    private Set<String> getAvailableFacultyAbbr(SelectiveCourses availableCourses){
+    private Set<String> getAvailableFacultyAbbr(SelectiveCourses availableCourses) {
         Set<String> uniqueFaculties = new TreeSet<String>(new UAComparator());
 
-        for (SelectiveCourse selectiveCourse: availableCourses.getSelectiveCoursesBothSemesters()) {
+        for (SelectiveCourse selectiveCourse : availableCourses.getSelectiveCoursesBothSemesters()) {
             uniqueFaculties.add(selectiveCourse.getDepartment().getFaculty().getAbbr());
         }
         return uniqueFaculties;
@@ -314,11 +309,13 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
     private void selectAndShowFragment() {
         CourseSelectionPeriod period;
         SelectiveCoursesSelectionTimeParameters timeParams;
+        SelectiveCoursesSelectionRules[] selectionRules;
 
         period = availableCourses
                 .getSelectiveCoursesSelectionTimeParameters()
                 .getCourseSelectionPeriod();
         timeParams = availableCourses.getSelectiveCoursesSelectionTimeParameters();
+        selectionRules = availableCourses.getSelectiveCoursesSelectionRules();
 
         ActiveState activeState;
         long timeLeftUntilCurrentRoundEnd = timeParams.getTimeLeftUntilCurrentRoundEnd();
@@ -330,7 +327,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
                 break;
             case FIRST_ROUND:
                 //Init and show Headers
-                headerInit(timeParams);
+                headerInit(timeParams, selectionRules);
                 activeState = new FirstRound(availableListIsNull, selectedListIsNull);
                 break;
             case BETWEEN_FIRST_AND_SECOND_ROUND:
@@ -338,7 +335,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
                 break;
             case SECOND_ROUND:
                 //Init and show Headers
-                headerInit(timeParams);
+                headerInit(timeParams, selectionRules);
                 activeState = new SecondRound(availableListIsNull, selectedListIsNull);
                 break;
             case AFTER_SECOND_ROUND:
@@ -414,7 +411,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
                     String infoMessage = getRString(R.string.info_failed_load_selective_courses);
                     fragment = new InformationFragment(infoMessage);
                 } else {
-                    fragment = new SelectiveCoursesFragment(selectedCoursesCounter, availableCourses);
+                    fragment = new SelectiveCoursesFirstRoundFragment(selectedCoursesCounter, availableCourses);
                     setUpHeaders(Headers.SELECTION);
                     if (hasGeneralAndProfessional(availableCourses.getSelectiveCoursesFirstSemester()) ||
                             hasGeneralAndProfessional(availableCourses.getSelectiveCoursesSecondSemester())) {
@@ -574,7 +571,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         boolean hasGeneral = false;
         boolean hasProfessional = false;
         for (SelectiveCourse selectiveCourse : availableCourses) {
-            if (selectiveCourse.getTrainingCycle().equals("GENERAL")) {
+            if (selectiveCourse.getTrainingCycle() == TypeCycle.GENERAL) {
                 hasGeneral = true;
             } else {
                 hasProfessional = true;
@@ -646,10 +643,12 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         containerSelectionFunctionalHeaders.setVisibility(selectionHeadersState);
     }
 
-    private void headerInit(SelectiveCoursesSelectionTimeParameters timeParams) {
+    private void headerInit(SelectiveCoursesSelectionTimeParameters timeParams, SelectiveCoursesSelectionRules[] selectionRules) {
         TextView studyYearsTV = findViewById(R.id.textStudyYears);
         TextView leftTimeToEndRoundTV = findViewById(R.id.textLeftTimeToEndRound);
-        TextView selectedCoursesCounterTV = findViewById(R.id.textSelectedCoursesCounter);
+        TextView semesterTV = findViewById(R.id.textSemester);
+        TextView professionalCounterTV = findViewById(R.id.textSelectedCoursesCounterProfessional);
+        TextView generalCounterTV = findViewById(R.id.textSelectedCoursesCounterGeneral);
 
         int studyYear = timeParams.getStudyYear();
         String studyYearsString = getRString(R.string.header_study_years);
@@ -665,20 +664,32 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
 
         leftTimeToEndRoundTV.setText(leftTimeToEndRoundString);
 
-        //TODO: replace max counts from constants with max counters from backend
-        boolean isMagister = App.getInstance().getCurrentStudent().getDegrees()[0].getSpecialization().getDegree().getId() == 3;
-        StudentDegree studentDegree;
-        if (isMagister) {
-            studentDegree = StudentDegree.Master;
-        } else {
-            studentDegree = StudentDegree.Bachelor;
+        Map<String, TextView> textViewMap = new ArrayMap<>();
+        textViewMap.put("Semester", semesterTV);
+        textViewMap.put("ProfessionalCounter", professionalCounterTV);
+        textViewMap.put("GeneralCounter", generalCounterTV);
+        textViewMap.put("ViewControlOfCourses", viewCountOfCourses);
+
+        selectedCoursesCounter = new SelectedCoursesCounter(textViewMap, timeParams, selectionRules);
+
+        if (selectedCourses != null) {
+            for (Semester semester : Semester.values()) {
+                int[] selectedCoursesCounts = new int[2];
+                if (semester == Semester.FIRST) {
+                    for (SelectiveCourse selectiveCourse : selectedCourses.getSelectiveCoursesFirstSemester()) {
+                        int cycleType = selectiveCourse.getTrainingCycle() == TypeCycle.GENERAL ? 1 : 0;
+                        selectedCoursesCounts[cycleType] += 1;
+                    }
+                    selectedCoursesCounter.setSelectedCountFirstSemester(selectedCoursesCounts);
+                } else {
+                    for (SelectiveCourse selectiveCourse : selectedCourses.getSelectiveCoursesSecondSemester()) {
+                        int cycleType = selectiveCourse.getTrainingCycle() == TypeCycle.GENERAL ? 1 : 0;
+                        selectedCoursesCounts[cycleType] += 1;
+                    }
+                    selectedCoursesCounter.setSelectedCountSecondSemester(selectedCoursesCounts);
+                }
+            }
         }
-
-//        int maxCoursesFirstSemester = studentDegree.getMaxCoursesFirstSemester();
-//        int maxCoursesSecondSemester = studentDegree.getMaxCoursesSecondSemester();
-//        selectedCoursesCounter = new SelectedCoursesCounter(selectedCoursesCounterTV, maxCoursesFirstSemester, maxCoursesSecondSemester);
-
-        selectedCoursesCounter = new SelectedCoursesCounter(viewCountOfCourses, selectedCoursesCounterTV, timeParams);
         selectedCoursesCounter.init();
     }
 }
