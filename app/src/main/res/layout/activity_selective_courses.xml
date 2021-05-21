@@ -128,12 +128,14 @@
             android:id="@+id/containerSelectionFunctionalHeaders"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/containerHeaders">
 
             <ImageView
                 android:id="@+id/facultyFilterBtn"
                 android:layout_width="30dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="20sp"
                 android:src="@drawable/ic_filter" />
 
             <TextView
@@ -162,7 +164,7 @@
         android:layout_height="0dp"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@+id/containerHeaders">
+        app:layout_constraintTop_toBottomOf="@+id/containerSelectionFunctionalHeaders">
 
         <TextView
             android:id="@+id/sortLabel"
