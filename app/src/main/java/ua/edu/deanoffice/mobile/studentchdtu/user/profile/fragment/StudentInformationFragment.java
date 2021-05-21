@@ -44,7 +44,7 @@ public class StudentInformationFragment extends Fragment {
         studentInformationViews.put("Year", view.findViewById(R.id.yearNameTextView));
 
         studentInformationViews.get("Name").setText(student.getSurname() + " " + student.getName() + " " + student.getPatronimic());
-        studentInformationViews.get("Facult").setText("Факультет інформаційних технологій і систем");
+        studentInformationViews.get("Facult").setText(student.getDegrees()[0].getSpecialization().getFaculty().getName());
         studentInformationViews.get("Degree").setText(student.getDegrees()[0].getSpecialization().getDegree().getName());
         studentInformationViews.get("Speciality").setText(student.getDegrees()[0].getSpecialization().getSpeciality().getCode() + " " + student.getDegrees()[0].getSpecialization().getSpeciality().getName());
         studentInformationViews.get("Specialization").setText(student.getDegrees()[0].getSpecialization().getName());
