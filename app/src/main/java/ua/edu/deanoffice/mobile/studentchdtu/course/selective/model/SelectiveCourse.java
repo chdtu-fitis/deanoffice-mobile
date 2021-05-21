@@ -19,6 +19,7 @@ public class SelectiveCourse extends ModelBase {
     private int studyYear;
     private int studentsCount;
     private boolean selected;
+    private boolean selectedFromFirstRound;
 
     public static Comparator<SelectiveCourse> ByFacultyName = (one, two) -> {
         String facultyName1 = one.getDepartment().getFaculty().getAbbr();
