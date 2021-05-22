@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.Locale;
 
 import lombok.Data;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.enums.TypeCycle;
 import ua.edu.deanoffice.mobile.studentchdtu.shared.util.UAComparator;
 
 @Data
@@ -14,7 +15,7 @@ public class SelectiveCourse extends ModelBase {
     private Teacher teacher;
     private Degree degree;
     private Department department;
-    private String trainingCycle;
+    private TypeCycle trainingCycle;
     private String description;
     private int studyYear;
     private int studentsCount;

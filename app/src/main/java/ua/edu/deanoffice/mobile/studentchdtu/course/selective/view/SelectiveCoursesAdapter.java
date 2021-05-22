@@ -30,6 +30,7 @@ import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.Department;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourse;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.Teacher;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.enums.Semester;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.enums.TypeCycle;
 
 public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCoursesAdapter.ViewHolder> implements Filterable {
     // 1 - bak
@@ -39,9 +40,9 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
     private final List<SelectiveCourse> selectiveCoursesList;
     private final List<SelectiveCourse> selectiveCoursesListFull;
     @Getter
-    private final List<SelectiveCourse> selectedCourse;
+    private final List<SelectiveCourse> selectedCoursesList;
     private static boolean showExtendView = true;
-    private boolean interactive = true;
+    private final boolean interactive = true;
     private TextView itemCountView;
     @Getter
     private final Semester semester;
@@ -49,7 +50,7 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
     public SelectiveCoursesAdapter(List<SelectiveCourse> selectiveCoursesList, SelectedCoursesCounter selectedCoursesCounter, Semester semester) {
         this.selectiveCoursesList = selectiveCoursesList;
         this.selectiveCoursesListFull = new ArrayList<>(selectiveCoursesList);
-        this.selectedCourse = new ArrayList<>(selectiveCoursesList.size());
+        this.selectedCoursesList = new ArrayList<>(selectiveCoursesList.size());
         this.selectedCoursesCounter = selectedCoursesCounter;
         if (selectedCoursesCounter != null) {
             itemCountView = selectedCoursesCounter.getCountOfCourseView();
@@ -61,7 +62,7 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
             if (course.isSelected()) {
                 course.setSelectedFromFirstRound(true);
                 if (course.isAvailable()) {
-                    selectedCourse.add(course);
+                    selectedCoursesList.add(course);
                 }
             }
         }
@@ -100,14 +101,14 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         }
 
         String courseName = course.getCourse().getCourseName().getName();
-        SpannableString coloredCourseName = course.getTrainingCycle().equals("GENERAL") ?
+        SpannableString coloredCourseName = course.getTrainingCycle() == TypeCycle.GENERAL ?
                 new SpannableString(courseName + " (Заг.) ") :
                 new SpannableString(courseName + " (Проф.)");
 
         int generalColor = viewHolder.itemView.getResources().getColor(R.color.general_training_cycle, null);
         int professionalColor = viewHolder.itemView.getResources().getColor(R.color.professional_training_cycle, null);
 
-        coloredCourseName.setSpan(course.getTrainingCycle().equals("GENERAL") ?
+        coloredCourseName.setSpan(course.getTrainingCycle() == TypeCycle.GENERAL ?
                         new ForegroundColorSpan(generalColor) :
                         new ForegroundColorSpan(professionalColor),
                 courseName.length() + 1, courseName.length() + 8, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -137,7 +138,7 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
             viewHolder.setShortView();
         }
 
-        if (selectedCoursesCounter!=null) {
+        if (selectedCoursesCounter != null) {
             viewHolder.setCrowded(course.getStudentsCount() >= selectedCoursesCounter.getMaxStudentsCount());
         }
     }
@@ -212,7 +213,7 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
                 View dialogView = LayoutInflater.from(viewClick.getContext()).inflate(R.layout.dialog_selectivecourse_info, viewGroup, false);
 
                 ((TextView) dialogView.findViewById(R.id.selectiveCourseName)).setText(selectiveCourse.getCourse().getCourseName().getName());
-                if (selectiveCourse.getTrainingCycle().equals("GENERAL")) {
+                if (selectiveCourse.getTrainingCycle() == TypeCycle.GENERAL) {
                     int generalColor = itemView.getResources().getColor(R.color.general_training_cycle, null);
                     ((TextView) dialogView.findViewById(R.id.selectiveCourseTrainingCycle)).setText("Загальний рівень");
                     ((TextView) dialogView.findViewById(R.id.selectiveCourseTrainingCycle)).setTextColor(generalColor);
@@ -317,7 +318,7 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
     }
 
     public void updateItemCountView() {
-        if (selectedCoursesCounter!=null) {
+        if (selectedCoursesCounter != null) {
             if (getItemCount() == selectiveCoursesListFull.size()) {
                 itemCountView.setEnabled(true);
                 itemCountView.setText("(" + getItemCount() + ")");
@@ -332,18 +333,26 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         if (selectedCoursesCounter == null) return false;
         SelectiveCourse course = viewHolder.getSelectiveCourse();
 
-        boolean isSuccess;
+        boolean isSuccess = addOrRemoveToSelectedList(course, selectedCoursesList);
+        int[] selectedCoursesCounts = new int[2];
+        for (SelectiveCourse selectiveCourse : selectedCoursesList) {
+            int cycleType = selectiveCourse.getTrainingCycle() == TypeCycle.GENERAL ? 1 : 0;
+            selectedCoursesCounts[cycleType] += 1;
+        }
+
         if (semester == Semester.FIRST) {
-            isSuccess = addOrRemoveToSelectedList(course, selectedCourse, selectedCoursesCounter.isFirstSemesterFull());
-            selectedCoursesCounter.setSelectedFirstSemester(selectedCourse.size());
+            selectedCoursesCounter.setSelectedCountFirstSemester(selectedCoursesCounts);
         } else {
-            isSuccess = addOrRemoveToSelectedList(course, selectedCourse, selectedCoursesCounter.isSecondSemesterFull());
-            selectedCoursesCounter.setSelectedSecondSemester(selectedCourse.size());
+            selectedCoursesCounter.setSelectedCountSecondSemester(selectedCoursesCounts);
         }
         return isSuccess;
     }
 
-    private boolean addOrRemoveToSelectedList(SelectiveCourse course, List<SelectiveCourse> list, boolean listIsFull) {
+    private boolean addOrRemoveToSelectedList(SelectiveCourse course, List<SelectiveCourse> list) {
+        boolean listIsFull = semester == Semester.FIRST ?
+                selectedCoursesCounter.isFirstSemesterFull(course.getTrainingCycle()) :
+                selectedCoursesCounter.isSecondSemesterFull(course.getTrainingCycle());
+
         if (!course.isSelected()) {
             if (!listIsFull) {
                 list.add(course);
