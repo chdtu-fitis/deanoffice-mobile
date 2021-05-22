@@ -333,9 +333,7 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         if (selectedCoursesCounter == null) return false;
         SelectiveCourse course = viewHolder.getSelectiveCourse();
 
-        boolean isSuccess;
-
-        isSuccess = addOrRemoveToSelectedList(course, selectedCoursesList);
+        boolean isSuccess = addOrRemoveToSelectedList(course, selectedCoursesList);
         int[] selectedCoursesCounts = new int[2];
         for (SelectiveCourse selectiveCourse : selectedCoursesList) {
             int cycleType = selectiveCourse.getTrainingCycle() == TypeCycle.GENERAL ? 1 : 0;
@@ -351,12 +349,10 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
     }
 
     private boolean addOrRemoveToSelectedList(SelectiveCourse course, List<SelectiveCourse> list) {
-        boolean listIsFull;
-        if (semester == Semester.FIRST) {
-            listIsFull = selectedCoursesCounter.isFirstSemesterFull(course.getTrainingCycle());
-        } else {
-            listIsFull = selectedCoursesCounter.isSecondSemesterFull(course.getTrainingCycle());
-        }
+        boolean listIsFull = semester == Semester.FIRST ?
+                selectedCoursesCounter.isFirstSemesterFull(course.getTrainingCycle()) :
+                selectedCoursesCounter.isSecondSemesterFull(course.getTrainingCycle());
+
         if (!course.isSelected()) {
             if (!listIsFull) {
                 list.add(course);

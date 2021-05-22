@@ -20,7 +20,7 @@ public class SelectedCoursesCounter {
     @Getter
     private final int[] selectedCountSecondSemester;
     @Getter
-    private final int[] needCoursesFirstSemester, needCoursesSecondSemester;
+    private final int[] neededCoursesCountFirstSemester, neededCoursesCountSecondSemester;
     @Getter
     private final int maxStudentsCount;
 
@@ -44,13 +44,13 @@ public class SelectedCoursesCounter {
         this.countOfCourseView = textViews.get("ViewControlOfCourses");
 
         //Professional
-        this.needCoursesFirstSemester = new int[2];
-        this.needCoursesFirstSemester[0] = selectionRules[0].getSelectiveCoursesNumber()[0];
-        this.needCoursesFirstSemester[1] = selectionRules[1].getSelectiveCoursesNumber()[0];
+        this.neededCoursesCountFirstSemester = new int[2];
+        this.neededCoursesCountFirstSemester[0] = selectionRules[0].getSelectiveCoursesNumber()[0];
+        this.neededCoursesCountFirstSemester[1] = selectionRules[1].getSelectiveCoursesNumber()[0];
         //General
-        this.needCoursesSecondSemester = new int[2];
-        this.needCoursesSecondSemester[0] = selectionRules[0].getSelectiveCoursesNumber()[1];
-        this.needCoursesSecondSemester[1] = selectionRules[1].getSelectiveCoursesNumber()[1];
+        this.neededCoursesCountSecondSemester = new int[2];
+        this.neededCoursesCountSecondSemester[0] = selectionRules[0].getSelectiveCoursesNumber()[1];
+        this.neededCoursesCountSecondSemester[1] = selectionRules[1].getSelectiveCoursesNumber()[1];
         this.maxStudentsCount = timeParams.getMaxStudentsCount();
 
         this.selectedCountFirstSemester = new int[2];
@@ -62,7 +62,7 @@ public class SelectedCoursesCounter {
     }
 
     public void setSelectedCountFirstSemester(int[] value) {
-        if (value[0] < 0 || value[1] < 0 || value[0] > needCoursesFirstSemester[0] || value[1] > needCoursesFirstSemester[1])
+        if (value[0] < 0 || value[1] < 0 || value[0] > neededCoursesCountFirstSemester[0] || value[1] > neededCoursesCountFirstSemester[1])
             return;
 
         selectedCountFirstSemester[0] = value[0];
@@ -71,7 +71,7 @@ public class SelectedCoursesCounter {
     }
 
     public void setSelectedCountSecondSemester(int[] value) {
-        if (value[0] < 0 || value[1] < 0 || value[0] > needCoursesSecondSemester[0] || value[1] > needCoursesSecondSemester[1])
+        if (value[0] < 0 || value[1] < 0 || value[0] > neededCoursesCountSecondSemester[0] || value[1] > neededCoursesCountSecondSemester[1])
             return;
 
         selectedCountSecondSemester[0] = value[0];
@@ -80,28 +80,20 @@ public class SelectedCoursesCounter {
     }
 
     public boolean isFirstSemesterFull(TypeCycle cycle) {
-        boolean result;
-        if (cycle == TypeCycle.GENERAL) {
-            result = selectedCountFirstSemester[1] == needCoursesFirstSemester[1];
-        } else {
-            result = selectedCountFirstSemester[0] == needCoursesFirstSemester[0];
-        }
-        return result;
+        return cycle == TypeCycle.GENERAL ?
+                selectedCountFirstSemester[1] == neededCoursesCountFirstSemester[1] :
+                selectedCountFirstSemester[0] == neededCoursesCountFirstSemester[0];
     }
 
     public boolean isSecondSemesterFull(TypeCycle cycle) {
-        boolean result;
-        if (cycle == TypeCycle.GENERAL) {
-            result = selectedCountSecondSemester[1] == needCoursesSecondSemester[1];
-        } else {
-            result = selectedCountSecondSemester[0] == needCoursesSecondSemester[0];
-        }
-        return result;
+        return cycle == TypeCycle.GENERAL ?
+                selectedCountSecondSemester[1] == neededCoursesCountSecondSemester[1] :
+                selectedCountSecondSemester[0] == neededCoursesCountSecondSemester[0];
     }
 
     public boolean hasAllSelected() {
-        return selectedCountFirstSemester[0] == needCoursesFirstSemester[0] && selectedCountFirstSemester[1] == needCoursesFirstSemester[1]
-                && selectedCountSecondSemester[0] == needCoursesSecondSemester[0] && selectedCountSecondSemester[1] == needCoursesSecondSemester[1];
+        return selectedCountFirstSemester[0] == neededCoursesCountFirstSemester[0] && selectedCountFirstSemester[1] == neededCoursesCountFirstSemester[1]
+                && selectedCountSecondSemester[0] == neededCoursesCountSecondSemester[0] && selectedCountSecondSemester[1] == neededCoursesCountSecondSemester[1];
     }
 
     public void switchSemester(Semester semester) {
@@ -140,18 +132,18 @@ public class SelectedCoursesCounter {
             case FIRST:
                 semesterString = context.getResources().getString(R.string.header_selected_courses_s1);
                 professionalCounterString = professionalCounterString.replace("{professional_count}", selectedCountFirstSemester[0] + "");
-                professionalCounterString = professionalCounterString.replace("{professional_max}", needCoursesFirstSemester[0] + "");
+                professionalCounterString = professionalCounterString.replace("{professional_max}", neededCoursesCountFirstSemester[0] + "");
 
                 generalCounterString = generalCounterString.replace("{general_count}", selectedCountFirstSemester[1] + "");
-                generalCounterString = generalCounterString.replace("{general_max}", needCoursesFirstSemester[1] + "");
+                generalCounterString = generalCounterString.replace("{general_max}", neededCoursesCountFirstSemester[1] + "");
                 break;
             case SECOND:
                 semesterString = context.getResources().getString(R.string.header_selected_courses_s2);
                 professionalCounterString = professionalCounterString.replace("{professional_count}", selectedCountSecondSemester[0] + "");
-                professionalCounterString = professionalCounterString.replace("{professional_max}", needCoursesSecondSemester[0] + "");
+                professionalCounterString = professionalCounterString.replace("{professional_max}", neededCoursesCountSecondSemester[0] + "");
 
                 generalCounterString = generalCounterString.replace("{general_count}", selectedCountSecondSemester[1] + "");
-                generalCounterString = generalCounterString.replace("{general_max}", needCoursesSecondSemester[1] + "");
+                generalCounterString = generalCounterString.replace("{general_max}", neededCoursesCountSecondSemester[1] + "");
                 break;
         }
 
