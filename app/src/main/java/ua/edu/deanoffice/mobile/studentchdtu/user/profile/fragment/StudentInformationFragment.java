@@ -50,7 +50,7 @@ public class StudentInformationFragment extends Fragment {
         studentInformationViews.get("Specialization").setText(student.getDegrees()[0].getSpecialization().getName());
         studentInformationViews.get("GroupAndYear").setText(student.getDegrees()[0].getStudentGroup().getName());
         studentInformationViews.get("Termin").setText((student.getDegrees()[0].getTuitionForm().equals("FULL_TIME") ? "Денна" : "Заочна")
-                + (student.getDegrees()[0].getTuitionTerm().equals("REGULAR") ? "" : "Скорочена"));
+                + (student.getDegrees()[0].getTuitionTerm().equals("REGULAR") ? "" : " Скорочена"));
         studentInformationViews.get("RealYear").setText(String.valueOf(student.getDegrees()[0].getRealYear()));
         studentInformationViews.get("Year").setText(String.valueOf(student.getDegrees()[0].getYear()));
     }
