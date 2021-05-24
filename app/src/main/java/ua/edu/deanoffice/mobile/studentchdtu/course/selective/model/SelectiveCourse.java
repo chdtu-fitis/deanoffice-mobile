@@ -31,7 +31,7 @@ public class SelectiveCourse extends ModelBase {
 
     public static Comparator<SelectiveCourse> ByTrainingCycle = (one, two) -> {
         Collator engCollator = Collator.getInstance(Locale.ENGLISH);
-        return engCollator.compare(one.getTrainingCycle(), two.getTrainingCycle());
+        return engCollator.compare(one.getTrainingCycle().toString(), two.getTrainingCycle().toString());
     };
 
     public static Comparator<SelectiveCourse> ByCourseName = (one, two) -> {
