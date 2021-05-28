@@ -239,6 +239,10 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
     }
 
     protected void fillSelectedSelectiveCoursesContainer(ViewGroup viewGroup) {
+        fillSelectedSelectiveCoursesContainer(viewGroup, true);
+    }
+
+    protected void fillSelectedSelectiveCoursesContainer(ViewGroup viewGroup, boolean isStudentCountVisible) {
         viewGroup.removeAllViews();
 
         SemesterLabel firstSemesterLabel = new SemesterLabel(Semester.FIRST);
@@ -256,6 +260,7 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
                 viewHolder.setBlocked(true);
                 viewHolder.setExtendedView();
                 viewHolder.setVisible(true);
+                viewHolder.setTextStudentCountVisible(isStudentCountVisible);
                 viewGroup.addView(viewHolder.itemView);
             }
         }
@@ -269,6 +274,7 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
                 viewHolder.setBlocked(true);
                 viewHolder.setExtendedView();
                 viewHolder.setVisible(true);
+                viewHolder.setTextStudentCountVisible(isStudentCountVisible);
                 viewGroup.addView(viewHolder.itemView);
             }
         }

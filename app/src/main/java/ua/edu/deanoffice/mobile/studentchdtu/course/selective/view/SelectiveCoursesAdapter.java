@@ -246,6 +246,10 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
             setBlocked(true);
         }
 
+        public void setTextStudentCountVisible(boolean isVisible) {
+            textStudentCount.setVisibility(isVisible ? View.VISIBLE : View.INVISIBLE);
+        }
+
         public void setChecked(boolean checked) {
             if (selectiveCourse.isSelectedFromFirstRound()) return;
             checkBox.setChecked(checked);
