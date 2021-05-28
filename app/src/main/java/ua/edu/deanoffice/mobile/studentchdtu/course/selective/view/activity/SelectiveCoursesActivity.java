@@ -652,8 +652,8 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
 
         int studyYear = timeParams.getStudyYear();
         String studyYearsString = getRString(R.string.header_study_years);
-        studyYearsString = studyYearsString.replace("{study_year_begin}", String.valueOf(studyYear));
-        studyYearsString = studyYearsString.replace("{study_year_end}", String.valueOf(studyYear + 1));
+        studyYearsString = studyYearsString.replace("{study_year_begin}", String.valueOf(studyYear + 1));
+        studyYearsString = studyYearsString.replace("{study_year_end}", String.valueOf(studyYear + 2));
 
         studyYearsTV.setText(studyYearsString);
 
