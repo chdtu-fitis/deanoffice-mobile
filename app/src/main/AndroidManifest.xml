@@ -15,25 +15,39 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".user.profile.activity.StudentInformationActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".user.profile.activity.MainOptionsActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".user.profile.activity.MainMenuActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".applications.activity.ChooseApplicationActivity" />
+        <activity
+            android:name=".applications.activity.ChooseApplicationActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".applications.activity.ExamApplicationActivity"
-            android:label="@string/title_activity_exam_application" />
-        <activity android:name=".applications.activity.DeducApplicationActivity" />
-        <activity android:name=".applications.activity.RetakeApplicationActivity" />
-        <activity android:name=".applications.activity.RenewApplicationActivity" />
+            android:label="@string/title_activity_exam_application"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".applications.activity.DeducApplicationActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".applications.activity.RetakeApplicationActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".applications.activity.RenewApplicationActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".course.selective.view.activity.SelectiveCoursesActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".user.login.activity.LoginActivity"
+            android:screenOrientation="sensorPortrait"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
