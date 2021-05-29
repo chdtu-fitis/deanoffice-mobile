@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.ArrayMap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -387,6 +388,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         }
 
         private InformationFragment getInformationFragment() {
+            setUpHeaders(Headers.HIDE);
             DeadLineTimer deadLineTimer = new DeadLineTimer(context);
             String timeBeforeNextRoundString = "\n" + getRString(R.string.info_left_before_next_round);
 
@@ -445,6 +447,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         }
 
         private InformationFragment getInformationFragment() {
+            setUpHeaders(Headers.HIDE);
             DeadLineTimer deadLineTimer = new DeadLineTimer(context);
 
             String timeBeforeNextRoundString = "\n" + getRString(R.string.info_left_before_next_round);
@@ -516,6 +519,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         }
 
         private InformationFragment getInformationFragment() {
+            setUpHeaders(Headers.HIDE);
             String infoMessage = getRString(R.string.info_failed_load_selective_courses);
             return new InformationFragment(infoMessage);
         }
@@ -539,6 +543,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         }
 
         private InformationFragment getInformationFragment() {
+            setUpHeaders(Headers.HIDE);
             String infoMessage = getRString(R.string.info_after_second_round);
             return new InformationFragment(infoMessage);
         }
@@ -628,6 +633,11 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
                 successRegHeadersState = View.GONE;
                 break;
             case HIDE:
+                allHeaders = View.GONE;
+                confirmHeadersState = View.GONE;
+                selectionHeadersState = View.GONE;
+                successRegHeadersState = View.GONE;
+                break;
             default:
                 allHeaders = View.GONE;
                 confirmHeadersState = View.GONE;
