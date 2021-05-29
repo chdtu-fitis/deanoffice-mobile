@@ -112,7 +112,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:text="Курс (реальний): "
+                        android:text="Курс: "
                         android:textAlignment="textStart"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -122,7 +122,7 @@
                         android:layout_height="wrap_content" />
 
                     <TextView
-                        android:id="@+id/realYearNameTextView"
+                        android:id="@+id/courseNameTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
@@ -136,27 +136,10 @@
                     android:layout_height="match_parent"
                     android:layout_marginBottom="10dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:text="Курс (формальний): "
-                        android:textAlignment="textStart"
-                        android:textSize="16sp"
-                        android:textStyle="bold" />
-
                     <Space
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 
-                    <TextView
-                        android:id="@+id/yearNameTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:layout_weight="1"
-                        android:textAlignment="textStart"
-                        android:textSize="16sp" />
                 </TableRow>
 
                 <TableRow
@@ -197,7 +180,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
-                        android:text="Освітня програма:"
+                        android:text="Освітня програма: "
                         android:textAlignment="textStart"
                         android:textSize="16sp"
                         android:textStyle="bold" />

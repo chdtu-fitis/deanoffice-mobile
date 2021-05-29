@@ -1,4 +1,4 @@
-package ua.edu.deanoffice.mobile.studentchdtu.user.profile.activity;
+package ua.edu.deanoffice.mobile.studentchdtu.user.profile.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
