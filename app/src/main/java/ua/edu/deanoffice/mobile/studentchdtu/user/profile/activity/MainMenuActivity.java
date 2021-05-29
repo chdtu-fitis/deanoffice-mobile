@@ -37,6 +37,12 @@ public class MainMenuActivity extends BaseDrawerActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        setSelectedMenuItemId(-1);
+    }
+
+    @Override
     public void onBackPressed() {
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             //Close drawer menu

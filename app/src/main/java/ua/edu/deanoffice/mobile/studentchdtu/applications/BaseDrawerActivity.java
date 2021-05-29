@@ -17,7 +17,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -35,7 +34,6 @@ import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
 import ua.edu.deanoffice.mobile.studentchdtu.user.login.activity.LoginActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.activity.MainOptionsActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.activity.StudentInformationActivity;
-import ua.edu.deanoffice.mobile.studentchdtu.user.profile.fragment.StudentInformationFragment;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.model.Student;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.service.ProfileRequests;
 
