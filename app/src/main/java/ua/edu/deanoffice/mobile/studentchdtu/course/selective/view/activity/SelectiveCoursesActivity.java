@@ -58,6 +58,8 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         HIDE
     }
 
+    private final String LOG_TAG = this.getClass().getName();
+
     private View sortPanel;
     private TextView sortLabel;
     private List<View> sortButtons;
@@ -263,6 +265,9 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
 
                                 selectedCourses = selectiveCourses;
                             }
+                        } else {
+                            Log.e(LOG_TAG, response.toString());
+                            showError(getServerErrorMessage(response));
                         }
                         loadAvailableSelectiveCourses();
                     }
@@ -270,8 +275,8 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
                     @Override
                     public void onFailure(@NonNull Call<SelectiveCoursesStudentDegree> call, @NonNull Throwable t) {
                         hideLoadingProgress();
-                        showError(getRString(R.string.error_connection_failed));
-                        loadAvailableSelectiveCourses();
+                        t.printStackTrace();
+                        showError(getRString(R.string.error_connection_failed), () -> finish());
                     }
                 });
     }
@@ -291,6 +296,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
                         if (response.isSuccessful()) {
                             availableCourses = response.body();
                         } else {
+                            Log.e(LOG_TAG, response.toString());
                             showError(getServerErrorMessage(response), () -> finish());
                             return;
                         }
@@ -301,7 +307,8 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
                     @Override
                     public void onFailure(@NonNull Call<SelectiveCourses> call, @NonNull Throwable t) {
                         hideLoadingProgress();
-                        selectAndShowFragment();
+                        t.printStackTrace();
+                        showError(getRString(R.string.error_connection_failed), () -> finish());
                     }
                 });
     }

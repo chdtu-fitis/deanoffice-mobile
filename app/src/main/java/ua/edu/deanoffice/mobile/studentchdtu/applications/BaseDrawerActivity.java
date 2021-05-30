@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,7 @@ import ua.edu.deanoffice.mobile.studentchdtu.user.profile.model.Student;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.service.ProfileRequests;
 
 public abstract class BaseDrawerActivity extends AppCompatActivity {
+    private final String LOG_TAG = this.getClass().getName();
 
     protected DrawerLayout drawer;
     protected Toolbar toolbar;
@@ -86,6 +88,9 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
                         startActivity(intent);
                         finish();
                     }
+                } else {
+                    Log.e(LOG_TAG, response.toString());
+                    showError(getServerErrorMessage(response));
                 }
                 hideLoadingProgress();
             }
@@ -93,6 +98,7 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call<Student> call, @NonNull Throwable t) {
                 hideLoadingProgress();
+                t.printStackTrace();
                 Intent intent = new Intent(BaseDrawerActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
@@ -226,7 +232,11 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
     }
 
     public String getServerErrorMessage(Response response) {
+        Log.e("S", response.toString());
         String errorMessage = getRString(R.string.error_connection_failed);
+
+        if(response == null) return errorMessage;
+
         if (response.errorBody() != null) {
             try {
                 JSONObject object = new JSONObject(response.errorBody().string());
