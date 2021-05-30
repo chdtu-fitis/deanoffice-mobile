@@ -2,6 +2,7 @@
     <string name="app_name">Студент ЧДТУ</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_exam_application">ExamApplicationActivity</string>
+    <string name="support_email">chdtu_support@gmail.com</string>
     <string name="selected_item">Selected item:</string>
     <string name="title_activity_main_menu">MainMenuActivity</string>
 
@@ -32,6 +33,7 @@
     <string name="action_bar_title_selective_courses">Реєстрація на вибіркові дисципліни</string>
     <string name="action_bar_title_main_options">Налаштування</string>
     <string name="action_bar_title_student_info">Про студента</string>
+    <string name="action_bar_title_support">Технічна підтримка</string>
 
     //Activities
     //MainMenuActivity
