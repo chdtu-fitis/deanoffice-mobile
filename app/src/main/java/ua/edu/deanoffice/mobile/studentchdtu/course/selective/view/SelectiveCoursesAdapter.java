@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +43,6 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
     @Getter
     private final List<SelectiveCourse> selectedCoursesList;
     private static boolean showExtendView = true;
-    private final boolean interactive = true;
     private TextView itemCountView;
     @Getter
     private final Semester semester;
@@ -96,9 +96,11 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
     @SuppressLint("SetTextI18n")
     public static void bindViewHolder(@NonNull ViewHolder viewHolder, SelectiveCourse course, SelectedCoursesCounter selectedCoursesCounter) {
         viewHolder.setSelectiveCourse(course);
-        if (!course.isAvailable()) {
-            viewHolder.makeDisqualified();
-        }
+        boolean blockedCourses = false;
+
+        boolean courseDisqualified = !course.isAvailable();
+        viewHolder.setDisqualified(courseDisqualified);
+        blockedCourses = courseDisqualified;
 
         String courseName = course.getCourse().getCourseName().getName();
         SpannableString coloredCourseName = course.getTrainingCycle() == TypeCycle.GENERAL ?
@@ -139,8 +141,14 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         }
 
         if (selectedCoursesCounter != null) {
-            viewHolder.setCrowded(course.getStudentsCount() >= selectedCoursesCounter.getMaxStudentsCount());
+            boolean courseCrowded = course.getStudentsCount() >= selectedCoursesCounter.getMaxStudentsCount();
+            viewHolder.setCrowded(courseCrowded);
+            blockedCourses = blockedCourses || courseCrowded;
         }
+
+        blockedCourses = blockedCourses || course.isSelectedFromFirstRound();
+
+        viewHolder.setBlocked(blockedCourses);
     }
 
     @Override
@@ -238,12 +246,17 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
             btnCheckBox.setOnClickListener(this);
         }
 
-        public void makeDisqualified() {
+        public void setDisqualified(boolean isDisqualified) {
             TextView disqualifiedLabel = itemView.findViewById(R.id.labelDisqulifiedCourse);
-            disqualifiedLabel.setVisibility(View.VISIBLE);
-            int fondColor = itemView.getContext().getResources().getColor(R.color.disqualified_course_fond, null);
-            itemView.setBackgroundColor(fondColor);
-            setBlocked(true);
+            if (isDisqualified) {
+                disqualifiedLabel.setVisibility(View.VISIBLE);
+                int fondColor = itemView.getContext().getResources().getColor(R.color.disqualified_course_fond, null);
+                itemView.setBackgroundColor(fondColor);
+            } else {
+                disqualifiedLabel.setVisibility(View.GONE);
+                int fondColor = itemView.getContext().getResources().getColor(R.color.white, null);
+                itemView.setBackgroundColor(fondColor);
+            }
         }
 
         public void setTextStudentCountVisible(boolean isVisible) {
@@ -251,7 +264,6 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         }
 
         public void setChecked(boolean checked) {
-            if (selectiveCourse.isSelectedFromFirstRound()) return;
             checkBox.setChecked(checked);
             selectiveCourse.setSelected(checked);
         }
@@ -284,16 +296,14 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         public void setCrowded(boolean didCrowed) {
             if (didCrowed) {
                 textStudentCount.setBackground(itemView.getContext().getDrawable(studentCountBadgeCrowed));
-                setBlocked(true);
             } else {
                 textStudentCount.setBackground(itemView.getContext().getDrawable(studentCountBadgeNormal));
-                setBlocked(false);
             }
         }
 
         @Override
         public void onClick(View view) {
-            if (!interactive) return;
+            if (!interactive || selectiveCourse.isSelectedFromFirstRound()) return;
 
             boolean isSuccess = listener.onClick(this);
             if (isSuccess) {
@@ -303,7 +313,8 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
 
         public void setBlocked(boolean isBlock) {
             if (isBlock) {
-                checkBox.setAlpha(0.5f);
+                Log.e("L", "Block!");
+                checkBox.setAlpha(0.37f);
                 interactive = false;
             } else {
                 checkBox.setAlpha(1f);

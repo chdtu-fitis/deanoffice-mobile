@@ -17,7 +17,7 @@ public interface SelectiveCourseRequests {
     Call<SelectiveCourses> requestSelectiveCourses(@Header("Authorization") String token, @Query("studentDegreeId") int id, @Query("studentsCount") boolean studentCount);
 
     @GET("selective-courses/student-degree")
-    Call<SelectiveCoursesStudentDegree> studentDegree(@Header("Authorization") String token, @Query("studentDegreeId") int id);
+    Call<SelectiveCoursesStudentDegree> studentDegree(@Header("Authorization") String token, @Query("studentDegreeId") int id, @Query("all") boolean all);
 
     @POST("selective-courses/registration")
     Call<StudentDegreeSelectiveCoursesIds> confirmedSelectiveCourses(@Header("Authorization") String token, @Body ConfirmedSelectiveCourses selectiveCourses);
