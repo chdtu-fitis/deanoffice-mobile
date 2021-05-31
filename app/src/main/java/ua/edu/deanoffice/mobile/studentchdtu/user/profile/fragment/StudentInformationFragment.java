@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import java.util.HashMap;
@@ -40,8 +39,7 @@ public class StudentInformationFragment extends Fragment {
         studentInformationViews.put("Specialization", view.findViewById(R.id.specializationNameTextView));
         studentInformationViews.put("GroupAndYear", view.findViewById(R.id.groupNameTextView));
         studentInformationViews.put("Termin", view.findViewById(R.id.tuitionFormNameTextView));
-        studentInformationViews.put("RealYear", view.findViewById(R.id.realYearNameTextView));
-        studentInformationViews.put("Year", view.findViewById(R.id.yearNameTextView));
+        studentInformationViews.put("Course", view.findViewById(R.id.courseNameTextView));
 
         studentInformationViews.get("Name").setText(student.getSurname() + " " + student.getName() + " " + student.getPatronimic());
         studentInformationViews.get("Facult").setText(student.getDegrees()[0].getSpecialization().getFaculty().getName());
@@ -51,7 +49,13 @@ public class StudentInformationFragment extends Fragment {
         studentInformationViews.get("GroupAndYear").setText(student.getDegrees()[0].getStudentGroup().getName());
         studentInformationViews.get("Termin").setText((student.getDegrees()[0].getTuitionForm().equals("FULL_TIME") ? "Денна" : "Заочна")
                 + (student.getDegrees()[0].getTuitionTerm().equals("REGULAR") ? "" : " Скорочена"));
-        studentInformationViews.get("RealYear").setText(String.valueOf(student.getDegrees()[0].getRealYear()));
-        studentInformationViews.get("Year").setText(String.valueOf(student.getDegrees()[0].getYear()));
+
+        int realCourse = student.getDegrees()[0].getRealYear();
+        int formalCourse = student.getDegrees()[0].getYear();
+        String courseString = String.valueOf(formalCourse);
+        if(realCourse != formalCourse){
+            courseString += "("+ realCourse +")";
+        }
+        studentInformationViews.get("Course").setText(courseString);
     }
 }

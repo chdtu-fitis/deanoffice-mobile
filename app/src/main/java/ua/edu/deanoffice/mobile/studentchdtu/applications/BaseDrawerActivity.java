@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -35,11 +35,12 @@ import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
 import ua.edu.deanoffice.mobile.studentchdtu.user.login.activity.LoginActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.activity.MainOptionsActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.activity.StudentInformationActivity;
-import ua.edu.deanoffice.mobile.studentchdtu.user.profile.fragment.StudentInformationFragment;
+import ua.edu.deanoffice.mobile.studentchdtu.user.profile.activity.SupportActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.model.Student;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.service.ProfileRequests;
 
 public abstract class BaseDrawerActivity extends AppCompatActivity {
+    private final String LOG_TAG = this.getClass().getName();
 
     protected DrawerLayout drawer;
     protected Toolbar toolbar;
@@ -88,6 +89,9 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
                         startActivity(intent);
                         finish();
                     }
+                } else {
+                    Log.e(LOG_TAG, response.toString());
+                    showError(getServerErrorMessage(response));
                 }
                 hideLoadingProgress();
             }
@@ -95,6 +99,7 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
             @Override
             public void onFailure(@NonNull Call<Student> call, @NonNull Throwable t) {
                 hideLoadingProgress();
+                t.printStackTrace();
                 Intent intent = new Intent(BaseDrawerActivity.this, LoginActivity.class);
                 startActivity(intent);
             }
@@ -122,6 +127,10 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
                 case R.id.nav_info:
                     Intent studentInfoActivity = new Intent(this, StudentInformationActivity.class);
                     startActivity(studentInfoActivity);
+                    break;
+                case R.id.nav_support:
+                    Intent supportActivity = new Intent(this, SupportActivity.class);
+                    startActivity(supportActivity);
                     break;
                 case R.id.nav_schedule:
                 case R.id.nav_applications:
@@ -228,7 +237,11 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
     }
 
     public String getServerErrorMessage(Response response) {
+        Log.e("S", response.toString());
         String errorMessage = getRString(R.string.error_connection_failed);
+
+        if(response == null) return errorMessage;
+
         if (response.errorBody() != null) {
             try {
                 JSONObject object = new JSONObject(response.errorBody().string());

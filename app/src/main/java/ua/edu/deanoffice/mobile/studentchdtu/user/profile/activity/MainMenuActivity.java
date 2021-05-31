@@ -12,6 +12,7 @@ import androidx.core.view.GravityCompat;
 
 import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.applications.BaseDrawerActivity;
+import ua.edu.deanoffice.mobile.studentchdtu.user.profile.fragment.MainMenuFragment;
 
 public class MainMenuActivity extends BaseDrawerActivity {
 
@@ -33,6 +34,12 @@ public class MainMenuActivity extends BaseDrawerActivity {
         //Load fragment
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                 new MainMenuFragment()).commit();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setSelectedMenuItemId(-1);
     }
 
     @Override

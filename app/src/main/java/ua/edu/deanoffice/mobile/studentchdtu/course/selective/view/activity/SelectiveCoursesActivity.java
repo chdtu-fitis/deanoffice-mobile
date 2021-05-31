@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.ArrayMap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,6 +57,8 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         REGISTERED,
         HIDE
     }
+
+    private final String LOG_TAG = this.getClass().getName();
 
     private View sortPanel;
     private TextView sortLabel;
@@ -262,6 +265,9 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
 
                                 selectedCourses = selectiveCourses;
                             }
+                        } else {
+                            Log.e(LOG_TAG, response.toString());
+                            showError(getServerErrorMessage(response));
                         }
                         loadAvailableSelectiveCourses();
                     }
@@ -269,8 +275,8 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
                     @Override
                     public void onFailure(@NonNull Call<SelectiveCoursesStudentDegree> call, @NonNull Throwable t) {
                         hideLoadingProgress();
-                        showError(getRString(R.string.error_connection_failed));
-                        loadAvailableSelectiveCourses();
+                        t.printStackTrace();
+                        showError(getRString(R.string.error_connection_failed), () -> finish());
                     }
                 });
     }
@@ -290,6 +296,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
                         if (response.isSuccessful()) {
                             availableCourses = response.body();
                         } else {
+                            Log.e(LOG_TAG, response.toString());
                             showError(getServerErrorMessage(response), () -> finish());
                             return;
                         }
@@ -300,7 +307,8 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
                     @Override
                     public void onFailure(@NonNull Call<SelectiveCourses> call, @NonNull Throwable t) {
                         hideLoadingProgress();
-                        selectAndShowFragment();
+                        t.printStackTrace();
+                        showError(getRString(R.string.error_connection_failed), () -> finish());
                     }
                 });
     }
@@ -387,6 +395,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         }
 
         private InformationFragment getInformationFragment() {
+            setUpHeaders(Headers.HIDE);
             DeadLineTimer deadLineTimer = new DeadLineTimer(context);
             String timeBeforeNextRoundString = "\n" + getRString(R.string.info_left_before_next_round);
 
@@ -445,6 +454,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         }
 
         private InformationFragment getInformationFragment() {
+            setUpHeaders(Headers.HIDE);
             DeadLineTimer deadLineTimer = new DeadLineTimer(context);
 
             String timeBeforeNextRoundString = "\n" + getRString(R.string.info_left_before_next_round);
@@ -516,6 +526,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         }
 
         private InformationFragment getInformationFragment() {
+            setUpHeaders(Headers.HIDE);
             String infoMessage = getRString(R.string.info_failed_load_selective_courses);
             return new InformationFragment(infoMessage);
         }
@@ -539,6 +550,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         }
 
         private InformationFragment getInformationFragment() {
+            setUpHeaders(Headers.HIDE);
             String infoMessage = getRString(R.string.info_after_second_round);
             return new InformationFragment(infoMessage);
         }
@@ -628,6 +640,11 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
                 successRegHeadersState = View.GONE;
                 break;
             case HIDE:
+                allHeaders = View.GONE;
+                confirmHeadersState = View.GONE;
+                selectionHeadersState = View.GONE;
+                successRegHeadersState = View.GONE;
+                break;
             default:
                 allHeaders = View.GONE;
                 confirmHeadersState = View.GONE;
@@ -652,8 +669,8 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
 
         int studyYear = timeParams.getStudyYear();
         String studyYearsString = getRString(R.string.header_study_years);
-        studyYearsString = studyYearsString.replace("{study_year_begin}", String.valueOf(studyYear));
-        studyYearsString = studyYearsString.replace("{study_year_end}", String.valueOf(studyYear + 1));
+        studyYearsString = studyYearsString.replace("{study_year_begin}", String.valueOf(studyYear + 1));
+        studyYearsString = studyYearsString.replace("{study_year_end}", String.valueOf(studyYear + 2));
 
         studyYearsTV.setText(studyYearsString);
 

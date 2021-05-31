@@ -1,6 +1,7 @@
 package ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,6 +56,7 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
             this.rightButtonLabel = rightButtonLabel;
         }
     }
+    private final String LOG_TAG = this.getClass().getName();
 
     protected SelectedCoursesCounter selectedCoursesCounter;
     protected RecyclerView recyclerView;
@@ -161,6 +163,7 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
                                 }
                             }
                         } else {
+                            Log.e(LOG_TAG, response.toString());
                             showError(getServerErrorMessage(response));
                         }
                         hideLoadingProgress();
@@ -239,6 +242,10 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
     }
 
     protected void fillSelectedSelectiveCoursesContainer(ViewGroup viewGroup) {
+        fillSelectedSelectiveCoursesContainer(viewGroup, true);
+    }
+
+    protected void fillSelectedSelectiveCoursesContainer(ViewGroup viewGroup, boolean isStudentCountVisible) {
         viewGroup.removeAllViews();
 
         SemesterLabel firstSemesterLabel = new SemesterLabel(Semester.FIRST);
@@ -256,6 +263,7 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
                 viewHolder.setBlocked(true);
                 viewHolder.setExtendedView();
                 viewHolder.setVisible(true);
+                viewHolder.setTextStudentCountVisible(isStudentCountVisible);
                 viewGroup.addView(viewHolder.itemView);
             }
         }
@@ -269,6 +277,7 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
                 viewHolder.setBlocked(true);
                 viewHolder.setExtendedView();
                 viewHolder.setVisible(true);
+                viewHolder.setTextStudentCountVisible(isStudentCountVisible);
                 viewGroup.addView(viewHolder.itemView);
             }
         }

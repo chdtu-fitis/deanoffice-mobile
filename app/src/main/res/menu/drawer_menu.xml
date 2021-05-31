@@ -29,6 +29,11 @@
             android:id="@+id/nav_options"
             android:icon="@drawable/ic_options"
             android:title="Налаштування" />
+
+        <item
+            android:id="@+id/nav_support"
+            android:icon="@drawable/ic_support"
+            android:title="Тех. Підтримка" />
     </group>
 
     <group

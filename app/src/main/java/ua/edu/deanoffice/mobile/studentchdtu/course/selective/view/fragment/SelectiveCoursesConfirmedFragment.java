@@ -30,7 +30,7 @@ public class SelectiveCoursesConfirmedFragment extends BaseSelectiveCoursesFragm
         showHeaders(SelectiveCoursesActivity.Headers.REGISTERED);
 
         ViewGroup viewGroup = getView().findViewById(R.id.сontainer_сonfirmed_сourses);
-        fillSelectedSelectiveCoursesContainer(viewGroup);
+        fillSelectedSelectiveCoursesContainer(viewGroup, false);
 
         View buttonToMainMenu = view.findViewById(R.id.buttonToMenu);
         buttonToMainMenu.setOnClickListener((v) -> {
