@@ -196,6 +196,7 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         private SelectiveCourse selectiveCourse;
         @Setter
         private OnClickListener listener;
+        private boolean isStudentsCountVisible = true;
 
         public ViewHolder(View view) {
             super(view);
@@ -228,7 +229,14 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
                 }
                 ((TextView) dialogView.findViewById(R.id.selectiveCourseFaculty)).setText(selectiveCourse.getDepartment().getFaculty().getName());
                 ((TextView) dialogView.findViewById(R.id.selectiveCourseDepartment)).setText(selectiveCourse.getDepartment().getName());
-                ((TextView) dialogView.findViewById(R.id.selectiveCourseStudentCount)).setText("Кількість записаних студентів: " + selectiveCourse.getStudentsCount());
+                TextView studentsCountText = dialogView.findViewById(R.id.selectiveCourseStudentCount);
+                if(isStudentsCountVisible) {
+                    studentsCountText.setText("Кількість записаних студентів: " + selectiveCourse.getStudentsCount());
+                    studentsCountText.setVisibility(View.VISIBLE);
+                }else{
+                    studentsCountText.setVisibility(View.INVISIBLE);
+                }
+
                 Teacher teacher = selectiveCourse.getTeacher();
                 String teacherFullName = teacher.getSurname() + " " + teacher.getName() + " " + teacher.getPatronimic();
                 ((TextView) dialogView.findViewById(R.id.selectiveCourseTeacher)).setText(teacherFullName + " (" + teacher.getPosition().getName() + ")");
@@ -260,6 +268,7 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
         }
 
         public void setTextStudentCountVisible(boolean isVisible) {
+            isStudentsCountVisible = isVisible;
             textStudentCount.setVisibility(isVisible ? View.VISIBLE : View.INVISIBLE);
         }
 
