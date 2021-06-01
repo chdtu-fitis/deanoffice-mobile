@@ -38,6 +38,7 @@
     //Activities
     //MainMenuActivity
     <string name="info_double_back">Два рази, щоб вийти</string>
+    <string name="label_button_switching_degrees">Спеціальність: {specialization_name}</string>
 
     //MainOptionsActivity
     //Options

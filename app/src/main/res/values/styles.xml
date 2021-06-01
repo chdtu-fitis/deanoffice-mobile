@@ -47,4 +47,21 @@
         <item name="android:textColor">@color/disable_text_color</item>
     </style>
 
+    <style name="RadioButton">
+<!--        <item name="android:textStyle">bold</item>-->
+        <item name="android:textSize">18sp</item>
+<!--        <item name="fontFamily">sans-serif-medium</item>-->
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:button">@null</item>
+        <item name="android:drawableEnd">@android:drawable/btn_radio</item>
+        <item name="android:textAlignment">textStart</item>
+        <item name="android:textColor">@color/gray2</item>
+    </style>
+
+    <style name="DialogAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_up_dialog</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_down</item>
+    </style>
+
 </resources>

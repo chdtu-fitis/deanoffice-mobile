@@ -84,6 +84,7 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
                         TextView menuHeader = navigationView.getHeaderView(0).findViewById(R.id.student_name);
                         String studentName = student.getSurname() + " " + student.getName() + " " + student.getPatronimic();
                         menuHeader.setText(studentName);
+                        onGetStudent();
                     } else {
                         Intent intent = new Intent(BaseDrawerActivity.this, LoginActivity.class);
                         startActivity(intent);
@@ -144,6 +145,9 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
         });
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+    }
+
+    protected void onGetStudent(){
     }
 
     public static void setSelectedMenuItemId(int selectedMenuItemId) {
