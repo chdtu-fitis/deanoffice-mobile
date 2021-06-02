@@ -35,6 +35,6 @@ public class App {
 
     public void setCurrentStudent(Student currentStudent) {
         this.currentStudent = currentStudent;
-        selectedStudentDegree = currentStudent.getDegrees()[0];
+        selectedStudentDegree = currentStudent != null ? currentStudent.getDegrees()[0] : null;
     }
 }

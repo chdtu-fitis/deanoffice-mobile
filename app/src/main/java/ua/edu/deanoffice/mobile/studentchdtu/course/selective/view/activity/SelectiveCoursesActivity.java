@@ -232,7 +232,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         showLoadingProgress();
 
         String jwtToken = App.getInstance().getJwt().getToken();
-        int degreesId = App.getInstance().getCurrentStudent().getDegrees()[0].getId();
+        int degreesId = App.getInstance().getSelectedStudentDegree().getId();
         App.getInstance().getClient()
                 .createRequest(SelectiveCourseRequests.class)
                 .studentDegree(jwtToken, degreesId)
@@ -285,7 +285,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         showLoadingProgress();
 
         String jwtToken = App.getInstance().getJwt().getToken();
-        int degreesId = App.getInstance().getCurrentStudent().getDegrees()[0].getId();
+        int degreesId = App.getInstance().getSelectedStudentDegree().getId();
         App.getInstance().getClient()
                 .createRequest(SelectiveCourseRequests.class)
                 .requestSelectiveCourses(jwtToken, degreesId, true)

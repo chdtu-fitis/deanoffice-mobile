@@ -134,7 +134,7 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
 
         ConfirmedSelectiveCourses confirmedSelectiveCourses = getConfirmedSelectiveCourses(selectiveCourses);
 
-        int degreesId = App.getInstance().getCurrentStudent().getDegrees()[0].getId();
+        int degreesId = App.getInstance().getSelectedStudentDegree().getId();
         ExistingId existingId = new ExistingId(degreesId);
         confirmedSelectiveCourses.setStudentDegree(existingId);
 

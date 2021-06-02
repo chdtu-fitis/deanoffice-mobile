@@ -30,6 +30,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         App.getInstance().setJwt(null);
+        App.getInstance().setCurrentStudent(null);
 
         Button loginButton = findViewById(R.id.buttonLogin);
         EditText textLogin = findViewById(R.id.textFieldLogin);

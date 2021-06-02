@@ -16,8 +16,6 @@ import android.widget.Toast;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.view.GravityCompat;
 
-import java.util.ArrayList;
-
 import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.applications.BaseDrawerActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
@@ -68,6 +66,7 @@ public class MainMenuActivity extends BaseDrawerActivity {
         RadioGroup degreesContainer = dialogView.findViewById(R.id.degreesSelectorRadioGroup);
         degreesContainer.removeAllViews();
 
+        int currentSelectedDegreeId = App.getInstance().getSelectedStudentDegree().getId();
         for (StudentDegree studentDegree : App.getInstance().getCurrentStudent().getDegrees()) {
             String specializationName = studentDegree.getSpecialization().getName();
             int degreeId = studentDegree.getId();
@@ -75,20 +74,17 @@ public class MainMenuActivity extends BaseDrawerActivity {
             radioButton.setText(specializationName);
             radioButton.setTag(degreeId);
             radioButton.setTextAppearance(R.style.RadioButton);
+
+            if (degreeId == currentSelectedDegreeId) {
+                radioButton.setChecked(true);
+            }
+
             degreesContainer.addView(radioButton);
         }
 
         dialog.setContentView(dialogView);
 
         RadioGroup resourceTypeRadioGroup = dialogView.findViewById(R.id.degreesSelectorRadioGroup);
-        ArrayList<View> viewRadioButtons = resourceTypeRadioGroup.getTouchables();
-
-        for (View v : viewRadioButtons) {
-            RadioButton radioButton = (RadioButton) v;
-            if ((int) radioButton.getTag() == App.getInstance().getSelectedStudentDegree().getId()) {
-                radioButton.setChecked(true);
-            }
-        }
 
         resourceTypeRadioGroup.setOnCheckedChangeListener((group, checkedId) -> {
             RadioButton selectedRB = dialogView.findViewById(checkedId);

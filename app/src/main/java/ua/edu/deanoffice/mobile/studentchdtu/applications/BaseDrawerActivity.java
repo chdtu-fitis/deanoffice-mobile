@@ -71,40 +71,7 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
                 R.string.close_drawer);
         navigationView = findViewById(R.id.nav_view);
 
-        showLoadingProgress();
-
-        App.getInstance().getClient().createRequest(ProfileRequests.class)
-                .requestStudentInfo(App.getInstance().getJwt().getToken()).enqueue(new Callback<Student>() {
-            @Override
-            public void onResponse(@NonNull Call<Student> call, @NonNull Response<Student> response) {
-                if (response.isSuccessful()) {
-                    Student student = response.body();
-                    if (student.isValid()) {
-                        App.getInstance().setCurrentStudent(student);
-                        TextView menuHeader = navigationView.getHeaderView(0).findViewById(R.id.student_name);
-                        String studentName = student.getSurname() + " " + student.getName() + " " + student.getPatronimic();
-                        menuHeader.setText(studentName);
-                        onGetStudent();
-                    } else {
-                        Intent intent = new Intent(BaseDrawerActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                        finish();
-                    }
-                } else {
-                    Log.e(LOG_TAG, response.toString());
-                    showError(getServerErrorMessage(response));
-                }
-                hideLoadingProgress();
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<Student> call, @NonNull Throwable t) {
-                hideLoadingProgress();
-                t.printStackTrace();
-                Intent intent = new Intent(BaseDrawerActivity.this, LoginActivity.class);
-                startActivity(intent);
-            }
-        });
+        getStudentInfo();
 
         navigationView.setNavigationItemSelectedListener(item -> {
             if (selectedMenuItemId == item.getItemId()) return false;
@@ -145,6 +112,45 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
         });
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+    }
+
+    private void getStudentInfo(){
+        if(App.getInstance().getCurrentStudent() != null) return;
+
+        showLoadingProgress();
+
+        App.getInstance().getClient().createRequest(ProfileRequests.class)
+                .requestStudentInfo(App.getInstance().getJwt().getToken()).enqueue(new Callback<Student>() {
+            @Override
+            public void onResponse(@NonNull Call<Student> call, @NonNull Response<Student> response) {
+                if (response.isSuccessful()) {
+                    Student student = response.body();
+                    if (student.isValid()) {
+                        App.getInstance().setCurrentStudent(student);
+                        TextView menuHeader = navigationView.getHeaderView(0).findViewById(R.id.student_name);
+                        String studentName = student.getSurname() + " " + student.getName() + " " + student.getPatronimic();
+                        menuHeader.setText(studentName);
+                        onGetStudent();
+                    } else {
+                        Intent intent = new Intent(BaseDrawerActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                } else {
+                    Log.e(LOG_TAG, response.toString());
+                    showError(getServerErrorMessage(response));
+                }
+                hideLoadingProgress();
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<Student> call, @NonNull Throwable t) {
+                hideLoadingProgress();
+                t.printStackTrace();
+                Intent intent = new Intent(BaseDrawerActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     protected void onGetStudent(){
