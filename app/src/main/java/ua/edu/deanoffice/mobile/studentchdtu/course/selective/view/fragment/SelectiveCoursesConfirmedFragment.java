@@ -1,5 +1,6 @@
 package ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourses;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.activity.SelectiveCoursesActivity;
+import ua.edu.deanoffice.mobile.studentchdtu.user.profile.activity.MainMenuActivity;
 
 public class SelectiveCoursesConfirmedFragment extends BaseSelectiveCoursesFragment {
     public SelectiveCoursesConfirmedFragment(SelectiveCourses selectiveCourses) {
@@ -36,7 +38,9 @@ public class SelectiveCoursesConfirmedFragment extends BaseSelectiveCoursesFragm
         buttonToMainMenu.setOnClickListener((v) -> {
             FragmentActivity activity = getActivity();
             if (activity != null) {
-                activity.onBackPressed();
+                Intent mainMenuActivity = new Intent(activity, MainMenuActivity.class);
+                startActivity(mainMenuActivity);
+                activity.finish();
             }
         });
     }

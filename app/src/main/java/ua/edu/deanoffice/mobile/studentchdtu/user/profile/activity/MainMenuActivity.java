@@ -3,6 +3,7 @@ package ua.edu.deanoffice.mobile.studentchdtu.user.profile.activity;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Gravity;
@@ -19,6 +20,7 @@ import androidx.core.view.GravityCompat;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.applications.BaseDrawerActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
+import ua.edu.deanoffice.mobile.studentchdtu.user.login.activity.LoginActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.fragment.MainMenuFragment;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.model.StudentDegree;
 
@@ -130,7 +132,9 @@ public class MainMenuActivity extends BaseDrawerActivity {
         } else {
             //Double click for exit
             if (isDoubleClickBackButton) {
-                super.onBackPressed();
+                Intent intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
+                finish();
             } else {
                 Toast.makeText(this, getRString(R.string.info_double_back), Toast.LENGTH_SHORT).show();
                 isDoubleClickBackButton = true;

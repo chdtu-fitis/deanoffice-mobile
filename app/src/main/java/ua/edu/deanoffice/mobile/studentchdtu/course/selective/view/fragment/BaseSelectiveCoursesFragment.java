@@ -1,5 +1,7 @@
 package ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -38,6 +40,7 @@ import ua.edu.deanoffice.mobile.studentchdtu.course.selective.service.SelectiveC
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.SelectiveCoursesAdapter;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.activity.SelectiveCoursesActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
+import ua.edu.deanoffice.mobile.studentchdtu.user.profile.activity.MainMenuActivity;
 
 import static ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.SelectiveCoursesAdapter.ViewHolder;
 import static ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.SelectiveCoursesAdapter.bindViewHolder;
@@ -378,7 +381,12 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
 
         @Override
         protected void onClickLeftButton(View button) {
-            onBackPressed();
+            Activity activity = getActivity();
+            if(activity != null) {
+                Intent mainMenuActivity = new Intent(activity, MainMenuActivity.class);
+                startActivity(mainMenuActivity);
+                activity.finish();
+            }
         }
 
         @Override
@@ -487,12 +495,5 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
             return (SelectiveCoursesAdapter) recyclerView.getAdapter();
         }
         return null;
-    }
-
-    protected void onBackPressed() {
-        FragmentActivity activity = getActivity();
-        if (activity != null) {
-            activity.onBackPressed();
-        }
     }
 }
