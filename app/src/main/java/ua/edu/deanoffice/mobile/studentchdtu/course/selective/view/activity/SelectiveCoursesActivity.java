@@ -235,7 +235,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         int degreesId = App.getInstance().getSelectedStudentDegree().getId();
         App.getInstance().getClient()
                 .createRequest(SelectiveCourseRequests.class)
-                .studentDegree(jwtToken, degreesId)
+                .studentDegree(jwtToken, degreesId, true)
                 .enqueue(new Callback<SelectiveCoursesStudentDegree>() {
                     @Override
                     public void onResponse(@NonNull Call<SelectiveCoursesStudentDegree> call, @NonNull Response<SelectiveCoursesStudentDegree> response) {
@@ -487,42 +487,23 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
                     initializeFacultyFilteringCheckBoxes(getAvailableFacultyAbbr(availableCourses));
                 }
             } else {
-                if (existDisqualifiedCourse(selectedCourses)) {
+                if (isSelectedListFull()) {
+                    fragment = new SelectiveCoursesConfirmedFragment(selectedCourses);
+                    setUpHeaders(Headers.REGISTERED);
+                } else {
                     if (availableListIsNull) {
                         fragment = getInformationFragment();
                     } else {
                         fragment = new SelectiveCoursesSecondRoundFragment(selectedCoursesCounter, availableCourses, selectedCourses);
                         setUpHeaders(Headers.SELECTION);
                     }
-                } else {
-                    fragment = new SelectiveCoursesConfirmedFragment(selectedCourses);
-                    setUpHeaders(Headers.REGISTERED);
                 }
             }
             return fragment;
         }
 
-        private boolean existDisqualifiedCourse(SelectiveCourses selectedCourses) {
-            boolean existDisqualifiedCourse = false;
-            List<SelectiveCourse> firstSemesterCoursesList = selectedCourses.getSelectiveCoursesFirstSemester();
-            List<SelectiveCourse> secondSemesterCoursesList = selectedCourses.getSelectiveCoursesSecondSemester();
-
-            for (SelectiveCourse course : firstSemesterCoursesList) {
-                if (!course.isAvailable()) {
-                    existDisqualifiedCourse = true;
-                    break;
-                }
-            }
-            for (SelectiveCourse course : secondSemesterCoursesList) {
-                if (existDisqualifiedCourse) {
-                    break;
-                }
-                if (!course.isAvailable()) {
-                    existDisqualifiedCourse = true;
-                    break;
-                }
-            }
-            return existDisqualifiedCourse;
+        private boolean isSelectedListFull() {
+            return selectedCoursesCounter.hasAllSelected();
         }
 
         private InformationFragment getInformationFragment() {
@@ -695,13 +676,17 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
                 if (semester == Semester.FIRST) {
                     for (SelectiveCourse selectiveCourse : selectedCourses.getSelectiveCoursesFirstSemester()) {
                         int cycleType = selectiveCourse.getTrainingCycle() == TypeCycle.GENERAL ? 1 : 0;
-                        selectedCoursesCounts[cycleType] += 1;
+                        if (selectiveCourse.isAvailable()) {
+                            selectedCoursesCounts[cycleType] += 1;
+                        }
                     }
                     selectedCoursesCounter.setSelectedCountFirstSemester(selectedCoursesCounts);
                 } else {
                     for (SelectiveCourse selectiveCourse : selectedCourses.getSelectiveCoursesSecondSemester()) {
                         int cycleType = selectiveCourse.getTrainingCycle() == TypeCycle.GENERAL ? 1 : 0;
-                        selectedCoursesCounts[cycleType] += 1;
+                        if (selectiveCourse.isAvailable()) {
+                            selectedCoursesCounts[cycleType] += 1;
+                        }
                     }
                     selectedCoursesCounter.setSelectedCountSecondSemester(selectedCoursesCounts);
                 }
