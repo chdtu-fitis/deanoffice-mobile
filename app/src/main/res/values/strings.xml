@@ -58,6 +58,7 @@
     <string name="header_success_registered2">Ваші предмети зареєстровано\nПерейдіть у меню для вибору інших дій</string>
     <string name="header_study_years">"{study_year_begin}-{study_year_end} н.р. "</string>
     <string name="header_left_time_to_end_round">До завершення реєстрації {left_time}</string>
+    <string name="header_time_end_message">Час вичерпано, поверніться у головне меню</string>
     <string name="header_selected_courses_s1">1-й семестр</string>
     <string name="header_selected_courses_counter_general">Заг. ({general_count} з {general_max})</string>
     <string name="header_selected_courses_s2">2-й семестр</string>
