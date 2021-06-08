@@ -48,7 +48,6 @@ public class MainMenuActivity extends BaseDrawerActivity {
 
     @Override
     protected void onGetStudent() {
-        super.onGetStudent();
         AppCompatButton button = findViewById(R.id.openDegreesListButton);
         if (App.getInstance().getCurrentStudent().getDegrees().length > 1) {
             String selectedDegreeName = App.getInstance().getSelectedStudentDegree().getSpecialization().getName();
