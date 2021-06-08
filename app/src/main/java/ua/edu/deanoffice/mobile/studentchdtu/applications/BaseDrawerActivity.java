@@ -189,7 +189,7 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
         }
     }
 
-    protected String getRString(int resource) {
+    public String getRString(int resource) {
         return getResources().getString(resource);
     }
 

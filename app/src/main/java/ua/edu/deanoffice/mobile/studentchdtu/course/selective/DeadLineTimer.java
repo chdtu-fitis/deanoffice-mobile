@@ -1,8 +1,11 @@
 package ua.edu.deanoffice.mobile.studentchdtu.course.selective;
 
+import android.app.Activity;
 import android.content.Context;
+import android.widget.TextView;
 
 import ua.edu.deanoffice.mobile.studentchdtu.R;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.activity.SelectiveCoursesActivity;
 
 public class DeadLineTimer {
     private final Context context;
@@ -88,6 +91,45 @@ public class DeadLineTimer {
                 return 2;
             default:
                 return 3;
+        }
+    }
+
+    public void subscribeToTimeUpdate(Activity activity, TextView textViewTime, long startMillis) {
+        new Thread(() -> {
+            long xMillis = startMillis;
+
+            if (activity == null) return;
+
+            SelectiveCoursesActivity selectiveCoursesActivity = (SelectiveCoursesActivity) activity;
+            String leftTimeToEndRoundString = selectiveCoursesActivity.getRString(R.string.header_left_time_to_end_round);
+            String timeEndMessage = selectiveCoursesActivity.getRString(R.string.header_time_end_message);
+
+            while (!activity.isFinishing()) {
+                final String timeResultMsg = xMillis > 1001 ?
+                        leftTimeToEndRoundString.replace("{left_time}", deadLine(xMillis)) : timeEndMessage;
+
+                if (activity == null || textViewTime == null) break;
+                final long timeLeft = xMillis;
+                activity.runOnUiThread(() -> {
+                    textViewTime.setText(timeResultMsg);
+                    if (timeLeft <= 1001) {
+                        textViewTime.setTextColor(activity.getColor(R.color.red));
+                    }
+                });
+
+                if (xMillis <= 1001) break;
+
+                delay(1000);
+                xMillis -= 1000;
+            }
+        }).start();
+    }
+
+    private void delay(int delay) {
+        try {
+            Thread.sleep(delay);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 }

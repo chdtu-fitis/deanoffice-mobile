@@ -662,6 +662,8 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
 
         leftTimeToEndRoundTV.setText(leftTimeToEndRoundString);
 
+        deadLineTimer.subscribeToTimeUpdate(this, leftTimeToEndRoundTV, leftTimeToEndRound);
+
         Map<String, TextView> textViewMap = new ArrayMap<>();
         textViewMap.put("Semester", semesterTV);
         textViewMap.put("ProfessionalCounter", professionalCounterTV);

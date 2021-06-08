@@ -146,8 +146,8 @@
                 android:gravity="center"
                 android:text="До кінця залишилось ще трохи"
                 android:textAlignment="center"
-                android:textColor="@color/gray2"
-                android:textSize="14sp"
+                android:textColor="@color/gray"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <Space
