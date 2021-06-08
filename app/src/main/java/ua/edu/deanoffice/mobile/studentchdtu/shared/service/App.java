@@ -1,21 +1,31 @@
 package ua.edu.deanoffice.mobile.studentchdtu.shared.service;
 
+import lombok.Getter;
+import lombok.Setter;
 import ua.edu.deanoffice.mobile.studentchdtu.applications.ApplicationCache;
 import ua.edu.deanoffice.mobile.studentchdtu.shared.network.Client;
 import ua.edu.deanoffice.mobile.studentchdtu.user.login.model.JWToken;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.model.Student;
+import ua.edu.deanoffice.mobile.studentchdtu.user.profile.model.StudentDegree;
 
 public class App {
-    private static App instance = new App();
+    private static final App instance = new App();
 
     public static App getInstance() {
         return instance;
     }
 
-    private Client client;
-    private ApplicationCache currentApplication;
+    @Getter
+    private final Client client;
+    @Getter
+    private final ApplicationCache currentApplication;
+    @Getter
     private Student currentStudent;
-
+    @Getter
+    @Setter
+    private StudentDegree selectedStudentDegree;
+    @Getter
+    @Setter
     private JWToken jwt;
 
     private App() {
@@ -23,27 +33,8 @@ public class App {
         currentApplication = new ApplicationCache();
     }
 
-    public JWToken getJwt() {
-        return jwt;
-    }
-
-    public void setJwt(JWToken jwt) {
-        this.jwt = jwt;
-    }
-
-    public Client getClient() {
-        return client;
-    }
-
-    public ApplicationCache getCurrentApplication() {
-        return currentApplication;
-    }
-
-    public Student getCurrentStudent() {
-        return currentStudent;
-    }
-
     public void setCurrentStudent(Student currentStudent) {
         this.currentStudent = currentStudent;
+        selectedStudentDegree = currentStudent != null ? currentStudent.getDegrees()[0] : null;
     }
 }

@@ -13,7 +13,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ua.edu.deanoffice.mobile.studentchdtu.R;
+import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.model.Student;
+import ua.edu.deanoffice.mobile.studentchdtu.user.profile.model.StudentDegree;
 
 public class StudentInformationFragment extends Fragment {
 
@@ -41,20 +43,26 @@ public class StudentInformationFragment extends Fragment {
         studentInformationViews.put("Termin", view.findViewById(R.id.tuitionFormNameTextView));
         studentInformationViews.put("Course", view.findViewById(R.id.courseNameTextView));
 
-        studentInformationViews.get("Name").setText(student.getSurname() + " " + student.getName() + " " + student.getPatronimic());
-        studentInformationViews.get("Facult").setText(student.getDegrees()[0].getSpecialization().getFaculty().getName());
-        studentInformationViews.get("Degree").setText(student.getDegrees()[0].getSpecialization().getDegree().getName());
-        studentInformationViews.get("Speciality").setText(student.getDegrees()[0].getSpecialization().getSpeciality().getCode() + " " + student.getDegrees()[0].getSpecialization().getSpeciality().getName());
-        studentInformationViews.get("Specialization").setText(student.getDegrees()[0].getSpecialization().getName());
-        studentInformationViews.get("GroupAndYear").setText(student.getDegrees()[0].getStudentGroup().getName());
-        studentInformationViews.get("Termin").setText((student.getDegrees()[0].getTuitionForm().equals("FULL_TIME") ? "Денна" : "Заочна")
-                + (student.getDegrees()[0].getTuitionTerm().equals("REGULAR") ? "" : " Скорочена"));
+        StudentDegree studentDegree = App.getInstance().getSelectedStudentDegree();
 
-        int realCourse = student.getDegrees()[0].getRealYear();
-        int formalCourse = student.getDegrees()[0].getYear();
+        String fullName = student.getSurname() + " " + student.getName() + " " + student.getPatronimic();
+        studentInformationViews.get("Name").setText(fullName);
+        studentInformationViews.get("Facult").setText(studentDegree.getSpecialization().getFaculty().getName());
+        studentInformationViews.get("Degree").setText(studentDegree.getSpecialization().getDegree().getName());
+        String speciality = studentDegree.getSpecialization().getSpeciality().getCode();
+        speciality += " " + studentDegree.getSpecialization().getSpeciality().getName();
+        studentInformationViews.get("Speciality").setText(speciality);
+        studentInformationViews.get("Specialization").setText(studentDegree.getSpecialization().getName());
+        studentInformationViews.get("GroupAndYear").setText(studentDegree.getStudentGroup().getName());
+        String tuitionForm = studentDegree.getTuitionForm().equals("FULL_TIME") ? "Денна" : "Заочна";
+        tuitionForm += studentDegree.getTuitionTerm().equals("REGULAR") ? "" : " Скорочена";
+        studentInformationViews.get("Termin").setText(tuitionForm);
+
+        int realCourse = studentDegree.getRealYear();
+        int formalCourse = studentDegree.getYear();
         String courseString = String.valueOf(formalCourse);
-        if(realCourse != formalCourse){
-            courseString += "("+ realCourse +")";
+        if (realCourse != formalCourse) {
+            courseString += "(" + realCourse + ")";
         }
         studentInformationViews.get("Course").setText(courseString);
     }
