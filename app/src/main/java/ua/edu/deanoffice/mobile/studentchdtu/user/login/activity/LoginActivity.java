@@ -85,6 +85,11 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        System.exit(0);
+    }
+
     public void onResponse(JWToken jwt) {
         App.getInstance().setJwt(jwt);
         if (App.getInstance().getJwt().isValid()) {
