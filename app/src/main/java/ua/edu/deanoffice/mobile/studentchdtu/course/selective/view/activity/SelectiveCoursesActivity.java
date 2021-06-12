@@ -330,6 +330,9 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         boolean availableListIsNull = availableCourses == null;
         boolean selectedListIsNull = selectedCourses == null;
         switch (period) {
+            case NO_SELECTIVE_COURSES:
+                activeState = new NoSelectiveCourses(this);
+                break;
             case BEFORE_FIRST_ROUND:
                 activeState = new BeforeFirstRound(this, timeLeftUntilCurrentRoundEnd);
                 break;
@@ -382,6 +385,24 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         }
 
         public abstract Fragment getFragment();
+    }
+
+    class NoSelectiveCourses extends ActiveState {
+        public NoSelectiveCourses(Context context) {
+            super(context, 0, true, true);
+        }
+
+        @Override
+        public Fragment getFragment() {
+            return getInformationFragment();
+        }
+
+        private InformationFragment getInformationFragment() {
+            setUpHeaders(Headers.HIDE);
+            String infoMessage = getRString(R.string.info_for_first_course_student);
+
+            return new InformationFragment(infoMessage);
+        }
     }
 
     class BeforeFirstRound extends ActiveState {

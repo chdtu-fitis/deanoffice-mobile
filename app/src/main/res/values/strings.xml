@@ -81,6 +81,7 @@
 
     //InformationFragment
     <string name="info_left_before_next_round">До початку туру залишилось \n{left_time}</string>
+    <string name="info_for_first_course_student">Ви ще не маєте вибіркових дисциплін</string>
 
     //Other Classes
     //DeadLineTimer
