@@ -663,32 +663,32 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
     }
 
     private void headerInit(SelectiveCoursesSelectionTimeParameters timeParams, SelectiveCoursesSelectionRules[] selectionRules) {
-        TextView studyYearsTV = findViewById(R.id.textStudyYears);
-        TextView leftTimeToEndRoundTV = findViewById(R.id.textLeftTimeToEndRound);
-        TextView semesterTV = findViewById(R.id.textSemester);
-        TextView professionalCounterTV = findViewById(R.id.textSelectedCoursesCounterProfessional);
-        TextView generalCounterTV = findViewById(R.id.textSelectedCoursesCounterGeneral);
+        TextView textViewStudyYears = findViewById(R.id.textStudyYears);
+        TextView textViewLeftTimeToEndRound = findViewById(R.id.textLeftTimeToEndRound);
+        TextView textViewSemester = findViewById(R.id.textSemester);
+        TextView textViewProfessionalCounter = findViewById(R.id.textSelectedCoursesCounterProfessional);
+        TextView textViewGeneralCounter = findViewById(R.id.textSelectedCoursesCounterGeneral);
 
         int studyYear = timeParams.getStudyYear();
         String studyYearsString = getRString(R.string.header_study_years);
         studyYearsString = studyYearsString.replace("{study_year_begin}", String.valueOf(studyYear + 1));
         studyYearsString = studyYearsString.replace("{study_year_end}", String.valueOf(studyYear + 2));
 
-        studyYearsTV.setText(studyYearsString);
+        textViewStudyYears.setText(studyYearsString);
 
         long leftTimeToEndRound = timeParams.getTimeLeftUntilCurrentRoundEnd();
         DeadLineTimer deadLineTimer = new DeadLineTimer(this);
         String leftTimeToEndRoundString = getRString(R.string.header_left_time_to_end_round);
         leftTimeToEndRoundString = leftTimeToEndRoundString.replace("{left_time}", deadLineTimer.deadLine(leftTimeToEndRound));
 
-        leftTimeToEndRoundTV.setText(leftTimeToEndRoundString);
+        textViewLeftTimeToEndRound.setText(leftTimeToEndRoundString);
 
-        deadLineTimer.subscribeToTimeUpdate(this, leftTimeToEndRoundTV, leftTimeToEndRound);
+        deadLineTimer.subscribeToTimeUpdate(this, textViewLeftTimeToEndRound, leftTimeToEndRound);
 
         Map<String, TextView> textViewMap = new ArrayMap<>();
-        textViewMap.put("Semester", semesterTV);
-        textViewMap.put("ProfessionalCounter", professionalCounterTV);
-        textViewMap.put("GeneralCounter", generalCounterTV);
+        textViewMap.put("Semester", textViewSemester);
+        textViewMap.put("ProfessionalCounter", textViewProfessionalCounter);
+        textViewMap.put("GeneralCounter", textViewGeneralCounter);
         textViewMap.put("ViewControlOfCourses", viewCountOfCourses);
 
         selectedCoursesCounter = new SelectedCoursesCounter(textViewMap, timeParams, selectionRules);
