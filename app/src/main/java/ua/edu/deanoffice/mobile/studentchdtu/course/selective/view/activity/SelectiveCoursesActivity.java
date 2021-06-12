@@ -300,7 +300,9 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
                             showError(getServerErrorMessage(response), () -> finish());
                             return;
                         }
-
+                        availableCourses
+                                .getSelectiveCoursesSelectionTimeParameters()
+                                .setCourseSelectionPeriod(CourseSelectionPeriod.NO_SELECTIVE_COURSES);
                         selectAndShowFragment();
                     }
 
@@ -401,7 +403,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
             setUpHeaders(Headers.HIDE);
             String infoMessage = getRString(R.string.info_for_first_course_student);
 
-            return new InformationFragment(infoMessage);
+            return new InformationFragment(infoMessage, true);
         }
     }
 
@@ -423,7 +425,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
             timeBeforeNextRoundString = timeBeforeNextRoundString.replace("{left_time}", deadLineTimer.deadLine(time));
             String infoMessage = getRString(R.string.info_before_first_round) + timeBeforeNextRoundString;
 
-            return new InformationFragment(infoMessage);
+            return new InformationFragment(infoMessage, true);
         }
     }
 
@@ -439,7 +441,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
             if (selectedListIsNull) {
                 if (availableListIsNull) {
                     String infoMessage = getRString(R.string.info_failed_load_selective_courses);
-                    fragment = new InformationFragment(infoMessage);
+                    fragment = new InformationFragment(infoMessage, true);
                 } else {
                     fragment = new SelectiveCoursesFirstRoundFragment(selectedCoursesCounter, availableCourses);
                     setUpHeaders(Headers.SELECTION);
@@ -482,7 +484,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
             timeBeforeNextRoundString = timeBeforeNextRoundString.replace("{left_time}", deadLineTimer.deadLine(time));
 
             String infoMessage = getRString(R.string.info_between_first_and_second_round) + timeBeforeNextRoundString;
-            return new InformationFragment(infoMessage);
+            return new InformationFragment(infoMessage, true);
         }
     }
 
@@ -530,7 +532,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         private InformationFragment getInformationFragment() {
             setUpHeaders(Headers.HIDE);
             String infoMessage = getRString(R.string.info_failed_load_selective_courses);
-            return new InformationFragment(infoMessage);
+            return new InformationFragment(infoMessage, true);
         }
     }
 
@@ -554,7 +556,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         private InformationFragment getInformationFragment() {
             setUpHeaders(Headers.HIDE);
             String infoMessage = getRString(R.string.info_after_second_round);
-            return new InformationFragment(infoMessage);
+            return new InformationFragment(infoMessage, true);
         }
 
     }
