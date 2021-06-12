@@ -300,9 +300,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
                             showError(getServerErrorMessage(response), () -> finish());
                             return;
                         }
-                        availableCourses
-                                .getSelectiveCoursesSelectionTimeParameters()
-                                .setCourseSelectionPeriod(CourseSelectionPeriod.NO_SELECTIVE_COURSES);
+
                         selectAndShowFragment();
                     }
 
