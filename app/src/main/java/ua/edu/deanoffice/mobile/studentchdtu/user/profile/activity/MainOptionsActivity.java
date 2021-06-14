@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
+import com.onesignal.OneSignal;
+
 import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.applications.BaseDrawerActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.controller.OptionsController;
@@ -76,6 +78,7 @@ public class MainOptionsActivity extends BaseDrawerActivity implements CompoundB
         switch (buttonView.getId()) {
             case R.id.switchEnableNotifOnRegSelectiveCourses:
                 mainOptions.setEnableNotifOnRegSelectiveCourses(isChecked);
+                OneSignal.disablePush(!isChecked);
                 break;
         }
     }
