@@ -330,6 +330,9 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         boolean availableListIsNull = availableCourses == null;
         boolean selectedListIsNull = selectedCourses == null;
         switch (period) {
+            case NO_SELECTIVE_COURSES:
+                activeState = new NoSelectiveCourses(this);
+                break;
             case BEFORE_FIRST_ROUND:
                 activeState = new BeforeFirstRound(this, timeLeftUntilCurrentRoundEnd);
                 break;
@@ -384,6 +387,24 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         public abstract Fragment getFragment();
     }
 
+    class NoSelectiveCourses extends ActiveState {
+        public NoSelectiveCourses(Context context) {
+            super(context, 0, true, true);
+        }
+
+        @Override
+        public Fragment getFragment() {
+            return getInformationFragment();
+        }
+
+        private InformationFragment getInformationFragment() {
+            setUpHeaders(Headers.HIDE);
+            String infoMessage = getRString(R.string.info_for_first_course_student);
+
+            return new InformationFragment(infoMessage, true);
+        }
+    }
+
     class BeforeFirstRound extends ActiveState {
         public BeforeFirstRound(Context context, long time) {
             super(context, time, true, true);
@@ -402,7 +423,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
             timeBeforeNextRoundString = timeBeforeNextRoundString.replace("{left_time}", deadLineTimer.deadLine(time));
             String infoMessage = getRString(R.string.info_before_first_round) + timeBeforeNextRoundString;
 
-            return new InformationFragment(infoMessage);
+            return new InformationFragment(infoMessage, true);
         }
     }
 
@@ -418,7 +439,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
             if (selectedListIsNull) {
                 if (availableListIsNull) {
                     String infoMessage = getRString(R.string.info_failed_load_selective_courses);
-                    fragment = new InformationFragment(infoMessage);
+                    fragment = new InformationFragment(infoMessage, true);
                 } else {
                     fragment = new SelectiveCoursesFirstRoundFragment(selectedCoursesCounter, availableCourses);
                     setUpHeaders(Headers.SELECTION);
@@ -461,7 +482,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
             timeBeforeNextRoundString = timeBeforeNextRoundString.replace("{left_time}", deadLineTimer.deadLine(time));
 
             String infoMessage = getRString(R.string.info_between_first_and_second_round) + timeBeforeNextRoundString;
-            return new InformationFragment(infoMessage);
+            return new InformationFragment(infoMessage, true);
         }
     }
 
@@ -509,7 +530,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         private InformationFragment getInformationFragment() {
             setUpHeaders(Headers.HIDE);
             String infoMessage = getRString(R.string.info_failed_load_selective_courses);
-            return new InformationFragment(infoMessage);
+            return new InformationFragment(infoMessage, true);
         }
     }
 
@@ -533,7 +554,7 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
         private InformationFragment getInformationFragment() {
             setUpHeaders(Headers.HIDE);
             String infoMessage = getRString(R.string.info_after_second_round);
-            return new InformationFragment(infoMessage);
+            return new InformationFragment(infoMessage, true);
         }
 
     }
@@ -642,32 +663,32 @@ public class SelectiveCoursesActivity extends BaseDrawerActivity {
     }
 
     private void headerInit(SelectiveCoursesSelectionTimeParameters timeParams, SelectiveCoursesSelectionRules[] selectionRules) {
-        TextView studyYearsTV = findViewById(R.id.textStudyYears);
-        TextView leftTimeToEndRoundTV = findViewById(R.id.textLeftTimeToEndRound);
-        TextView semesterTV = findViewById(R.id.textSemester);
-        TextView professionalCounterTV = findViewById(R.id.textSelectedCoursesCounterProfessional);
-        TextView generalCounterTV = findViewById(R.id.textSelectedCoursesCounterGeneral);
+        TextView textViewStudyYears = findViewById(R.id.textStudyYears);
+        TextView textViewLeftTimeToEndRound = findViewById(R.id.textLeftTimeToEndRound);
+        TextView textViewSemester = findViewById(R.id.textSemester);
+        TextView textViewProfessionalCounter = findViewById(R.id.textSelectedCoursesCounterProfessional);
+        TextView textViewGeneralCounter = findViewById(R.id.textSelectedCoursesCounterGeneral);
 
         int studyYear = timeParams.getStudyYear();
         String studyYearsString = getRString(R.string.header_study_years);
         studyYearsString = studyYearsString.replace("{study_year_begin}", String.valueOf(studyYear + 1));
         studyYearsString = studyYearsString.replace("{study_year_end}", String.valueOf(studyYear + 2));
 
-        studyYearsTV.setText(studyYearsString);
+        textViewStudyYears.setText(studyYearsString);
 
         long leftTimeToEndRound = timeParams.getTimeLeftUntilCurrentRoundEnd();
         DeadLineTimer deadLineTimer = new DeadLineTimer(this);
         String leftTimeToEndRoundString = getRString(R.string.header_left_time_to_end_round);
         leftTimeToEndRoundString = leftTimeToEndRoundString.replace("{left_time}", deadLineTimer.deadLine(leftTimeToEndRound));
 
-        leftTimeToEndRoundTV.setText(leftTimeToEndRoundString);
+        textViewLeftTimeToEndRound.setText(leftTimeToEndRoundString);
 
-        deadLineTimer.subscribeToTimeUpdate(this, leftTimeToEndRoundTV, leftTimeToEndRound);
+        deadLineTimer.subscribeToTimeUpdate(this, textViewLeftTimeToEndRound, leftTimeToEndRound);
 
         Map<String, TextView> textViewMap = new ArrayMap<>();
-        textViewMap.put("Semester", semesterTV);
-        textViewMap.put("ProfessionalCounter", professionalCounterTV);
-        textViewMap.put("GeneralCounter", generalCounterTV);
+        textViewMap.put("Semester", textViewSemester);
+        textViewMap.put("ProfessionalCounter", textViewProfessionalCounter);
+        textViewMap.put("GeneralCounter", textViewGeneralCounter);
         textViewMap.put("ViewControlOfCourses", viewCountOfCourses);
 
         selectedCoursesCounter = new SelectedCoursesCounter(textViewMap, timeParams, selectionRules);

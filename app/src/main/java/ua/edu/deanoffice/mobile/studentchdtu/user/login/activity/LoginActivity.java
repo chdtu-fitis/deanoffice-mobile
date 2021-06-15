@@ -3,11 +3,15 @@ package ua.edu.deanoffice.mobile.studentchdtu.user.login.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.method.PasswordTransformationMethod;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -27,6 +31,9 @@ import ua.edu.deanoffice.mobile.studentchdtu.user.profile.controller.OptionsCont
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.model.MainOptions;
 
 public class LoginActivity extends AppCompatActivity {
+
+    private boolean isDoubleClickBackButton = false;
+    private boolean isVisible = false;
     private static final String ONESIGNAL_APP_ID = "10e1ad0d-388b-4205-a9c1-662eec0e4d91";
     boolean isVisible = false;
 
@@ -97,6 +104,20 @@ public class LoginActivity extends AppCompatActivity {
             });
 
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        //Double click for exit
+        if (isDoubleClickBackButton) {
+            System.exit(0);
+        } else {
+            Toast.makeText(this, getResources().getText(R.string.info_double_back), Toast.LENGTH_SHORT).show();
+            isDoubleClickBackButton = true;
+            new Handler().postDelayed(() -> {
+                isDoubleClickBackButton = false;
+            }, 500);
+        }
     }
 
     public void onResponse(JWToken jwt) {
