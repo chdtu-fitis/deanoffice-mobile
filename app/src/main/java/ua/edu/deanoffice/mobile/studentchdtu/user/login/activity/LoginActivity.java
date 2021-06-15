@@ -1,29 +1,32 @@
 package ua.edu.deanoffice.mobile.studentchdtu.user.login.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.method.PasswordTransformationMethod;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
+import ua.edu.deanoffice.mobile.studentchdtu.applications.Utils;
 import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
 import ua.edu.deanoffice.mobile.studentchdtu.user.login.model.Credentials;
-import ua.edu.deanoffice.mobile.studentchdtu.applications.Utils;
 import ua.edu.deanoffice.mobile.studentchdtu.user.login.model.JWToken;
 import ua.edu.deanoffice.mobile.studentchdtu.user.login.service.LoginRequests;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.activity.MainMenuActivity;
 
 public class LoginActivity extends AppCompatActivity {
-
-    boolean isVisible = false;
+    private boolean isDoubleClickBackButton = false;
+    private boolean isVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +90,16 @@ public class LoginActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        System.exit(0);
+        //Double click for exit
+        if (isDoubleClickBackButton) {
+            System.exit(0);
+        } else {
+            Toast.makeText(this, getResources().getText(R.string.info_double_back), Toast.LENGTH_SHORT).show();
+            isDoubleClickBackButton = true;
+            new Handler().postDelayed(() -> {
+                isDoubleClickBackButton = false;
+            }, 500);
+        }
     }
 
     public void onResponse(JWToken jwt) {
