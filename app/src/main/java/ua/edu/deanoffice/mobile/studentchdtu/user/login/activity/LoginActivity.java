@@ -13,6 +13,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.onesignal.OneSignal;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -23,10 +27,15 @@ import ua.edu.deanoffice.mobile.studentchdtu.user.login.model.Credentials;
 import ua.edu.deanoffice.mobile.studentchdtu.user.login.model.JWToken;
 import ua.edu.deanoffice.mobile.studentchdtu.user.login.service.LoginRequests;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.activity.MainMenuActivity;
+import ua.edu.deanoffice.mobile.studentchdtu.user.profile.controller.OptionsController;
+import ua.edu.deanoffice.mobile.studentchdtu.user.profile.model.MainOptions;
 
 public class LoginActivity extends AppCompatActivity {
+
     private boolean isDoubleClickBackButton = false;
     private boolean isVisible = false;
+    private static final String ONESIGNAL_APP_ID = "10e1ad0d-388b-4205-a9c1-662eec0e4d91";
+    boolean isVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +43,15 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         App.getInstance().setJwt(null);
         App.getInstance().setCurrentStudent(null);
+
+        OneSignal.setLogLevel(OneSignal.LOG_LEVEL.NONE, OneSignal.LOG_LEVEL.NONE);
+        OneSignal.initWithContext(this);
+        OneSignal.setAppId(ONESIGNAL_APP_ID);
+
+        OptionsController optionsController = new OptionsController(this);
+        MainOptions mainOptions = optionsController.load();
+        boolean disablePush = !mainOptions.isEnableNotifOnRegSelectiveCourses();
+        OneSignal.disablePush(disablePush);
 
         Button loginButton = findViewById(R.id.buttonLogin);
         EditText textLogin = findViewById(R.id.textFieldLogin);
