@@ -31,11 +31,9 @@ import ua.edu.deanoffice.mobile.studentchdtu.user.profile.controller.OptionsCont
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.model.MainOptions;
 
 public class LoginActivity extends AppCompatActivity {
-
+    private static final String ONESIGNAL_APP_ID = "10e1ad0d-388b-4205-a9c1-662eec0e4d91";
     private boolean isDoubleClickBackButton = false;
     private boolean isVisible = false;
-    private static final String ONESIGNAL_APP_ID = "10e1ad0d-388b-4205-a9c1-662eec0e4d91";
-    boolean isVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
