@@ -1,4 +1,4 @@
-package ua.edu.deanoffice.mobile.studentchdtu.applications;
+package ua.edu.deanoffice.mobile.studentchdtu;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
@@ -26,10 +26,10 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
+import lombok.Getter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.activity.SelectiveCoursesActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
 import ua.edu.deanoffice.mobile.studentchdtu.user.login.activity.LoginActivity;
@@ -112,10 +112,23 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
         });
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
+        drawer.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                super.onDrawerSlide(drawerView, slideOffset);
+                Student student = App.getInstance().getCurrentStudent();
+                if (student != null) {
+                    String fullName = student.getSurname() + " " + student.getName() + " " + student.getPatronimic();
+                    TextView textView = navigationView.getHeaderView(0).findViewById(R.id.student_name);
+                    textView.setText(fullName);
+                }
+            }
+        });
     }
 
-    private void getStudentInfo(){
-        if(App.getInstance().getCurrentStudent() != null) return;
+    private void getStudentInfo() {
+        if (App.getInstance().getCurrentStudent() != null) return;
 
         showLoadingProgress();
 
@@ -127,9 +140,6 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
                     Student student = response.body();
                     if (student.isValid()) {
                         App.getInstance().setCurrentStudent(student);
-                        TextView menuHeader = navigationView.getHeaderView(0).findViewById(R.id.student_name);
-                        String studentName = student.getSurname() + " " + student.getName() + " " + student.getPatronimic();
-                        menuHeader.setText(studentName);
                         onGetStudent();
                     } else {
                         Intent intent = new Intent(BaseDrawerActivity.this, LoginActivity.class);
@@ -153,7 +163,7 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
         });
     }
 
-    protected void onGetStudent(){
+    protected void onGetStudent() {
     }
 
     public static void setSelectedMenuItemId(int selectedMenuItemId) {
@@ -247,10 +257,9 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
     }
 
     public String getServerErrorMessage(Response response) {
-        Log.e("S", response.toString());
         String errorMessage = getRString(R.string.error_connection_failed);
 
-        if(response == null) return errorMessage;
+        if (response == null) return errorMessage;
 
         if (response.errorBody() != null) {
             try {

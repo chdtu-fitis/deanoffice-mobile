@@ -9,7 +9,7 @@ import android.view.View;
 import androidx.fragment.app.Fragment;
 
 import ua.edu.deanoffice.mobile.studentchdtu.R;
-import ua.edu.deanoffice.mobile.studentchdtu.applications.BaseDrawerActivity;
+import ua.edu.deanoffice.mobile.studentchdtu.BaseDrawerActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.fragment.StudentInformationFragment;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.model.Student;

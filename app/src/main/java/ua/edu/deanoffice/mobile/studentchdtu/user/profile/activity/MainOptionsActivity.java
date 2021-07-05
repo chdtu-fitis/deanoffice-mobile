@@ -11,7 +11,7 @@ import android.widget.Switch;
 import com.onesignal.OneSignal;
 
 import ua.edu.deanoffice.mobile.studentchdtu.R;
-import ua.edu.deanoffice.mobile.studentchdtu.applications.BaseDrawerActivity;
+import ua.edu.deanoffice.mobile.studentchdtu.BaseDrawerActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.controller.OptionsController;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.model.MainOptions;
 

@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ua.edu.deanoffice.mobile.studentchdtu.R;
-import ua.edu.deanoffice.mobile.studentchdtu.applications.BaseDrawerActivity;
+import ua.edu.deanoffice.mobile.studentchdtu.BaseDrawerActivity;
 
 public class SupportActivity extends BaseDrawerActivity {
     private final Map<String, TextView> supportViews = new HashMap<>();
