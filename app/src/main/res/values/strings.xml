@@ -2,7 +2,7 @@
     <string name="app_name">Студент ЧДТУ</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_exam_application">ExamApplicationActivity</string>
-    <string name="support_email">chdtu_support@gmail.com</string>
+    <string name="support_email">is@chdtu.edu.ua</string>
     <string name="selected_item">Selected item:</string>
     <string name="title_activity_main_menu">MainMenuActivity</string>
 
