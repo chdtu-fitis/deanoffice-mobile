@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -30,7 +31,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
-import ua.edu.deanoffice.mobile.studentchdtu.Utils;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.activity.SelectiveCoursesActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
 import ua.edu.deanoffice.mobile.studentchdtu.user.login.activity.LoginActivity;
@@ -40,7 +40,6 @@ import ua.edu.deanoffice.mobile.studentchdtu.user.profile.activity.StudentInform
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.activity.SupportActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.model.Student;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.service.ProfileRequests;
-import ua.edu.deanoffice.mobile.studentchdtu.BuildConfig;
 
 public abstract class BaseDrawerActivity extends AppCompatActivity {
     private final String LOG_TAG = this.getClass().getName();
@@ -49,11 +48,10 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
     protected Toolbar toolbar;
     protected ViewGroup mainContentBlock;
     protected ProgressDialog progressDialog = null;
-    private NavigationView navigationView;
+    protected NavigationView navigationView;
 
     private static int selectedMenuItemId = -1;
 
-    @SuppressLint("NonConstantResourceId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,52 +78,58 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
             navigationView.getMenu().findItem(R.id.nav_selectivecourses).setEnabled(false);
         }
 
-        navigationView.setNavigationItemSelectedListener(item -> {
-            if (selectedMenuItemId == item.getItemId()) return false;
-
-            selectedMenuItemId = item.getItemId();
-
-            switch (selectedMenuItemId) {
-                case R.id.nav_selectivecourses:
-                    Intent selectiveCoursesActivity = new Intent(this, SelectiveCoursesActivity.class);
-                    startActivity(selectiveCoursesActivity);
-                    break;
-                case R.id.nav_options:
-                    Intent mainOptionsActivity = new Intent(this, MainOptionsActivity.class);
-                    startActivity(mainOptionsActivity);
-                    break;
-                case R.id.nav_exitFrom:
-                    Intent intent = new Intent(this, LoginActivity.class);
-                    startActivity(intent);
-                    finish();
-                    break;
-                case R.id.nav_info:
-                    Intent studentInfoActivity = new Intent(this, StudentInformationActivity.class);
-                    startActivity(studentInfoActivity);
-                    break;
-                case R.id.nav_support:
-                    Intent supportActivity = new Intent(this, SupportActivity.class);
-                    startActivity(supportActivity);
-                    break;
-                case R.id.nav_schedule:
-                case R.id.nav_applications:
-                default:
-                    Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show();
-            }
-            if (drawer.isDrawerOpen(GravityCompat.START)) {
-                drawer.closeDrawer(GravityCompat.START);
-            }
-            return true;
-        });
+        navigationView.setNavigationItemSelectedListener(this::onOptionsItemSelected);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
     }
 
+    @SuppressLint("NonConstantResourceId")
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        Log.e("s", "s1");
+        if (selectedMenuItemId == item.getItemId()) return false;
+
+        selectedMenuItemId = item.getItemId();
+
+        switch (selectedMenuItemId) {
+            case R.id.nav_selectivecourses:
+                Intent selectiveCoursesActivity = new Intent(this, SelectiveCoursesActivity.class);
+                startActivity(selectiveCoursesActivity);
+                break;
+            case R.id.nav_options:
+                Intent mainOptionsActivity = new Intent(this, MainOptionsActivity.class);
+                startActivity(mainOptionsActivity);
+                break;
+            case R.id.nav_exitFrom:
+                Intent intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+                break;
+            case R.id.nav_info:
+                Intent studentInfoActivity = new Intent(this, StudentInformationActivity.class);
+                startActivity(studentInfoActivity);
+                break;
+            case R.id.nav_support:
+                Intent supportActivity = new Intent(this, SupportActivity.class);
+                startActivity(supportActivity);
+                break;
+            case R.id.nav_schedule:
+            case R.id.nav_applications:
+            default:
+                Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show();
+        }
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        }
+        return true;
+    }
+
+    protected void onMainMenuItemClick(int menuItemId) {
+        onOptionsItemSelected(navigationView.getMenu().findItem(menuItemId));
+    }
+
     private void getStudentInfo() {
         if (App.getInstance().getCurrentStudent() != null) return;
-
-        Log.e("log", Utils.decryptBase64(App.getInstance().getJwt().getTokenElements()[1]));
-        Log.e("log2", BuildConfig.VERSION_NAME);
 
         showLoadingProgress();
 

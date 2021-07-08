@@ -1,6 +1,5 @@
 package ua.edu.deanoffice.mobile.studentchdtu.user.profile.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +11,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import ua.edu.deanoffice.mobile.studentchdtu.R;
-import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.activity.SelectiveCoursesActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.activity.MainMenuActivity;
 
 public class MainMenuFragment extends Fragment {
@@ -35,8 +33,7 @@ public class MainMenuFragment extends Fragment {
         }
 
         buttonSelectiveCourses.setOnClickListener(button -> {
-            Intent selectiveCoursesActivity = new Intent(getContext(), SelectiveCoursesActivity.class);
-            startActivity(selectiveCoursesActivity);
+            activity.onMainMenuItemClick(R.id.nav_selectivecourses);
         });
         buttonSchedule.setOnClickListener(button -> {
             Toast.makeText(getContext(), "Coming soon", Toast.LENGTH_SHORT).show();

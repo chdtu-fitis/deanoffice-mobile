@@ -4,7 +4,6 @@ import android.util.Base64;
 
 import com.google.gson.Gson;
 
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 
 import ua.edu.deanoffice.mobile.studentchdtu.applications.model.RenewApplicationData;
@@ -35,9 +34,8 @@ public class Utils {
         return new Gson().toJson(renewApplicationData);
     }
 
-    public static String decryptBase64(String base64){
+    public static String decryptBase64(String base64) {
         byte[] data = Base64.decode(base64, Base64.DEFAULT);
         return new String(data, StandardCharsets.UTF_8);
-        return "";
     }
 }

@@ -45,6 +45,11 @@ public class MainMenuActivity extends BaseDrawerActivity {
     }
 
     @Override
+    public void onMainMenuItemClick(int menuItemId) {
+        super.onMainMenuItemClick(menuItemId);
+    }
+
+    @Override
     public boolean isAccessSuccess() {
         return super.isAccessSuccess();
     }

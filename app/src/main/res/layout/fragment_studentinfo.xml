@@ -37,7 +37,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
-                    android:text="ВФВІВФІВВФІВ ІФВФІВФІ ВФІВФІВФІВФІВФВ"
                     android:textAlignment="center"
                     android:textAllCaps="true"
                     android:textColor="@color/black"
@@ -73,7 +72,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
-                    android:text="ФВІФВФВіфВфівфівфівфі вф ів іфв фівфівфівфі в"
                     android:textAlignment="center"
                     android:textAllCaps="true"
                     android:textColor="@color/black"
@@ -120,6 +118,7 @@
                 </TableRow>
 
                 <TableRow
+                    android:id="@+id/tableRowCourse"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
@@ -215,6 +214,7 @@
                 </TableRow>
 
                 <TableRow
+                    android:id="@+id/tableRowGroup"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="10dp">
