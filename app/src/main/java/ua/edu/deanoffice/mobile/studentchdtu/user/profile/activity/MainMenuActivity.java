@@ -25,8 +25,6 @@ import ua.edu.deanoffice.mobile.studentchdtu.user.profile.fragment.MainMenuFragm
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.model.StudentDegree;
 
 public class MainMenuActivity extends BaseDrawerActivity {
-
-    //    Map<String, TextView> studentInformationViews = new HashMap<>();
     private boolean isDoubleClickBackButton = false;
 
     @Override
@@ -44,6 +42,11 @@ public class MainMenuActivity extends BaseDrawerActivity {
         //Load fragment
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                 new MainMenuFragment()).commit();
+    }
+
+    @Override
+    public boolean isAccessSuccess() {
+        return super.isAccessSuccess();
     }
 
     @Override

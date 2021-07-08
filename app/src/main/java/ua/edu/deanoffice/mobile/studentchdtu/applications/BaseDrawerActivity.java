@@ -30,14 +30,17 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
+import ua.edu.deanoffice.mobile.studentchdtu.Utils;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.activity.SelectiveCoursesActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
 import ua.edu.deanoffice.mobile.studentchdtu.user.login.activity.LoginActivity;
+import ua.edu.deanoffice.mobile.studentchdtu.user.login.model.JWToken;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.activity.MainOptionsActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.activity.StudentInformationActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.activity.SupportActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.model.Student;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.service.ProfileRequests;
+import ua.edu.deanoffice.mobile.studentchdtu.BuildConfig;
 
 public abstract class BaseDrawerActivity extends AppCompatActivity {
     private final String LOG_TAG = this.getClass().getName();
@@ -72,6 +75,10 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
         navigationView = findViewById(R.id.nav_view);
 
         getStudentInfo();
+
+        if (!isAccessSuccess()) {
+            navigationView.getMenu().findItem(R.id.nav_selectivecourses).setEnabled(false);
+        }
 
         navigationView.setNavigationItemSelectedListener(item -> {
             if (selectedMenuItemId == item.getItemId()) return false;
@@ -114,8 +121,11 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
         toggle.syncState();
     }
 
-    private void getStudentInfo(){
-        if(App.getInstance().getCurrentStudent() != null) return;
+    private void getStudentInfo() {
+        if (App.getInstance().getCurrentStudent() != null) return;
+
+        Log.e("log", Utils.decryptBase64(App.getInstance().getJwt().getTokenElements()[1]));
+        Log.e("log2", BuildConfig.VERSION_NAME);
 
         showLoadingProgress();
 
@@ -153,7 +163,7 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
         });
     }
 
-    protected void onGetStudent(){
+    protected void onGetStudent() {
     }
 
     public static void setSelectedMenuItemId(int selectedMenuItemId) {
@@ -246,11 +256,18 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
         });
     }
 
+    protected boolean isAccessSuccess() {
+        JWToken.UserRole role = App.getInstance().getJwt().getUserRole();
+        if (role != null) {
+            return role == JWToken.UserRole.ROLE_STUDENT;
+        }
+        return false;
+    }
+
     public String getServerErrorMessage(Response response) {
-        Log.e("S", response.toString());
         String errorMessage = getRString(R.string.error_connection_failed);
 
-        if(response == null) return errorMessage;
+        if (response == null) return errorMessage;
 
         if (response.errorBody() != null) {
             try {

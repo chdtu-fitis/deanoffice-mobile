@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 
 import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.activity.SelectiveCoursesActivity;
+import ua.edu.deanoffice.mobile.studentchdtu.user.profile.activity.MainMenuActivity;
 
 public class MainMenuFragment extends Fragment {
 
@@ -26,6 +27,13 @@ public class MainMenuFragment extends Fragment {
     public void onViewCreated(final View view, final Bundle savedInstanceState) {
         Button buttonSelectiveCourses = view.findViewById(R.id.buttonSelectiveCourses);
         Button buttonSchedule = view.findViewById(R.id.buttonSchedule);
+
+        MainMenuActivity activity = (MainMenuActivity) getActivity();
+        if (activity == null || !activity.isAccessSuccess()) {
+            buttonSelectiveCourses.setEnabled(false);
+            view.findViewById(R.id.buttonContainerSelectiveCourses).setAlpha(0.5f);
+        }
+
         buttonSelectiveCourses.setOnClickListener(button -> {
             Intent selectiveCoursesActivity = new Intent(getContext(), SelectiveCoursesActivity.class);
             startActivity(selectiveCoursesActivity);
