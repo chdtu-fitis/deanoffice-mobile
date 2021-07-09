@@ -24,6 +24,7 @@
     <string name="info_sel_courses">Оберіть дисципліни</string>
     <string name="info_confirm_sel_courses">Підтвердіть обрані дисципліни</string>
     <string name="info_failed_load_selective_courses">Невдалось завантажити список дисциплін</string>
+    <string name="info_student_in_academic_vacation">У академічній відпусці</string>
 
     //Buttons
     <string name="button_confirm">Підтвердити</string>
