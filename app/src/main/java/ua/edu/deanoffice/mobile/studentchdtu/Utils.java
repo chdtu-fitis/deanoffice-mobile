@@ -1,6 +1,10 @@
-package ua.edu.deanoffice.mobile.studentchdtu.applications;
+package ua.edu.deanoffice.mobile.studentchdtu;
+
+import android.util.Base64;
 
 import com.google.gson.Gson;
+
+import java.nio.charset.StandardCharsets;
 
 import ua.edu.deanoffice.mobile.studentchdtu.applications.model.RenewApplicationData;
 import ua.edu.deanoffice.mobile.studentchdtu.applications.model.RetakeApplicationData;
@@ -28,5 +32,10 @@ public class Utils {
 
     public static String renewApplicationDataToJSON(RenewApplicationData renewApplicationData) {
         return new Gson().toJson(renewApplicationData);
+    }
+
+    public static String decryptBase64(String base64) {
+        byte[] data = Base64.decode(base64, Base64.DEFAULT);
+        return new String(data, StandardCharsets.UTF_8);
     }
 }
