@@ -50,8 +50,8 @@ public class MainMenuActivity extends BaseDrawerActivity {
     }
 
     @Override
-    public boolean isAccessSuccess() {
-        return super.isAccessSuccess();
+    public boolean isRoleStudent() {
+        return super.isRoleStudent();
     }
 
     @Override

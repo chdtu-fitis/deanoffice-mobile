@@ -38,7 +38,7 @@ public class StudentInformationFragment extends Fragment {
     @Override
     public void onViewCreated(final @NotNull View view, final Bundle savedInstanceState) {
         if (App.getInstance().getJwt().getUserRole() == JWToken.UserRole.ROLE_STUD_IN_ACADEMIC_VACATION) {
-            view.findViewById(R.id.inAcademicVocationTag).setVisibility(View.VISIBLE);
+            view.findViewById(R.id.inAcademicVacationTag).setVisibility(View.VISIBLE);
             view.findViewById(R.id.tableRowCourse).setVisibility(View.INVISIBLE);
             view.findViewById(R.id.tableRowGroup).setVisibility(View.INVISIBLE);
         }

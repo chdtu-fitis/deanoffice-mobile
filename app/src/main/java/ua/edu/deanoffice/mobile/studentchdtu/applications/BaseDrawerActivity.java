@@ -74,7 +74,7 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
 
         getStudentInfo();
 
-        if (!isAccessSuccess()) {
+        if (!isRoleStudent()) {
             navigationView.getMenu().findItem(R.id.nav_selectivecourses).setEnabled(false);
         }
 
@@ -260,7 +260,7 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
         });
     }
 
-    protected boolean isAccessSuccess() {
+    protected boolean isRoleStudent() {
         JWToken.UserRole role = App.getInstance().getJwt().getUserRole();
         if (role != null) {
             return role == JWToken.UserRole.ROLE_STUDENT;

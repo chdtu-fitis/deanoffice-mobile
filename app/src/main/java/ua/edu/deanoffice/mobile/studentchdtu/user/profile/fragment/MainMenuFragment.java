@@ -27,7 +27,7 @@ public class MainMenuFragment extends Fragment {
         Button buttonSchedule = view.findViewById(R.id.buttonSchedule);
 
         MainMenuActivity activity = (MainMenuActivity) getActivity();
-        if (activity == null || !activity.isAccessSuccess()) {
+        if (activity == null || !activity.isRoleStudent()) {
             buttonSelectiveCourses.setEnabled(false);
             view.findViewById(R.id.buttonContainerSelectiveCourses).setAlpha(0.5f);
         }

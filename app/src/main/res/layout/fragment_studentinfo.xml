@@ -48,13 +48,13 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
-                android:id="@+id/inAcademicVocationTag"
+                android:id="@+id/inAcademicVacationTag"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:paddingBottom="10dp"
-                android:text="@string/info_student_in_academic_vocation"
+                android:text="@string/info_student_in_academic_vacation"
                 android:textAlignment="center"
                 android:textAllCaps="true"
                 android:textColor="@color/red"
