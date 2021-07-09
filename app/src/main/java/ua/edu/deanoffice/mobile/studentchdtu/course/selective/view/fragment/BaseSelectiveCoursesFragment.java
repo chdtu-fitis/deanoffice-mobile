@@ -28,8 +28,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
+import ua.edu.deanoffice.mobile.studentchdtu.Utils;
 import ua.edu.deanoffice.mobile.studentchdtu.applications.BaseDrawerActivity;
-import ua.edu.deanoffice.mobile.studentchdtu.applications.Utils;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.SelectedCoursesCounter;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.ConfirmedSelectiveCourses;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.ExistingId;
@@ -41,7 +41,6 @@ import ua.edu.deanoffice.mobile.studentchdtu.course.selective.service.SelectiveC
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.SelectiveCoursesAdapter;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.activity.SelectiveCoursesActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
-import ua.edu.deanoffice.mobile.studentchdtu.user.login.activity.LoginActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.activity.MainMenuActivity;
 
 import static ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.SelectiveCoursesAdapter.ViewHolder;
@@ -61,6 +60,7 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
             this.rightButtonLabel = rightButtonLabel;
         }
     }
+
     private final String LOG_TAG = this.getClass().getName();
 
     protected SelectedCoursesCounter selectedCoursesCounter;
@@ -167,7 +167,7 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
                                             .commit();
                                 }
                             }
-                        }  else if (response.code() == 401) {
+                        } else if (response.code() == 401) {
                             Utils.showVersionError(BaseSelectiveCoursesFragment.this.getActivity());
                         } else {
                             Log.e(LOG_TAG, response.toString());
@@ -386,7 +386,7 @@ public abstract class BaseSelectiveCoursesFragment extends Fragment {
         @Override
         protected void onClickLeftButton(View button) {
             Activity activity = getActivity();
-            if(activity != null) {
+            if (activity != null) {
                 Intent mainMenuActivity = new Intent(activity, MainMenuActivity.class);
                 startActivity(mainMenuActivity);
                 activity.finish();

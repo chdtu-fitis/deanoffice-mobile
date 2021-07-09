@@ -29,8 +29,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
+import ua.edu.deanoffice.mobile.studentchdtu.Utils;
 import ua.edu.deanoffice.mobile.studentchdtu.applications.BaseDrawerActivity;
-import ua.edu.deanoffice.mobile.studentchdtu.applications.Utils;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.DeadLineTimer;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.SelectedCoursesCounter;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourse;
@@ -50,7 +50,6 @@ import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.Sele
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.SelectiveCoursesSecondRoundFragment;
 import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
 import ua.edu.deanoffice.mobile.studentchdtu.shared.util.UAComparator;
-import ua.edu.deanoffice.mobile.studentchdtu.user.login.activity.LoginActivity;
 
 public class SelectiveCoursesActivity extends BaseDrawerActivity {
     public enum Headers {
