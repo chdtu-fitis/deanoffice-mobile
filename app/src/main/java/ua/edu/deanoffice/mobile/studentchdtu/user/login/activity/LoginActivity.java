@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -16,6 +17,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.onesignal.OneSignal;
+
+import org.jetbrains.annotations.NotNull;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,6 +42,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        Log.e("OnCreateL", "1");
         App.getInstance().setJwt(null);
         App.getInstance().setCurrentStudent(null);
 
@@ -85,17 +89,19 @@ public class LoginActivity extends AppCompatActivity {
             App.getInstance().getClient().createRequest(LoginRequests.class)
                     .requestAuthStudent(new Credentials(login, password)).enqueue(new Callback<JWToken>() {
                 @Override
-                public void onResponse(Call<JWToken> call, Response<JWToken> response) {
+                public void onResponse(@NotNull Call<JWToken> call, @NotNull Response<JWToken> response) {
                     if (response.isSuccessful()) {
                         LoginActivity.this.onResponse(response.body());
+                    } else if (response.code() == 401) {
+                        Utils.showVersionError(LoginActivity.this);
                     } else {
-                        errorText.setText("Виникла помилка, перевірте правильність введених даних" + "(" + response.code() + ")");
+                        errorText.setText("Виникла помилка, перевірте правильність введених даних");
                     }
                     progressDialog.dismiss();
                 }
 
                 @Override
-                public void onFailure(Call<JWToken> call, Throwable t) {
+                public void onFailure(@NotNull Call<JWToken> call, Throwable t) {
                     errorText.setText("Виникли проблеми з мережею, перевірьте підключення до інтернету.");
                     progressDialog.dismiss();
                 }

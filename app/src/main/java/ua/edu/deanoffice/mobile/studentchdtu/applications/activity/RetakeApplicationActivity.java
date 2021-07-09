@@ -25,7 +25,7 @@ import ua.edu.deanoffice.mobile.studentchdtu.applications.model.RetakeApplicatio
 
 public class RetakeApplicationActivity extends AppCompatActivity {
 
-    private int id = 2;
+    private final int id = 2;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,6 +48,8 @@ public class RetakeApplicationActivity extends AppCompatActivity {
                     Log.d("Test", response.code() + "");
                     if (response.isSuccessful()) {
                         RetakeApplicationActivity.this.onResponse(response.body());
+                    } else if (response.code() == 401) {
+                        Utils.showVersionError(RetakeApplicationActivity.this);
                     }
                 }
 

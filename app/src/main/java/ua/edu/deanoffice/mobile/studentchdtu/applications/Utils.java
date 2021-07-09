@@ -18,6 +18,7 @@ import com.google.gson.Gson;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.applications.model.RenewApplicationData;
 import ua.edu.deanoffice.mobile.studentchdtu.applications.model.RetakeApplicationData;
+import ua.edu.deanoffice.mobile.studentchdtu.user.login.activity.LoginActivity;
 
 public class Utils {
 
@@ -66,6 +67,10 @@ public class Utils {
         Button buttonOk = dialogView.findViewById(R.id.buttonOk);
         buttonOk.setText(resources.getString(R.string.button_update_app));
         buttonOk.setOnClickListener((viewOk) -> {
+            if(!activity.getClass().getName().equals(LoginActivity.class.getName())){
+                Intent loginActivityIntent = new Intent(activity, LoginActivity.class);
+                activity.startActivity(loginActivityIntent);
+            }
             final String appPackageName = activity.getPackageName();
             try {
                 activity.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));

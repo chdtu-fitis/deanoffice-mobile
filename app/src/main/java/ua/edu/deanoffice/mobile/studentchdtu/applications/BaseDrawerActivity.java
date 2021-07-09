@@ -31,6 +31,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.activity.SelectiveCoursesActivity;
+import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.fragment.BaseSelectiveCoursesFragment;
 import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
 import ua.edu.deanoffice.mobile.studentchdtu.user.login.activity.LoginActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.activity.MainOptionsActivity;
@@ -136,6 +137,8 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
                         startActivity(intent);
                         finish();
                     }
+                } else if (response.code() == 401) {
+                    Utils.showVersionError(BaseDrawerActivity.this);
                 } else {
                     Log.e(LOG_TAG, response.toString());
                     showError(getServerErrorMessage(response));
