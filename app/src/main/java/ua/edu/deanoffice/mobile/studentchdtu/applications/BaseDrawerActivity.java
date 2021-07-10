@@ -87,7 +87,6 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
     @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        Log.e("s", "s1");
         if (selectedMenuItemId == item.getItemId()) return false;
 
         selectedMenuItemId = item.getItemId();

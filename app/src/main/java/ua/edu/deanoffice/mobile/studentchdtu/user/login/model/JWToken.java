@@ -1,8 +1,5 @@
 package ua.edu.deanoffice.mobile.studentchdtu.user.login.model;
 
-
-import android.util.Log;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -42,7 +39,6 @@ public class JWToken extends ValidModel {
             JSONObject tokenJson = new JSONObject(tokenString);
             userRole = UserRole.valueOf(tokenJson.getJSONArray("rol").get(0).toString());
         } catch (JSONException e) {
-            Log.e("Error getUserRole", e.getMessage() + ":");
             e.printStackTrace();
         }
 

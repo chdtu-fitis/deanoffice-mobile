@@ -1,12 +1,10 @@
 package ua.edu.deanoffice.mobile.studentchdtu;
 
-import android.util.Base64;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
-import android.util.Log;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +17,6 @@ import com.google.gson.Gson;
 
 import java.nio.charset.StandardCharsets;
 
-import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.applications.model.RenewApplicationData;
 import ua.edu.deanoffice.mobile.studentchdtu.applications.model.RetakeApplicationData;
 import ua.edu.deanoffice.mobile.studentchdtu.user.login.activity.LoginActivity;
@@ -55,7 +52,7 @@ public class Utils {
     }
 
     public static void showVersionError(Activity activity) {
-        if(activity == null) return;
+        if (activity == null) return;
 
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         ViewGroup viewGroup = activity.findViewById(android.R.id.content);
@@ -76,7 +73,7 @@ public class Utils {
         Button buttonOk = dialogView.findViewById(R.id.buttonOk);
         buttonOk.setText(resources.getString(R.string.button_update_app));
         buttonOk.setOnClickListener((viewOk) -> {
-            if(!activity.getClass().getName().equals(LoginActivity.class.getName())){
+            if (!activity.getClass().getName().equals(LoginActivity.class.getName())) {
                 Intent loginActivityIntent = new Intent(activity, LoginActivity.class);
                 activity.startActivity(loginActivityIntent);
             }
