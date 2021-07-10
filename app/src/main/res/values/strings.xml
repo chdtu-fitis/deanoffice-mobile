@@ -16,6 +16,7 @@
     <string name="error_version_outdated_title">Версія застосунку застаріла</string>
     <string name="error_version_outdated_body">Версія вашої копії застосунку Студент ЧДТУ застаріла. Щоб продовжити, вам необхідно оновити застосунок.</string>
     <string name="error_null_selective_courses_adapter">Виникла помилка при створенні списку обраних дисциплін. Переконайтесь, що ви обрали дисципліни і на перший, і на другий семестри.</string>
+    <string name="error_student_info_load">Виникла помилка при завантаженні інформації.</string>
 
     //Worn
     <string name="worn_select_courses">Оберіть дисципліни</string>

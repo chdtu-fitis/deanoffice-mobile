@@ -1,6 +1,7 @@
 package ua.edu.deanoffice.mobile.studentchdtu;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -227,16 +228,18 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
         return getResources().getString(resource);
     }
 
-    public void showError(String msg) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        ViewGroup viewGroup = findViewById(android.R.id.content);
-        View dialogView = LayoutInflater.from(this)
+    public static void showError(Activity activity, String msg) {
+        if (activity == null) return;
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        ViewGroup viewGroup = activity.findViewById(android.R.id.content);
+        View dialogView = LayoutInflater.from(activity)
                 .inflate(R.layout.dialog_error_message, viewGroup, false);
 
         TextView titleText = dialogView.findViewById(R.id.errorHeadline);
         TextView bodyText = dialogView.findViewById(R.id.errorBody);
 
-        titleText.setText(getRString(R.string.error_msg_title));
+        titleText.setText(activity.getResources().getString(R.string.error_msg_title));
         bodyText.setText(msg);
         builder.setView(dialogView);
 
@@ -246,6 +249,10 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
         dialogView.findViewById(R.id.buttonOk).setOnClickListener((viewOk) -> {
             alertDialog.dismiss();
         });
+    }
+
+    public void showError(String msg) {
+        showError(this, msg);
     }
 
     public void showError(String msg, ErrorDialogListener action) {

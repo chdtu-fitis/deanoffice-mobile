@@ -10,6 +10,7 @@
             android:title="Інформація про студента" />
         <item
             android:id="@+id/nav_schedule"
+            android:enabled="false"
             android:icon="@drawable/ic_schedule"
             android:title="Розклад" />
         <item
@@ -18,6 +19,7 @@
             android:title="Вибіркові дисципліни" />
         <item
             android:id="@+id/nav_applications"
+            android:enabled="false"
             android:icon="@drawable/ic_applications"
             android:title="Заяви" />
     </group>

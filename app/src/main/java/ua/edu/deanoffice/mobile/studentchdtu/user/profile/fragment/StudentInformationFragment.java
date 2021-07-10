@@ -1,6 +1,7 @@
 package ua.edu.deanoffice.mobile.studentchdtu.user.profile.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
+import ua.edu.deanoffice.mobile.studentchdtu.BaseDrawerActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
 import ua.edu.deanoffice.mobile.studentchdtu.user.login.model.JWToken;
@@ -52,27 +54,32 @@ public class StudentInformationFragment extends Fragment {
         studentInformationViews.put("Termin", view.findViewById(R.id.tuitionFormNameTextView));
         studentInformationViews.put("Course", view.findViewById(R.id.courseNameTextView));
 
-        StudentDegree studentDegree = App.getInstance().getSelectedStudentDegree();
+        try {
+            StudentDegree studentDegree = App.getInstance().getSelectedStudentDegree();
 
-        String fullName = student.getSurname() + " " + student.getName() + " " + student.getPatronimic();
-        studentInformationViews.get("Name").setText(fullName);
-        studentInformationViews.get("Facult").setText(studentDegree.getSpecialization().getFaculty().getName());
-        studentInformationViews.get("Degree").setText(studentDegree.getSpecialization().getDegree().getName());
-        String speciality = studentDegree.getSpecialization().getSpeciality().getCode();
-        speciality += " " + studentDegree.getSpecialization().getSpeciality().getName();
-        studentInformationViews.get("Speciality").setText(speciality);
-        studentInformationViews.get("Specialization").setText(studentDegree.getSpecialization().getName());
-        studentInformationViews.get("GroupAndYear").setText(studentDegree.getStudentGroup().getName());
-        String tuitionForm = studentDegree.getTuitionForm().equals("FULL_TIME") ? "Денна" : "Заочна";
-        tuitionForm += studentDegree.getTuitionTerm().equals("REGULAR") ? "" : " Скорочена";
-        studentInformationViews.get("Termin").setText(tuitionForm);
+            String fullName = student.getSurname() + " " + student.getName() + " " + student.getPatronimic();
+            studentInformationViews.get("Name").setText(fullName);
+            studentInformationViews.get("Facult").setText(studentDegree.getSpecialization().getFaculty().getName());
+            studentInformationViews.get("Degree").setText(studentDegree.getSpecialization().getDegree().getName());
+            String speciality = studentDegree.getSpecialization().getSpeciality().getCode();
+            speciality += " " + studentDegree.getSpecialization().getSpeciality().getName();
+            studentInformationViews.get("Speciality").setText(speciality);
+            studentInformationViews.get("Specialization").setText(studentDegree.getSpecialization().getName());
+            studentInformationViews.get("GroupAndYear").setText(studentDegree.getStudentGroup().getName());
+            String tuitionForm = studentDegree.getTuitionForm().equals("FULL_TIME") ? "Денна" : "Заочна";
+            tuitionForm += studentDegree.getTuitionTerm().equals("REGULAR") ? "" : " Скорочена";
+            studentInformationViews.get("Termin").setText(tuitionForm);
 
-        int realCourse = studentDegree.getRealYear();
-        int formalCourse = studentDegree.getYear();
-        String courseString = String.valueOf(formalCourse);
-        if (realCourse != formalCourse) {
-            courseString += "(" + realCourse + ")";
+            int realCourse = studentDegree.getRealYear();
+            int formalCourse = studentDegree.getYear();
+            String courseString = String.valueOf(formalCourse);
+            if (realCourse != formalCourse) {
+                courseString += "(" + realCourse + ")";
+            }
+            studentInformationViews.get("Course").setText(courseString);
+        } catch (Exception exception) {
+            BaseDrawerActivity.showError(getActivity(), getResources().getString(R.string.error_student_info_load));
+            Log.e("StudentInfoFragment", "Error with load student info: " + exception.getMessage());
         }
-        studentInformationViews.get("Course").setText(courseString);
     }
 }
