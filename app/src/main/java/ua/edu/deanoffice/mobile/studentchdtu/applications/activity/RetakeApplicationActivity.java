@@ -48,6 +48,8 @@ public class RetakeApplicationActivity extends AppCompatActivity {
                     Log.d("Test", response.code() + "");
                     if (response.isSuccessful()) {
                         RetakeApplicationActivity.this.onResponse(response.body());
+                    } else if (response.code() == 401) {
+                        Utils.showVersionError(RetakeApplicationActivity.this);
                     }
                 }
 

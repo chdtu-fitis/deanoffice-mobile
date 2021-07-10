@@ -19,6 +19,7 @@ import ua.edu.deanoffice.mobile.studentchdtu.applications.service.ApplicationReq
 import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
 import ua.edu.deanoffice.mobile.studentchdtu.Utils;
 import ua.edu.deanoffice.mobile.studentchdtu.applications.model.RenewApplicationData;
+import ua.edu.deanoffice.mobile.studentchdtu.user.login.activity.LoginActivity;
 
 public class DeducApplicationActivity extends AppCompatActivity {
 
@@ -40,8 +41,11 @@ public class DeducApplicationActivity extends AppCompatActivity {
                 public void onResponse(Call<Application> call, Response<Application> response) {
                     if (response.isSuccessful()) {
                         DeducApplicationActivity.this.onResponse(response.body());
+                    } else if (response.code() == 401) {
+                        Utils.showVersionError(DeducApplicationActivity.this);
                     }
                 }
+
                 @Override
                 public void onFailure(Call<Application> call, Throwable t) {
                     Snackbar.make(findViewById(android.R.id.content), "Failed connect to server", Snackbar.LENGTH_LONG)

@@ -40,6 +40,8 @@ public class RenewApplicationActivity extends AppCompatActivity {
                 public void onResponse(Call<Application> call, Response<Application> response) {
                     if (response.isSuccessful()) {
                         RenewApplicationActivity.this.onResponse(response.body());
+                    } else if (response.code() == 401) {
+                        Utils.showVersionError(RenewApplicationActivity.this);
                     }
                 }
                 @Override
