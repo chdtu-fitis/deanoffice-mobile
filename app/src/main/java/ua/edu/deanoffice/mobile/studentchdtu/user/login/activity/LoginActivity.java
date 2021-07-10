@@ -13,15 +13,15 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.onesignal.OneSignal;
+
+import org.jetbrains.annotations.NotNull;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import ua.edu.deanoffice.mobile.studentchdtu.R;
-import ua.edu.deanoffice.mobile.studentchdtu.applications.Utils;
+import ua.edu.deanoffice.mobile.studentchdtu.Utils;
 import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
 import ua.edu.deanoffice.mobile.studentchdtu.user.login.model.Credentials;
 import ua.edu.deanoffice.mobile.studentchdtu.user.login.model.JWToken;
@@ -85,17 +85,19 @@ public class LoginActivity extends AppCompatActivity {
             App.getInstance().getClient().createRequest(LoginRequests.class)
                     .requestAuthStudent(new Credentials(login, password)).enqueue(new Callback<JWToken>() {
                 @Override
-                public void onResponse(Call<JWToken> call, Response<JWToken> response) {
+                public void onResponse(@NotNull Call<JWToken> call, @NotNull Response<JWToken> response) {
                     if (response.isSuccessful()) {
                         LoginActivity.this.onResponse(response.body());
+                    } else if (response.code() == 401) {
+                        Utils.showVersionError(LoginActivity.this);
                     } else {
-                        errorText.setText("Виникла помилка, перевірте правильність введених даних" + "(" + response.code() + ")");
+                        errorText.setText("Виникла помилка, перевірте правильність введених даних");
                     }
                     progressDialog.dismiss();
                 }
 
                 @Override
-                public void onFailure(Call<JWToken> call, Throwable t) {
+                public void onFailure(@NotNull Call<JWToken> call, Throwable t) {
                     errorText.setText("Виникли проблеми з мережею, перевірьте підключення до інтернету.");
                     progressDialog.dismiss();
                 }

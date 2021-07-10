@@ -17,12 +17,12 @@ import ua.edu.deanoffice.mobile.studentchdtu.R;
 import ua.edu.deanoffice.mobile.studentchdtu.applications.model.Application;
 import ua.edu.deanoffice.mobile.studentchdtu.applications.service.ApplicationRequests;
 import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
-import ua.edu.deanoffice.mobile.studentchdtu.applications.Utils;
+import ua.edu.deanoffice.mobile.studentchdtu.Utils;
 import ua.edu.deanoffice.mobile.studentchdtu.applications.model.RenewApplicationData;
 
 public class RenewApplicationActivity extends AppCompatActivity {
 
-    private int id = 7;
+    private final int id = 7;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,6 +40,8 @@ public class RenewApplicationActivity extends AppCompatActivity {
                 public void onResponse(Call<Application> call, Response<Application> response) {
                     if (response.isSuccessful()) {
                         RenewApplicationActivity.this.onResponse(response.body());
+                    } else if (response.code() == 401) {
+                        Utils.showVersionError(RenewApplicationActivity.this);
                     }
                 }
                 @Override

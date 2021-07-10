@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -26,13 +27,13 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 
-import lombok.Getter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.view.activity.SelectiveCoursesActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.shared.service.App;
 import ua.edu.deanoffice.mobile.studentchdtu.user.login.activity.LoginActivity;
+import ua.edu.deanoffice.mobile.studentchdtu.user.login.model.JWToken;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.activity.MainOptionsActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.activity.StudentInformationActivity;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.activity.SupportActivity;
@@ -46,11 +47,10 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
     protected Toolbar toolbar;
     protected ViewGroup mainContentBlock;
     protected ProgressDialog progressDialog = null;
-    private NavigationView navigationView;
+    protected NavigationView navigationView;
 
     private static int selectedMenuItemId = -1;
 
-    @SuppressLint("NonConstantResourceId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,43 +73,11 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
 
         getStudentInfo();
 
-        navigationView.setNavigationItemSelectedListener(item -> {
-            if (selectedMenuItemId == item.getItemId()) return false;
+        if (!isRoleStudent()) {
+            navigationView.getMenu().findItem(R.id.nav_selectivecourses).setEnabled(false);
+        }
 
-            selectedMenuItemId = item.getItemId();
-
-            switch (selectedMenuItemId) {
-                case R.id.nav_selectivecourses:
-                    Intent selectiveCoursesActivity = new Intent(this, SelectiveCoursesActivity.class);
-                    startActivity(selectiveCoursesActivity);
-                    break;
-                case R.id.nav_options:
-                    Intent mainOptionsActivity = new Intent(this, MainOptionsActivity.class);
-                    startActivity(mainOptionsActivity);
-                    break;
-                case R.id.nav_exitFrom:
-                    Intent intent = new Intent(this, LoginActivity.class);
-                    startActivity(intent);
-                    finish();
-                    break;
-                case R.id.nav_info:
-                    Intent studentInfoActivity = new Intent(this, StudentInformationActivity.class);
-                    startActivity(studentInfoActivity);
-                    break;
-                case R.id.nav_support:
-                    Intent supportActivity = new Intent(this, SupportActivity.class);
-                    startActivity(supportActivity);
-                    break;
-                case R.id.nav_schedule:
-                case R.id.nav_applications:
-                default:
-                    Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show();
-            }
-            if (drawer.isDrawerOpen(GravityCompat.START)) {
-                drawer.closeDrawer(GravityCompat.START);
-            }
-            return true;
-        });
+        navigationView.setNavigationItemSelectedListener(this::onOptionsItemSelected);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -125,6 +93,50 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (selectedMenuItemId == item.getItemId()) return false;
+
+        selectedMenuItemId = item.getItemId();
+
+        switch (selectedMenuItemId) {
+            case R.id.nav_selectivecourses:
+                Intent selectiveCoursesActivity = new Intent(this, SelectiveCoursesActivity.class);
+                startActivity(selectiveCoursesActivity);
+                break;
+            case R.id.nav_options:
+                Intent mainOptionsActivity = new Intent(this, MainOptionsActivity.class);
+                startActivity(mainOptionsActivity);
+                break;
+            case R.id.nav_exitFrom:
+                Intent intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+                break;
+            case R.id.nav_info:
+                Intent studentInfoActivity = new Intent(this, StudentInformationActivity.class);
+                startActivity(studentInfoActivity);
+                break;
+            case R.id.nav_support:
+                Intent supportActivity = new Intent(this, SupportActivity.class);
+                startActivity(supportActivity);
+                break;
+            case R.id.nav_schedule:
+            case R.id.nav_applications:
+            default:
+                Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show();
+        }
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        }
+        return true;
+    }
+
+    protected void onMainMenuItemClick(int menuItemId) {
+        onOptionsItemSelected(navigationView.getMenu().findItem(menuItemId));
     }
 
     private void getStudentInfo() {
@@ -146,6 +158,8 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
                         startActivity(intent);
                         finish();
                     }
+                } else if (response.code() == 401) {
+                    Utils.showVersionError(BaseDrawerActivity.this);
                 } else {
                     Log.e(LOG_TAG, response.toString());
                     showError(getServerErrorMessage(response));
@@ -254,6 +268,14 @@ public abstract class BaseDrawerActivity extends AppCompatActivity {
             alertDialog.dismiss();
             action.onClickActionButton();
         });
+    }
+
+    protected boolean isRoleStudent() {
+        JWToken.UserRole role = App.getInstance().getJwt().getUserRole();
+        if (role != null) {
+            return role == JWToken.UserRole.ROLE_STUDENT;
+        }
+        return false;
     }
 
     public String getServerErrorMessage(Response response) {

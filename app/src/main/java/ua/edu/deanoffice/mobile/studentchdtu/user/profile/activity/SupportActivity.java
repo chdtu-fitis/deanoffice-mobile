@@ -43,7 +43,7 @@ public class SupportActivity extends BaseDrawerActivity {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("plain/text");
         intent.putExtra(Intent.EXTRA_EMAIL, new String[]{supportEmail});
-        intent.putExtra(Intent.EXTRA_SUBJECT, "Проблеми з додатком " + getRString(R.string.app_name));
+        intent.putExtra(Intent.EXTRA_SUBJECT, getRString(R.string.info_error_with_app) + " " + getRString(R.string.app_name));
         intent.putExtra(Intent.EXTRA_TEXT, "");
         startActivity(Intent.createChooser(intent, ""));
     }
