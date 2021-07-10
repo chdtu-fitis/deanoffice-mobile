@@ -13,8 +13,8 @@
     <string name="error_msg_title">Помилка</string>
     <string name="error_connection_failed">Помилка на сервері. Зверніться до тех. підтримки</string>
     <string name="error_login">Неправильно введений логін або пароль</string>
-    <string name="error_version_outdated_title">Версія додатку застаріла</string>
-    <string name="error_version_outdated_body">Версія вашої копії додатку Студент ЧДТУ застаріла. Щоб продовжити, вам необхідно оновити додаток.</string>
+    <string name="error_version_outdated_title">Версія застосунку застаріла</string>
+    <string name="error_version_outdated_body">Версія вашої копії застосунку Студент ЧДТУ застаріла. Щоб продовжити, вам необхідно оновити застосунок.</string>
     <string name="error_null_selective_courses_adapter">Виникла помилка при створенні списку обраних дисциплін. Переконайтесь, що ви обрали дисципліни і на перший, і на другий семестри.</string>
 
     //Worn
@@ -25,12 +25,13 @@
     <string name="info_confirm_sel_courses">Підтвердіть обрані дисципліни</string>
     <string name="info_failed_load_selective_courses">Невдалось завантажити список дисциплін</string>
     <string name="info_student_in_academic_vacation">У академічній відпусці</string>
+    <string name="info_error_with_app">Проблеми з застосунком</string>
 
     //Buttons
     <string name="button_confirm">Підтвердити</string>
     <string name="button_back">Назад</string>
     <string name="button_next">Далі</string>
-    <string name="button_update_app">Оновити додаток</string>
+    <string name="button_update_app">Оновити застосунок</string>
 
     //ActionBar titles
     <string name="action_bar_title_main_menu">Головне меню</string>
