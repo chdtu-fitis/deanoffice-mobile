@@ -1,5 +1,7 @@
 package ua.edu.deanoffice.mobile.studentchdtu.course.selective.service;
 
+import androidx.annotation.Keep;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -12,7 +14,7 @@ import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.ConfirmedSel
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCourses;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.SelectiveCoursesStudentDegree;
 import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.StudentDegreeSelectiveCoursesIds;
-
+@Keep
 public interface SelectiveCourseRequests {
 
     @GET("selective-courses")
