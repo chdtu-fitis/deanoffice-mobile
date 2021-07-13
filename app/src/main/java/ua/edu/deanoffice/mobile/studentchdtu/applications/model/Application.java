@@ -1,8 +1,11 @@
 package ua.edu.deanoffice.mobile.studentchdtu.applications.model;
 
+import androidx.annotation.Keep;
+
+@Keep
 public class Application {
-    private String header;
-    private String body;
+    private final String header;
+    private final String body;
 
     public Application(String header, String body) {
         this.header = header;

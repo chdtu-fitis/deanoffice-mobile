@@ -1,11 +1,13 @@
 package ua.edu.deanoffice.mobile.studentchdtu.user.login.model;
 
+import androidx.annotation.Keep;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import ua.edu.deanoffice.mobile.studentchdtu.Utils;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.model.ValidModel;
-
+@Keep
 public class JWToken extends ValidModel {
 
     public enum UserRole {

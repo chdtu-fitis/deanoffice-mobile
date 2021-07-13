@@ -1,5 +1,7 @@
 package ua.edu.deanoffice.mobile.studentchdtu.course.selective.model;
 
+import androidx.annotation.Keep;
+
 import java.text.Collator;
 import java.util.Comparator;
 import java.util.Locale;
@@ -9,6 +11,7 @@ import ua.edu.deanoffice.mobile.studentchdtu.course.selective.model.enums.TypeCy
 import ua.edu.deanoffice.mobile.studentchdtu.shared.util.UAComparator;
 
 @Data
+@Keep
 public class SelectiveCourse extends ModelBase {
     private boolean available;
     private Course course;

@@ -1,5 +1,7 @@
 package ua.edu.deanoffice.mobile.studentchdtu.shared.service;
 
+import androidx.annotation.Keep;
+
 import lombok.Getter;
 import lombok.Setter;
 import ua.edu.deanoffice.mobile.studentchdtu.applications.ApplicationCache;
@@ -8,6 +10,7 @@ import ua.edu.deanoffice.mobile.studentchdtu.user.login.model.JWToken;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.model.Student;
 import ua.edu.deanoffice.mobile.studentchdtu.user.profile.model.StudentDegree;
 
+@Keep
 public class App {
     private static final App instance = new App();
 

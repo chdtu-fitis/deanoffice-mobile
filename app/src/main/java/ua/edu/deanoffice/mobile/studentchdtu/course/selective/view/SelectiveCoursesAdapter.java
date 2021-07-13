@@ -230,10 +230,10 @@ public class SelectiveCoursesAdapter extends RecyclerView.Adapter<SelectiveCours
                 ((TextView) dialogView.findViewById(R.id.selectiveCourseFaculty)).setText(selectiveCourse.getDepartment().getFaculty().getName());
                 ((TextView) dialogView.findViewById(R.id.selectiveCourseDepartment)).setText(selectiveCourse.getDepartment().getName());
                 TextView studentsCountText = dialogView.findViewById(R.id.selectiveCourseStudentCount);
-                if(isStudentsCountVisible) {
+                if (isStudentsCountVisible) {
                     studentsCountText.setText("Кількість записаних студентів: " + selectiveCourse.getStudentsCount());
                     studentsCountText.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     studentsCountText.setVisibility(View.INVISIBLE);
                 }
 

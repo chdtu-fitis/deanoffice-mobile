@@ -1,5 +1,7 @@
 package ua.edu.deanoffice.mobile.studentchdtu.applications.service;
 
+import androidx.annotation.Keep;
+
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
@@ -9,6 +11,7 @@ import ua.edu.deanoffice.mobile.studentchdtu.BuildConfig;
 import ua.edu.deanoffice.mobile.studentchdtu.applications.model.Application;
 import ua.edu.deanoffice.mobile.studentchdtu.applications.model.ApplicationTypePOJO;
 
+@Keep
 public interface ApplicationRequests {
 
     @GET("applications")

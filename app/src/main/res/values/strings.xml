@@ -2,7 +2,7 @@
     <string name="app_name">Студент ЧДТУ</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_exam_application">ExamApplicationActivity</string>
-    <string name="support_email">chdtu_support@gmail.com</string>
+    <string name="support_email">is@chdtu.edu.ua</string>
     <string name="selected_item">Selected item:</string>
     <string name="title_activity_main_menu">MainMenuActivity</string>
 
@@ -16,6 +16,7 @@
     <string name="error_version_outdated_title">Версія застосунку застаріла</string>
     <string name="error_version_outdated_body">Версія вашої копії застосунку Студент ЧДТУ застаріла. Щоб продовжити, вам необхідно оновити застосунок.</string>
     <string name="error_null_selective_courses_adapter">Виникла помилка при створенні списку обраних дисциплін. Переконайтесь, що ви обрали дисципліни і на перший, і на другий семестри.</string>
+    <string name="error_student_info_load">Виникла помилка при завантаженні інформації.</string>
 
     //Worn
     <string name="worn_select_courses">Оберіть дисципліни</string>
